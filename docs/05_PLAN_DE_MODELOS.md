@@ -38,3 +38,15 @@ El costo también importa: Kaggle permite 9 horas y el test oculto es grande. Un
 ## 5. Ensemble e inferencia Kaggle
 
 Elegimos checkpoints que mejoren OOF y que no sean copias casi idénticas. `04_inferencia_kaggle.ipynb` lee DICOM de test directamente, promedia probabilidades y respeta el orden de `sample_submission.csv`. Antes de enviar, corremos el notebook completo sin internet y confirmamos tiempo, rutas, pesos incluidos, número de filas, columnas y ausencia de NaN.
+
+## Dónde vamos (23 sep)
+
+| Paso | Estado | Resultado |
+|---|---|---|
+| Datos en el volumen | listo | 4,407 estudios, 24,371 series, 585 GB en `/workspace/data/raw` |
+| Cache `v1_256` | listo | 24,371 series, 0 errores, 59 GB, ~15 min con 14 workers |
+| Pseudo-etiquetas `report_labels_v1` (Qwen2.5-7B) | listo | AUC vs gold ~0.80; flojas: Synovitis 0.66, PF OA 0.70, Effusion 0.73 |
+| Baseline `rodrigo_dinov2s_baseline_v1` (lr 1e-4 para todo) | descartado | se cae al descongelar el backbone: gold 0.64 → 0.60 |
+| Baseline `rodrigo_dinov2s_bblr1e5_v2` (backbone 1e-5, 8 épocas, fold 0) | referencia | pseudo_auc 0.828, gold_auc 0.781, ~24 min en RTX PRO 6000 |
+
+Siguientes ejes para repartir: mejores pseudo-etiquetas (Qwen más grande / prompt con definiciones), más épocas y cortes, `dinov2-base`, los 5 folds, e inferencia Kaggle cronometrada.
