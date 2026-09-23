@@ -81,6 +81,7 @@ def _append_result(cfg, fold, pseudo_metrics, gold_metrics, selected_metrics, se
         "n_slices": _value(cfg, "n_slices"),
         "epochs": _value(cfg, "epochs"),
         "lr": _value(cfg, "lr"),
+        "backbone_lr": _value(cfg, "backbone_lr"),
         "pseudo_auc": pseudo_metrics["mean"],
         "gold_auc": gold_metrics["mean"] if gold_metrics is not None else float("nan"),
         "select_on": select_on,
@@ -172,7 +173,12 @@ def train_fold(cfg):
     )
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
-    optimizer = AdamW(model.parameters(), lr=_value(cfg, "lr", 1e-4), weight_decay=_value(cfg, "weight_decay", 0.01))
+    lr = _value(cfg, "lr", 1e-4)
+    backbone_ids = {id(p) for p in model.backbone.parameters()}
+    optimizer = AdamW([
+        {"params": list(model.backbone.parameters()), "lr": _value(cfg, "backbone_lr", lr / 10)},
+        {"params": [p for p in model.parameters() if id(p) not in backbone_ids], "lr": lr},
+    ], weight_decay=_value(cfg, "weight_decay", 0.01))
     accumulation = _value(cfg, "grad_accum", 1)
     total_steps = max(1, math.ceil(len(train_loader) / accumulation) * _value(cfg, "epochs", 5))
     warmup = int(total_steps * _value(cfg, "warmup_ratio", 0.1))
