@@ -5,6 +5,11 @@ if [[ $# -lt 2 ]]; then
   echo "Uso: bash scripts/run_notebook.sh <notebook.ipynb> <run_name> [args de papermill]" >&2
   exit 2
 fi
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [[ -z "${RSNA_USER:-}" && "$REPO_DIR" == /workspace/users/* ]]; then
+  RSNA_USER="$(echo "$REPO_DIR" | cut -d/ -f4)"
+  export RSNA_USER
+fi
 if [[ -z "${RSNA_USER:-}" ]]; then
   echo "Falta RSNA_USER. Define tu nombre primero: export RSNA_USER=ana" >&2
   exit 2

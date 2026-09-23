@@ -29,5 +29,10 @@ PLANE_TO_ID = {"Sagittal": 0, "Coronal": 1, "Axial": 2}
 def user_dir() -> Path:
     user = os.environ.get("RSNA_USER")
     if not user:
+        parts = Path(__file__).resolve().parts
+        if "users" in parts and parts.index("users") + 1 < len(parts):
+            user = parts[parts.index("users") + 1]
+            os.environ["RSNA_USER"] = user
+    if not user:
         raise RuntimeError("Define RSNA_USER con tu nombre antes de continuar, por ejemplo: export RSNA_USER=ana")
     return Path("/workspace/users") / user
