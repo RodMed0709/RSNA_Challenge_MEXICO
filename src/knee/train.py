@@ -29,19 +29,22 @@ def masked_bce(logits, targets):
     return losses[valid].mean()
 
 
-def _make_folds(labels_df, run_dir, n_folds=5, seed=42):
+def _make_folds(labels_df, run_dir, n_folds=5, seed=42, excluded_studies=None):
     path = run_dir / "folds.csv"
     if path.exists():
-        return pd.read_csv(path)
-    target_matrix = labels_df[LABELS].apply(pd.to_numeric, errors="coerce").fillna(0.5).to_numpy()
-    target_matrix = (target_matrix >= 0.5).astype(int)
-    folds = np.full(len(labels_df), -1)
-    splitter = MultilabelStratifiedKFold(n_splits=n_folds, shuffle=True, random_state=seed)
-    for fold, (_, validation_indices) in enumerate(splitter.split(np.zeros(len(labels_df)), target_matrix)):
-        folds[validation_indices] = fold
-    result = labels_df[["StudyInstanceUID"]].copy()
-    result["fold"] = folds
-    result.to_csv(path, index=False)
+        result = pd.read_csv(path)
+    else:
+        target_matrix = labels_df[LABELS].apply(pd.to_numeric, errors="coerce").fillna(0.5).to_numpy()
+        target_matrix = (target_matrix >= 0.5).astype(int)
+        folds = np.full(len(labels_df), -1)
+        splitter = MultilabelStratifiedKFold(n_splits=n_folds, shuffle=True, random_state=seed)
+        for fold, (_, validation_indices) in enumerate(splitter.split(np.zeros(len(labels_df)), target_matrix)):
+            folds[validation_indices] = fold
+        result = labels_df[["StudyInstanceUID"]].copy()
+        result["fold"] = folds
+        result.to_csv(path, index=False)
+    if excluded_studies:
+        result = result.loc[~result["StudyInstanceUID"].astype(str).isin(excluded_studies)].copy()
     return result
 
 
@@ -64,32 +67,76 @@ def _file_lock(path, timeout=30):
         lock.unlink(missing_ok=True)
 
 
-def _append_result(cfg, fold, metrics):
+def _append_result(cfg, fold, pseudo_metrics, gold_metrics, selected_metrics, select_on):
     path = Path(_value(cfg, "results_csv", RESULTS_ROOT / "all_runs.csv"))
     path.parent.mkdir(parents=True, exist_ok=True)
+    backbone = _value(cfg, "backbone")
     row = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "user": os.environ.get("RSNA_USER", "unknown"),
         "run_name": _value(cfg, "run_name"),
         "fold": fold,
-        "backbone": _value(cfg, "backbone_path") or _value(cfg, "timm_name"),
+        "backbone": _value(cfg, "backbone_path") or _value(cfg, "timm_name") or type(backbone).__name__,
         "img_size": _value(cfg, "image_size"),
         "n_slices": _value(cfg, "n_slices"),
         "epochs": _value(cfg, "epochs"),
         "lr": _value(cfg, "lr"),
-        "val_auc_mean": metrics["mean"],
+        "pseudo_auc": pseudo_metrics["mean"],
+        "gold_auc": gold_metrics["mean"] if gold_metrics is not None else float("nan"),
+        "select_on": select_on,
+        "val_auc_mean": selected_metrics["mean"],
         "notes": _value(cfg, "notes", ""),
     }
-    row.update({f"auc_{label}": value for label, value in metrics["per_label"].items()})
+    label_metrics = gold_metrics if gold_metrics is not None else pseudo_metrics
+    row.update({f"auc_{label}": value for label, value in label_metrics["per_label"].items()})
     with _file_lock(path):
-        pd.DataFrame([row]).to_csv(path, mode="a", header=not path.exists(), index=False)
+        result = pd.DataFrame([row])
+        if path.exists():
+            result = pd.concat([pd.read_csv(path), result], ignore_index=True)
+        result.to_csv(path, index=False)
+
+
+def _evaluate(model, loader, device):
+    predictions, targets, studies = [], [], []
+    with torch.no_grad():
+        for batch in loader:
+            with model.autocast_context(device):
+                logits = model(
+                    batch["images"].to(device), batch["series_meta"].to(device), batch["series_mask"].to(device)
+                )
+            predictions.append(logits.sigmoid().float().cpu().numpy())
+            targets.append(batch["targets"].numpy())
+            studies.extend(batch["study"])
+    predictions = np.concatenate(predictions)
+    targets = np.concatenate(targets)
+    return predictions, targets, studies, mean_auc(targets, predictions)
+
+
+def _prediction_frame(predictions, targets, studies):
+    frame = pd.DataFrame(predictions, columns=[f"pred_{label}" for label in LABELS])
+    frame.insert(0, "StudyInstanceUID", studies)
+    for index, label in enumerate(LABELS):
+        frame[f"target_{label}"] = targets[:, index]
+    return frame
 
 
 def train_fold(cfg):
     run_dir = Path(_value(cfg, "run_dir"))
     run_dir.mkdir(parents=True, exist_ok=True)
     labels_df = pd.read_csv(_value(cfg, "labels_csv"))
-    folds = _make_folds(labels_df, run_dir, _value(cfg, "n_folds", 5), _value(cfg, "seed", 42))
+    labels_df["StudyInstanceUID"] = labels_df["StudyInstanceUID"].astype(str)
+    gold_csv = _value(cfg, "gold_csv")
+    gold_df = pd.read_csv(gold_csv) if gold_csv else None
+    if gold_df is not None:
+        gold_df["StudyInstanceUID"] = gold_df["StudyInstanceUID"].astype(str)
+        gold_studies = set(gold_df["StudyInstanceUID"])
+        labels_df = labels_df.loc[~labels_df["StudyInstanceUID"].isin(gold_studies)].copy()
+    else:
+        gold_studies = set()
+    folds = _make_folds(
+        labels_df, run_dir, _value(cfg, "n_folds", 5), _value(cfg, "seed", 42), gold_studies
+    )
+    folds["StudyInstanceUID"] = folds["StudyInstanceUID"].astype(str)
     labels_df = labels_df.merge(folds, on="StudyInstanceUID")
     fold = int(_value(cfg, "fold", 0))
     train_studies = labels_df.loc[labels_df.fold != fold, "StudyInstanceUID"]
@@ -103,8 +150,23 @@ def train_fold(cfg):
     loader_args = dict(batch_size=_value(cfg, "batch_size", 2), num_workers=_value(cfg, "workers", 4), pin_memory=True)
     train_loader = DataLoader(train_dataset, shuffle=True, **loader_args)
     val_loader = DataLoader(val_dataset, shuffle=False, **loader_args)
+    gold_loader = None
+    if gold_df is not None and len(gold_df):
+        gold_dataset = KneeDataset(
+            gold_df["StudyInstanceUID"], cache_index=_value(cfg, "cache_index"), labels=gold_df,
+            max_series=_value(cfg, "max_series", 5), n_slices=_value(cfg, "n_slices", 16),
+            image_size=_value(cfg, "image_size", 224), train=False,
+        )
+        gold_loader = DataLoader(gold_dataset, shuffle=False, **loader_args)
+
+    select_on = _value(cfg, "select_on", "pseudo")
+    if select_on not in {"pseudo", "gold"}:
+        raise ValueError("select_on debe ser 'pseudo' o 'gold'")
+    if select_on == "gold" and gold_loader is None:
+        raise ValueError("select_on='gold' requiere gold_csv con al menos un estudio")
 
     model = KneeModel(
+        backbone=_value(cfg, "backbone"), feature_dim=_value(cfg, "feature_dim"),
         backbone_path=_value(cfg, "backbone_path"), timm_name=_value(cfg, "timm_name"),
         gradient_checkpointing=_value(cfg, "gradient_checkpointing", False)
     )
@@ -146,35 +208,52 @@ def train_fold(cfg):
                 optimizer.zero_grad(set_to_none=True)
 
         model.eval()
-        predictions, targets, studies = [], [], []
-        with torch.no_grad():
-            for batch in val_loader:
-                with model.autocast_context(device):
-                    logits = model(
-                        batch["images"].to(device), batch["series_meta"].to(device), batch["series_mask"].to(device)
-                    )
-                predictions.append(logits.sigmoid().float().cpu().numpy())
-                targets.append(batch["targets"].numpy())
-                studies.extend(batch["study"])
-        predictions = np.concatenate(predictions)
-        targets = np.concatenate(targets)
-        metrics = mean_auc(targets, predictions)
-        history.append({"epoch": epoch + 1, "train_loss": train_loss / len(train_loader), "val_auc_mean": metrics["mean"]})
-        print(f"Epoch {epoch + 1}: loss={history[-1]['train_loss']:.4f} mean_auc={metrics['mean']:.4f}")
-        print(" | ".join(f"{label}: {auc:.4f}" for label, auc in metrics["per_label"].items()))
-        selection_auc = metrics["mean"] if np.isfinite(metrics["mean"]) else -np.inf
+        pseudo_predictions, pseudo_targets, pseudo_studies, pseudo_metrics = _evaluate(model, val_loader, device)
+        gold_payload = _evaluate(model, gold_loader, device) if gold_loader is not None else None
+        gold_metrics = gold_payload[3] if gold_payload is not None else None
+        selected_metrics = gold_metrics if select_on == "gold" else pseudo_metrics
+        history.append({
+            "epoch": epoch + 1,
+            "train_loss": train_loss / len(train_loader),
+            "pseudo_auc": pseudo_metrics["mean"],
+            "gold_auc": gold_metrics["mean"] if gold_metrics is not None else float("nan"),
+            "val_auc_mean": selected_metrics["mean"],
+        })
+        print(
+            f"Epoch {epoch + 1}: loss={history[-1]['train_loss']:.4f} "
+            f"pseudo_auc={pseudo_metrics['mean']:.4f} gold_auc={history[-1]['gold_auc']:.4f}"
+        )
+        selection_auc = selected_metrics["mean"] if np.isfinite(selected_metrics["mean"]) else -np.inf
         if best_payload is None or selection_auc > best_auc:
             best_auc = selection_auc
-            best_payload = (predictions, targets, studies, metrics)
-            torch.save({"model": model.state_dict(), "cfg": dict(cfg) if isinstance(cfg, dict) else vars(cfg)}, run_dir / "best.pt")
+            best_payload = {
+                "pseudo": (pseudo_predictions, pseudo_targets, pseudo_studies, pseudo_metrics),
+                "gold": gold_payload,
+                "selected_metrics": selected_metrics,
+            }
+            saved_cfg = dict(cfg) if isinstance(cfg, dict) else vars(cfg).copy()
+            saved_cfg.pop("backbone", None)
+            torch.save({"model": model.state_dict(), "cfg": saved_cfg}, run_dir / "best.pt")
 
-    predictions, targets, studies, metrics = best_payload
-    oof = pd.DataFrame(predictions, columns=[f"pred_{label}" for label in LABELS])
-    oof.insert(0, "StudyInstanceUID", studies)
-    for index, label in enumerate(LABELS):
-        oof[f"target_{label}"] = targets[:, index]
-    oof.to_csv(run_dir / "oof.csv", index=False)
-    output = {"best_auc": metrics["mean"] if best_auc == -np.inf else best_auc, "metrics": metrics, "history": history}
+    pseudo_predictions, pseudo_targets, pseudo_studies, pseudo_metrics = best_payload["pseudo"]
+    _prediction_frame(pseudo_predictions, pseudo_targets, pseudo_studies).to_csv(run_dir / "oof.csv", index=False)
+    gold_metrics = None
+    if best_payload["gold"] is not None:
+        gold_predictions, gold_targets, gold_studies, gold_metrics = best_payload["gold"]
+        _prediction_frame(gold_predictions, gold_targets, gold_studies).to_csv(
+            run_dir / "gold_preds.csv", index=False
+        )
+    selected_metrics = best_payload["selected_metrics"]
+    output = {
+        "best_auc": selected_metrics["mean"],
+        "pseudo_auc": pseudo_metrics["mean"],
+        "gold_auc": gold_metrics["mean"] if gold_metrics is not None else float("nan"),
+        "select_on": select_on,
+        "metrics": selected_metrics,
+        "pseudo_metrics": pseudo_metrics,
+        "gold_metrics": gold_metrics,
+        "history": history,
+    }
     (run_dir / "metrics.json").write_text(json.dumps(output, indent=2, allow_nan=True), encoding="utf-8")
-    _append_result(cfg, fold, metrics)
+    _append_result(cfg, fold, pseudo_metrics, gold_metrics, selected_metrics, select_on)
     return output

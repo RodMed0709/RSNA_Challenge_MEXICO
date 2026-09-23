@@ -20,6 +20,8 @@ Rodrigo corre una sola vez `01_crear_cache.ipynb`. Decodificar DICOM durante cad
 
 Primero se puede congelar el backbone y después afinarlo. Usamos BCE con máscara para soportar NaN y aceptar `0.5` como etiqueta suave. No hacemos flip horizontal porque puede cambiar medial por lateral.
 
+En cada época medimos `pseudo_auc` sobre el fold de pseudo-etiquetas y `gold_auc` sobre todos los estudios gold, que nunca entran en folds ni entrenamiento. `select_on` decide cuál de las dos métricas elige el mejor checkpoint; por defecto usamos `pseudo`.
+
 ## 4. Mejorar de forma controlada
 
 Cuando el baseline sea estable probamos una sola variable por run:
