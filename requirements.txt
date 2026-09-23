@@ -1,0 +1,17 @@
+pydicom
+pylibjpeg
+pylibjpeg-libjpeg
+pylibjpeg-openjpeg
+python-gdcm
+numpy
+pandas
+scikit-learn
+opencv-python-headless
+tqdm
+timm
+transformers
+accelerate
+papermill
+ipykernel
+matplotlib
+iterative-stratification
