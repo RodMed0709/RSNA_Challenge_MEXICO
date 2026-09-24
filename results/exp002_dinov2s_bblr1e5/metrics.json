@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "exp": "exp002_dinov2s_bblr1e5",
+  "author": "rodrigo",
+  "parent": "exp001",
+  "split": "legacy_run_folds",
+  "phase": "screen",
+  "legacy": true,
+  "notes": "split viejo",
+  "per_fold": {
+    "0": {
+      "pseudo_auc": 0.828178309255581,
+      "gold_auc": 0.7814062866360351,
+      "ckpt_path": "/workspace/users/rodrigo/results/exp002_dinov2s_bblr1e5/fold_0/best.pt"
+    }
+  },
+  "gold_auc": 0.7814062866360351,
+  "oof_pseudo_auc": null,
+  "decision_auto": null
+}
