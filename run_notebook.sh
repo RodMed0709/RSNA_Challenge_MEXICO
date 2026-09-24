@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
-source "$(dirname "${BASH_SOURCE[0]}")/env.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/_env.sh"
 
 if [[ $# -lt 1 ]]; then
-  echo "Uso: bash scripts/run_notebook.sh experiments/expNNN_tag/expNNN_tag.ipynb [-p FOLDS '[0,1,2,3,4]']" >&2
+  echo "Uso: bash run_notebook.sh experiments/expNNN_tag/expNNN_tag.ipynb [-p FOLDS '[0,1,2,3,4]']" >&2
   exit 2
 fi
 NOTEBOOK="$(realpath "$1")"

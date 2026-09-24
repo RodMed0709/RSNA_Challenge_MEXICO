@@ -22,7 +22,7 @@ Desde una terminal, dentro de tu carpeta:
 
 ```bash
 cd /workspace/users/<tu_nombre>
-bash scripts/setup_pod.sh
+bash setup_pod.sh
 ```
 
 `setup_pod.sh` elige el ambiente según la versión de Python de la imagen (3.11 → `/workspace/venv`, 3.12 → `/workspace/venv312`),
@@ -32,8 +32,8 @@ lo crea si falta o está roto, instala `requirements.txt` y registra el kernel `
 
 ```bash
 cd /workspace/users/<tu_nombre>
-bash scripts/run_notebook.sh experiments/exp023_dinov2_base/exp023_dinov2_base.ipynb
-bash scripts/run_notebook.sh experiments/exp023_dinov2_base/exp023_dinov2_base.ipynb -y "FOLDS: [0, 1, 2, 3, 4]"
+bash run_notebook.sh experiments/exp023_dinov2_base/exp023_dinov2_base.ipynb
+bash run_notebook.sh experiments/exp023_dinov2_base/exp023_dinov2_base.ipynb -y "FOLDS: [0, 1, 2, 3, 4]"
 ```
 
 Puedes cerrar el navegador: `nohup` mantiene el proceso. El comando imprime el PID y la ruta del log.
@@ -55,5 +55,5 @@ El volumen es compartido y los DICOM son cientos de miles de archivos. No abras 
 
 ## Tiempos de referencia
 
-exp003 (DINOv2-small, 224 px, 5 series × 16 cortes, 8 épocas) tarda ~90 min por fold en RTX PRO 6000:
+exp002 (DINOv2-small, 224 px, 5 series × 16 cortes, 8 épocas) tarda ~90 min por fold en RTX PRO 6000:
 fold 0 ≈ 1.5 h, 5 folds ≈ 7.5 h. Haz screening con `FOLDS = [0]` y solo confirma con 5 folds lo que promete.

@@ -1,7 +1,7 @@
 # Split canónico `split_v1_seed42`
 
-Un solo split para todo el equipo durante toda la competencia. Lo genera `experiments/exp000_preparacion/04_split_v1.ipynb`
-y vive en git como `splits/split_v1_seed42.csv` + `splits/split_v1_seed42.json` (hash, conteos, método).
+Un solo split para todo el equipo durante toda la competencia. Lo genera `experiments/exp001_preparacion/04_split_v1.ipynb`
+y vive en git como `SPLITS/split_v1_seed42.csv` + `SPLITS/split_v1_seed42.json` (hash, conteos, método).
 `load_split()` revisa el hash: si alguien edita el CSV, el notebook se detiene.
 
 ## Qué contiene

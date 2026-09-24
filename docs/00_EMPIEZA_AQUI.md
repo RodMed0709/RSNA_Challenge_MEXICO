@@ -12,10 +12,12 @@
     └── <tu_nombre>/
         ├── CLAUDE.md            reglas (léelas aunque no uses Claude)
         ├── docs/                compartido: proceso, reglas, registro de experimentos
-        ├── src/knee/            compartido: lectura de cache, dataset, modelo, métricas
-        ├── splits/              compartido: el split canónico (no se edita)
-        ├── kaggle/              notebook de inferencia para enviar
-        ├── experiments/         exp000_preparacion (datos, cache, etiquetas, split) · exp001, exp002… en orden
+        ├── setup_pod.sh         prepara el pod (ambiente, kernel, git)
+        ├── run_notebook.sh      corre un notebook en segundo plano
+        ├── inferencia_kaggle.ipynb   notebook que se sube a Kaggle para enviar
+        ├── src/knee/            compartido: código que importan los notebooks (cache, dataset, modelo, métricas, experimentos)
+        ├── SPLITS/              compartido: el split canónico (no se edita)
+        ├── experiments/         exp001_preparacion (datos, cache, etiquetas, split) · exp001, exp002… en orden
         └── results/             expNNN_tag/ → pesos, predicciones, metrics.json (solo metrics.json va a git)
 ```
 
@@ -30,7 +32,7 @@ Nadie los elige a mano; los reparte `nuevo_experimento()`.
    ```bash
    git clone https://github.com/RodMed0709/RSNA_Challenge_MEXICO.git /workspace/users/<tu_nombre>
    cd /workspace/users/<tu_nombre>
-   bash scripts/setup_pod.sh
+   bash setup_pod.sh
    ```
 3. Lee `CLAUDE.md`, `docs/02_REGLAS_DEL_EQUIPO.md` y `docs/06_SDD.md`.
 
@@ -38,7 +40,7 @@ Nadie los elige a mano; los reparte `nuevo_experimento()`.
 
 ```bash
 cd /workspace/users/<tu_nombre>
-bash scripts/setup_pod.sh      # elige el ambiente según la versión de Python del pod y registra el kernel
+bash setup_pod.sh      # elige el ambiente según la versión de Python del pod y registra el kernel
 git switch main && git pull
 ```
 
@@ -50,7 +52,7 @@ En Jupyter usa siempre el kernel **Python (rsna)**.
    ```python
    import sys; sys.path.insert(0, "/workspace/users/<tu_nombre>")
    from src.knee.experiments import nuevo_experimento, tabla_experimentos
-   nuevo_experimento("dinov2_base", padre="exp003", idea="backbone base en vez de small")
+   nuevo_experimento("dinov2_base", padre="exp002", idea="backbone base en vez de small")
    ```
    Crea `experiments/expNNN_dinov2_base/` con el notebook del padre y una `SPEC.md` en blanco.
 2. Llena las secciones 1 y 2 de la SPEC (puedes pedirle ayuda a Claude con el prompt de `docs/06_SDD.md`).
@@ -58,7 +60,7 @@ En Jupyter usa siempre el kernel **Python (rsna)**.
 4. Cambia solo las celdas del PLAN. Corre el notebook con `SMOKE = True`; si termina bien, `SMOKE = False`, `FOLDS = [0]`.
 5. Para dejarlo entrenando aunque cierres el navegador:
    ```bash
-   bash scripts/run_notebook.sh experiments/expNNN_dinov2_base/expNNN_dinov2_base.ipynb
+   bash run_notebook.sh experiments/expNNN_dinov2_base/expNNN_dinov2_base.ipynb
    ```
 6. Llena el verdict (sección 3 de la SPEC y tu fila en `docs/EXPERIMENTOS.md`), commit, push y abre el PR en GitHub.
 
