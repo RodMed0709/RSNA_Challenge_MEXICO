@@ -1,23 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/env.sh"
 
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VENV_DIR="/workspace/venv"
-
-if [[ ! -d "$VENV_DIR" ]]; then
-  echo "Creando el ambiente compartido en $VENV_DIR"
-  python -m venv --system-site-packages "$VENV_DIR"
+if ! "$VENV_DIR/bin/python" -c "import sys" 2>/dev/null; then
+  echo "Creando el ambiente $VENV_DIR (Python $PY_VER)"
+  rm -rf "$VENV_DIR"
+  python3 -m venv --system-site-packages "$VENV_DIR"
   "$VENV_DIR/bin/python" -m pip install --upgrade pip
-  "$VENV_DIR/bin/python" -m pip install -r "$REPO_DIR/requirements.txt"
-else
-  echo "El ambiente $VENV_DIR ya existe; no se reinstalan paquetes."
 fi
+"$VENV_DIR/bin/python" -m pip install -q -r "$REPO_DIR/requirements.txt"
+"$VENV_DIR/bin/python" -m ipykernel install --user --name rsna --display-name "Python (rsna)" >/dev/null
 
-"$VENV_DIR/bin/python" -m ipykernel install --user --name rsna --display-name "Python (rsna)"
+cd "$REPO_DIR"
+"$VENV_DIR/bin/nbstripout" --install
+git config user.name >/dev/null || git config user.name "$RSNA_USER"
+git config user.email >/dev/null || git config user.email "$RSNA_USER@rsna.local"
 
-echo
-echo "GPU:"
-nvidia-smi --query-gpu=name,memory.total,memory.free --format=csv,noheader || true
-echo
-echo "Disco de /workspace:"
-df -h /workspace
+echo "Usuario: ${RSNA_USER:-sin definir} · ambiente: $VENV_DIR · kernel: Python (rsna)"
+nvidia-smi --query-gpu=name,memory.total --format=csv,noheader || true

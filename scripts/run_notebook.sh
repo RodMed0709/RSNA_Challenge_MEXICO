@@ -1,45 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/env.sh"
 
-if [[ $# -lt 2 ]]; then
-  echo "Uso: bash scripts/run_notebook.sh <notebook.ipynb> <run_name> [args de papermill]" >&2
+if [[ $# -lt 1 ]]; then
+  echo "Uso: bash scripts/run_notebook.sh experiments/expNNN_tag/expNNN_tag.ipynb [-p FOLDS '[0,1,2,3,4]']" >&2
   exit 2
 fi
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-if [[ -z "${RSNA_USER:-}" && "$REPO_DIR" == /workspace/users/* ]]; then
-  RSNA_USER="$(echo "$REPO_DIR" | cut -d/ -f4)"
-  export RSNA_USER
-fi
-if [[ -z "${RSNA_USER:-}" ]]; then
-  echo "Falta RSNA_USER. Define tu nombre primero: export RSNA_USER=ana" >&2
-  exit 2
-fi
+NOTEBOOK="$(realpath "$1")"
+shift
+EXP="$(basename "$NOTEBOOK" .ipynb)"
+OUT_DIR="$REPO_DIR/results/$EXP"
+mkdir -p "$OUT_DIR"
+STAMP="$(date +%Y%m%d_%H%M%S)"
+LOG="$OUT_DIR/run_$STAMP.log"
 
-NOTEBOOK="$1"
-RUN_NAME="$2"
-shift 2
-
-if [[ ! -f "$NOTEBOOK" ]]; then
-  echo "No existe el notebook: $NOTEBOOK" >&2
-  exit 2
-fi
-if [[ "$RUN_NAME" == *"/"* || "$RUN_NAME" == *"\\"* || "$RUN_NAME" == "." || "$RUN_NAME" == ".." ]]; then
-  echo "run_name no puede contener rutas: $RUN_NAME" >&2
-  exit 2
-fi
-
-RUN_DIR="/workspace/users/$RSNA_USER/runs/$RUN_NAME"
-mkdir -p "$RUN_DIR"
-LOG_FILE="$RUN_DIR/train.log"
-OUTPUT_NOTEBOOK="$RUN_DIR/executed.ipynb"
-
-nohup /workspace/venv/bin/python -m papermill \
-  "$NOTEBOOK" "$OUTPUT_NOTEBOOK" \
-  -k rsna -p RUN_NAME "$RUN_NAME" "$@" \
-  >"$LOG_FILE" 2>&1 </dev/null &
-PID=$!
-
-echo "Entrenamiento iniciado. PID: $PID"
-echo "Salida: $OUTPUT_NOTEBOOK"
-echo "Log: $LOG_FILE"
-echo "Para verlo: tail -f '$LOG_FILE'"
+cd "$(dirname "$NOTEBOOK")"
+nohup "$VENV_DIR/bin/python" -m papermill "$NOTEBOOK" "$OUT_DIR/executed_$STAMP.ipynb" -k rsna --log-output "$@" \
+  >"$LOG" 2>&1 </dev/null &
+echo "$!" > "$OUT_DIR/pid"
+echo "Corriendo $EXP (PID $!)"
+echo "Avance: tail -f $LOG"

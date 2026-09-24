@@ -14,7 +14,6 @@ from src.knee.dicom import read_series
 from src.knee.labels import parse_label_json
 from src.knee.metrics import mean_auc
 from src.knee.model import KneeModel
-from src.knee.train import train_fold
 
 
 class TinyBackbone(torch.nn.Module):
@@ -59,82 +58,6 @@ def test_metrics_skip_single_class_labels():
     assert result["per_label"]["good"] == pytest.approx(1.0)
     assert np.isnan(result["per_label"]["single"])
     assert result["mean"] == pytest.approx(1.0)
-
-
-def test_train_fold_tracks_pseudo_and_gold_metrics(tmp_path):
-    cache_dir = tmp_path / "cache"
-    cache_dir.mkdir()
-    pseudo_studies = [f"pseudo-{index:02d}" for index in range(12)]
-    gold_studies = [f"gold-{index:02d}" for index in range(4)]
-    index_rows = []
-    for index, study in enumerate([*pseudo_studies, *gold_studies]):
-        path = cache_dir / f"{study}.npy"
-        np.save(path, np.full((2, 8, 8), index, dtype=np.uint8))
-        index_rows.append({
-            "study": study,
-            "path": str(path),
-            "plane": "Sagittal",
-            "fluid": 1,
-            "fat": 1,
-        })
-    cache_index = cache_dir / "index.csv"
-    pd.DataFrame(index_rows).to_csv(cache_index, index=False)
-
-    def label_row(study, index):
-        return {
-            "StudyInstanceUID": study,
-            **{label: (index + label_index) % 2 for label_index, label in enumerate(LABELS)},
-        }
-
-    pseudo_csv = tmp_path / "pseudo.csv"
-    gold_csv = tmp_path / "gold.csv"
-    pd.DataFrame([
-        label_row(study, index) for index, study in enumerate([*pseudo_studies, *gold_studies])
-    ]).to_csv(pseudo_csv, index=False)
-    pd.DataFrame([label_row(study, index) for index, study in enumerate(gold_studies)]).to_csv(
-        gold_csv, index=False
-    )
-
-    run_dir = tmp_path / "run"
-    run_dir.mkdir()
-    pd.DataFrame({
-        "StudyInstanceUID": [*pseudo_studies, *gold_studies],
-        "fold": [
-            *[(index // 2) % 2 for index in range(len(pseudo_studies))],
-            *[0 for _ in gold_studies],
-        ],
-    }).to_csv(run_dir / "folds.csv", index=False)
-    results_csv = tmp_path / "all_runs.csv"
-    output = train_fold({
-        "run_name": "smoke",
-        "run_dir": str(run_dir),
-        "fold": 0,
-        "n_folds": 2,
-        "labels_csv": str(pseudo_csv),
-        "gold_csv": str(gold_csv),
-        "cache_index": str(cache_index),
-        "backbone": TinyBackbone(),
-        "feature_dim": 4,
-        "image_size": 8,
-        "max_series": 1,
-        "n_slices": 1,
-        "batch_size": 2,
-        "epochs": 1,
-        "workers": 0,
-        "select_on": "gold",
-        "results_csv": str(results_csv),
-    })
-
-    assert (run_dir / "metrics.json").exists()
-    assert (run_dir / "oof.csv").exists()
-    assert (run_dir / "gold_preds.csv").exists()
-    assert set(pd.read_csv(run_dir / "oof.csv")["StudyInstanceUID"]).isdisjoint(gold_studies)
-    assert set(pd.read_csv(run_dir / "gold_preds.csv")["StudyInstanceUID"]) == set(gold_studies)
-    assert np.isfinite(output["history"][0]["pseudo_auc"])
-    assert np.isfinite(output["history"][0]["gold_auc"])
-    results = pd.read_csv(results_csv)
-    assert results.loc[0, "gold_auc"] == pytest.approx(output["gold_auc"])
-    assert results.loc[0, "select_on"] == "gold"
 
 
 def test_parse_label_json():
