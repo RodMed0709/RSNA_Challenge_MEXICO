@@ -4,15 +4,15 @@ La idea es subir un escalón a la vez. Cada etapa deja algo reusable y una medic
 
 ## 0. Explorar
 
-Corremos `prep/00_explorar_datos.ipynb` para entender los 4,407 estudios, los 58 con etiqueta experta, las series por plano y algunos DICOM. Aquí buscamos errores de ruta, estudios incompletos y diferencias raras de intensidad.
+Corremos `experiments/exp000_preparacion/01_explorar_datos.ipynb` para entender los 4,407 estudios, los 58 con etiqueta experta, las series por plano y algunos DICOM. Aquí buscamos errores de ruta, estudios incompletos y diferencias raras de intensidad.
 
 ## 1. Crear cache
 
-Rodrigo corre una sola vez `prep/01_crear_cache.ipynb`. Decodificar DICOM durante cada entrenamiento sería lento y competiría por el disco compartido. El cache `v1_256` normaliza y redimensiona cada corte, pero conserva todas las series y todos los cortes para cambiar el muestreo después.
+Rodrigo corre una sola vez `experiments/exp000_preparacion/02_crear_cache.ipynb`. Decodificar DICOM durante cada entrenamiento sería lento y competiría por el disco compartido. El cache `v1_256` normaliza y redimensiona cada corte, pero conserva todas las series y todos los cortes para cambiar el muestreo después.
 
 ## 2. Sacar pseudo-etiquetas de los informes
 
-`prep/02_etiquetas_con_qwen.ipynb` lee los 4,407 informes con un Qwen Instruct local y guarda 12 valores por estudio: presente, ausente o incierto. Es reanudable porque escribe resultados conforme avanza. Al final compara contra los 58 gold por etiqueta. Revisamos especialmente etiquetas con AUC o acuerdo bajo; un informe clínico y la etiqueta de expertos no siempre describen exactamente lo mismo.
+`experiments/exp000_preparacion/03_etiquetas_qwen.ipynb` lee los 4,407 informes con un Qwen Instruct local y guarda 12 valores por estudio: presente, ausente o incierto. Es reanudable porque escribe resultados conforme avanza. Al final compara contra los 58 gold por etiqueta. Revisamos especialmente etiquetas con AUC o acuerdo bajo; un informe clínico y la etiqueta de expertos no siempre describen exactamente lo mismo.
 
 ## 3. Baseline DINOv2-small
 

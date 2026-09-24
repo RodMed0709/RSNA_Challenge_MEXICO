@@ -14,9 +14,8 @@
         ├── docs/                compartido: proceso, reglas, registro de experimentos
         ├── src/knee/            compartido: lectura de cache, dataset, modelo, métricas
         ├── splits/              compartido: el split canónico (no se edita)
-        ├── prep/                notebooks únicos: explorar, crear cache, pseudo-etiquetas
         ├── kaggle/              notebook de inferencia para enviar
-        ├── experiments/         expNNN_tag/ → SPEC.md + notebook del experimento
+        ├── experiments/         exp000_preparacion (datos, cache, etiquetas, split) · exp001, exp002… en orden
         └── results/             expNNN_tag/ → pesos, predicciones, metrics.json (solo metrics.json va a git)
 ```
 

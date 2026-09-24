@@ -10,9 +10,9 @@ Reglas completas en [CLAUDE.md](CLAUDE.md).
 
 - `docs/`: guía del equipo. Empieza en [docs/00_EMPIEZA_AQUI.md](docs/00_EMPIEZA_AQUI.md).
 - `docs/EXPERIMENTOS.md`: registro global y referencia actual.
-- `experiments/expNNN_tag/`: SPEC + notebook de cada experimento (el entrenamiento vive en las celdas).
+- `experiments/`: exp000 (preparación de datos) y luego exp001, exp002… en orden; cada uno con SPEC + notebook.
 - `results/expNNN_tag/`: pesos y predicciones (solo `metrics.json` va a git).
 - `splits/`: split canónico `split_v1_seed42`.
 - `src/knee/`: código compartido (cache, dataset, modelo, métricas, experimentos).
-- `prep/`: notebooks únicos (explorar, cache, pseudo-etiquetas). `kaggle/`: inferencia para enviar.
+- `kaggle/`: inferencia para enviar. La preparación de datos es `experiments/exp000_preparacion/`.
 - `scripts/`: preparar el pod y correr notebooks en segundo plano.

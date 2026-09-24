@@ -35,7 +35,7 @@ Hay DICOM sin comprimir, JPEG Lossless y JPEG 2000. `src/knee/dicom.py` ordena c
 
 ## Cache
 
-`notebooks/01_crear_cache.ipynb` produce:
+`experiments/exp000_preparacion/02_crear_cache.ipynb` produce:
 
 ```text
 /workspace/data/cache/v1_256/<StudyInstanceUID>/<SeriesInstanceUID>.npy
