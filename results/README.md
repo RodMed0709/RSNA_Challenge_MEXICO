@@ -1,9 +1,7 @@
-# Registro de resultados
+# Resultados
 
-El archivo real vive en `/workspace/results/all_runs.csv` para que todos vean los experimentos terminados. `train_fold` agrega una fila automáticamente al finalizar cada fold.
+`results/expNNN_tag/` guarda lo que produce el notebook del experimento: `best_f{k}.pt`, `oof_f{k}.csv`, `gold_f{k}.csv`,
+`history_f{k}.csv`, logs y `metrics.json`. Solo `metrics.json` se sube a git.
 
-Columnas base: `timestamp`, `user`, `run_name`, `fold`, `backbone`, `img_size`, `n_slices`, `epochs`, `lr`, `pseudo_auc`, `gold_auc`, `select_on`, `val_auc_mean`, una columna `auc_<label>` por hallazgo y `notes`.
-
-`pseudo_auc` mide el fold de pseudo-etiquetas y `gold_auc` mide todos los estudios gold separados del entrenamiento. `val_auc_mean` contiene la métrica elegida por `select_on`; cuando hay gold, las columnas `auc_<label>` también corresponden a gold.
-
-Este directorio del repo solo documenta el formato. No copies aquí pesos ni resultados grandes.
+`tabla_experimentos()` junta los `metrics.json` de todas las carpetas `/workspace/users/*/results/` y muestra el ranking
+con las rutas de pesos. `pesos("exp023")` devuelve los checkpoints de un experimento.

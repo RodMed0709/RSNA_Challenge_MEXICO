@@ -1,12 +1,6 @@
-# Experimentos personales
+# Experimentos
 
-Los notebooks de `notebooks/` son la referencia y no se editan para una prueba individual.
+Una carpeta por experimento: `expNNN_tag/` con `SPEC.md` y `expNNN_tag.ipynb`. El número es global para todo el equipo
+y lo asigna `nuevo_experimento("tag", padre="expNNN")`. `_plantilla/SPEC.md` es la plantilla.
 
-Crea tu carpeta y copia ahí el notebook que quieras cambiar:
-
-```bash
-mkdir -p experiments/ana
-cp notebooks/03_baseline_dinov2.ipynb experiments/ana/ana_dinov2s_lr1e4_v1.ipynb
-```
-
-Cada persona trabaja solamente dentro de `experiments/<nombre>/`. Los pesos, logs y notebooks ejecutados van en `/workspace/users/<nombre>/runs/`, no en git.
+Ciclo y reglas: [docs/06_SDD.md](../docs/06_SDD.md). Registro: [docs/EXPERIMENTOS.md](../docs/EXPERIMENTOS.md).

@@ -1,6 +1,6 @@
 # Registro de experimentos
 
-**Referencia actual: exp003_ref_split_v1** (pendiente de correr sobre `split_v1_seed42`).
+**Referencia actual: exp003_ref_split_v1** (corriendo 5 folds; fold 0: pseudo 0.827, gold 0.777).
 
 Una fila por experimento. `nuevo_experimento()` agrega la fila con estado `spec`; su autor la completa en el verdict.
 Estados: `spec`, `running`, `worked`, `didnt`, `killed`. Los números salen de `results/expNNN_tag/metrics.json`.
