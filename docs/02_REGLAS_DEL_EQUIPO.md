@@ -4,7 +4,7 @@
 
 - Cada quien trabaja solo en `/workspace/users/<su_nombre>/`. Las carpetas de los demás se pueden leer (por ejemplo,
   para cargar sus pesos), nunca editar.
-- `docs/`, `src/`, `splits/` y `kaggle/` son compartidos: cambian por PR, no a mano en tu copia.
+- `docs/`, `src/`, `SPLITS/`, los `.sh` y `inferencia_kaggle.ipynb` son compartidos: cambian por PR, no a mano en tu copia.
 - `experiments/expNNN_tag/` es del autor del experimento. `results/expNNN_tag/` guarda lo pesado y no va a git
   (excepto `metrics.json`).
 - Nada de carpetas nuevas en `/workspace` ni en `/workspace/data`.

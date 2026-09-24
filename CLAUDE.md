@@ -35,7 +35,7 @@ Si en esta sesión no has leído los documentos de abajo, léelos ANTES de propo
 - Notebook con celdas fijas: 0 parámetros · 1 setup · 2 datos y split · 3 modelo · 4 entrenamiento ·
   5 evaluación · 6 guardar `results/expNNN_tag/metrics.json` · 7 verdict.
 - Primero `SMOKE = True` (1 época, pocos estudios). Luego `FOLDS = [0]`. Si promete, `FOLDS = [0, 1, 2, 3, 4]`.
-- Entrenamientos largos: `bash scripts/run_notebook.sh experiments/expNNN_tag/expNNN_tag.ipynb` (sigue aunque cierres el navegador).
+- Entrenamientos largos: `bash run_notebook.sh experiments/expNNN_tag/expNNN_tag.ipynb` (sigue aunque cierres el navegador).
 - Ver todos los resultados del equipo y rutas de pesos: `tabla_experimentos()`.
 - Apaga el pod al terminar.
 

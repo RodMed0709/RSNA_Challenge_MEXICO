@@ -1,4 +1,4 @@
-# exp000_preparacion
+# exp001_preparacion
 
 | Campo | Valor |
 |---|---|
@@ -14,9 +14,9 @@ No se vuelven a correr salvo que se quiera una versión nueva (cache v2, etiquet
 | 1 | `01_explorar_datos.ipynb` | Revisión de CSV, series y DICOM | 4,407 estudios, 24,371 series, 58 gold |
 | 2 | `02_crear_cache.ipynb` | `/workspace/data/cache/v1_256/` (un `.npy` uint8 por serie + `index.csv`) | 24,371 series, 0 errores, 59 GB, ~15 min |
 | 3 | `03_etiquetas_qwen.ipynb` | `/workspace/data/labels/report_labels_v1.csv` (Qwen2.5-7B lee los informes) | Acuerdo con gold ~0.80; flojas MCL, Effusion, Synovitis |
-| 4 | `04_split_v1.ipynb` | `splits/split_v1_seed42.csv` + `.json` | 5 folds de 865–877, gold en fold -1 (ver `docs/07_SPLIT.md`) |
+| 4 | `04_split_v1.ipynb` | `SPLITS/split_v1_seed42.csv` + `.json` | 5 folds de 865–877, gold en fold -1 (ver `docs/07_SPLIT.md`) |
 
-Salidas de ejecución en `results/exp000_preparacion/`.
+Salidas de ejecución en `results/exp001_preparacion/`.
 
 **Qué aprendimos:** no hay forma de identificar pacientes (PatientID distinto por estudio); el idioma del informe
 aproxima el hospital; en las etiquetas v1 "no mencionado" quedó como 0.5 y probablemente debería ser 0.

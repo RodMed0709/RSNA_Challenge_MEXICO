@@ -24,7 +24,7 @@ LABELS_ROOT = DATA_ROOT / "labels"
 MODELS_ROOT = Path("/workspace/models")
 USERS_ROOT = Path(os.environ.get("RSNA_USERS", "/workspace/users"))
 REPO_ROOT = Path(__file__).resolve().parents[2]
-SPLITS_ROOT = REPO_ROOT / "splits"
+SPLITS_ROOT = REPO_ROOT / "SPLITS"
 PLANE_TO_ID = {"Sagittal": 0, "Coronal": 1, "Axial": 2}
 
 

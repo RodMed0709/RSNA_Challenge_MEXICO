@@ -35,7 +35,7 @@ Hay DICOM sin comprimir, JPEG Lossless y JPEG 2000. `src/knee/dicom.py` ordena c
 
 ## Cache
 
-`experiments/exp000_preparacion/02_crear_cache.ipynb` produce:
+`experiments/exp001_preparacion/02_crear_cache.ipynb` produce:
 
 ```text
 /workspace/data/cache/v1_256/<StudyInstanceUID>/<SeriesInstanceUID>.npy
@@ -48,4 +48,4 @@ Cada `.npy` es `uint8` con forma `[cortes, 256, 256]`; conserva todos los cortes
 
 - `/workspace/data/labels/report_labels_v1.csv`: pseudo-etiquetas de Qwen2.5-7B (1, 0, 0.5 incierto). Acuerdo con gold ~0.80;
   flojas en MCL, Effusion y Synovitis. Ojo: hoy "no mencionado en el informe" queda como 0.5 (`src/knee/labels.py`), probablemente debería ser 0.
-- El split canónico está en `splits/` y se explica en `docs/07_SPLIT.md`.
+- El split canónico está en `SPLITS/` y se explica en `docs/07_SPLIT.md`.

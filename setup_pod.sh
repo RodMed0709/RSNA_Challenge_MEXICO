@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-source "$(dirname "${BASH_SOURCE[0]}")/env.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/_env.sh"
 
 if ! "$VENV_DIR/bin/python" -c "import sys" 2>/dev/null; then
   echo "Creando el ambiente $VENV_DIR (Python $PY_VER)"

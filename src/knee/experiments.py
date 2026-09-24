@@ -36,7 +36,7 @@ def git_info(repo=REPO_ROOT):
     return {
         "commit": run("rev-parse", "--short", "HEAD") or None,
         "branch": run("rev-parse", "--abbrev-ref", "HEAD") or None,
-        "src_dirty": bool(run("status", "--porcelain", "--", "src", "splits")),
+        "src_dirty": bool(run("status", "--porcelain", "--", "src", "SPLITS")),
     }
 
 
