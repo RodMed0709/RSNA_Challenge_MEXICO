@@ -47,19 +47,24 @@ Elegimos checkpoints que mejoren OOF y que no sean copias casi idénticas. `infe
 | Split canónico `split_v1_seed42` | listo | ver `docs/07_SPLIT.md` |
 | exp002 referencia sobre split_v1 | corriendo 5 folds | fold 0: pseudo 0.827, gold 0.777 (igual que la prueba previa al split). **Fold 1: pseudo 0.738, gold 0.690** — la receta es inestable al descongelar el backbone |
 
-## Roadmap priorizado (un experimento = una variable, padre exp002)
+## Backlog para el equipo (octubre)
 
-| Prioridad | Idea | Por qué | Costo |
+El nivel público está en ~0.94 y nosotros en 0.777 de gold: hay que cambiar datos, entrada y cabeza, no afinar.
+Detalle de cada idea en `docs/08_LO_QUE_HACEN_OTROS.md`. Nadie tiene número reservado: quien tome una idea corre
+`nuevo_experimento(...)`, escribe su SPEC y la marca en el grupo. Padre = referencia actual de `docs/EXPERIMENTOS.md`.
+
+| Prioridad | Idea | Tipo de cambio | Por qué |
 |---|---|---|---|
-| 1 | Warmup después de descongelar (el warmup hoy cae en la época congelada y el backbone arranca con lr completo) | Explica la caída del fold 1 tras la época 1 | igual |
-| 1 | Pseudo-etiquetas v2: "no mencionado" = 0 en vez de 0.5, prompt con definiciones, Qwen más grande | Probablemente la mayor fuente de ruido; +0.02–0.04 esperado en gold | GPU para relabel |
-| 1 | Inferencia Kaggle cronometrada con exp002 | Obligatorio antes de todo lo demás: tiempo, rutas, offline | 1 envío |
-| 2 | Selección de series que cubra los 3 planos | Hoy `head(5)` puede dejar fuera un plano | igual |
-| 2 | Espejo del estudio completo (augment + TTA) | Rodilla derecha ↔ izquierda sigue siendo válida | igual |
-| 2 | 24 cortes o 256 px | Más detalle | +30–60 % |
-| 3 | `dinov2-base` | Backbone más grande | ×3 |
-| 3 | Embedding posicional de cortes + 1 capa Transformer | El pooling actual ignora el orden de cortes | poco |
-| 3 | EMA / 12 épocas | Estabilidad | +50 % |
-| 4 | Pérdidas robustas al ruido, ensemble final con 2 semillas | Última semana | — |
+| 0 | Enviar a Kaggle un fork del notebook público 0.943 | Envío, no experimento | Valida el flujo de envío y nos pone en el leaderboard |
+| 0 | Inferencia propia cronometrada con exp002 (`inferencia_kaggle.ipynb`) | Envío | Rutas offline, tiempo real, formato |
+| 1 | Cache v2: recorte 130 mm, 336 px, rodillas alineadas, 6 slots por tipo de secuencia | Datos (nuevo cache) | Mayor palanca: detalle fino y series correctas |
+| 1 | Etiquetas v2: Qwen3-8B, "no mencionado" bajo (~0.2) con peso bajo, confianza por etiqueta | Etiquetas | Menos ruido; hoy "no mencionado" = 0.5 |
+| 1 | Cabeza con atención por etiqueta + lr cabeza 1e-3 | Modelo (celda 3) | Cada hallazgo mira su plano; también ataca el fold inestable |
+| 2 | Entrada 2.5D (3 cortes vecinos como RGB) | Datos/modelo | Contexto 3D barato |
+| 2 | Congelar la primera mitad de DINOv2 + warmup después de descongelar | Entrenamiento | Estabilidad (fold 1 cayó a 0.738) |
+| 2 | Pooling por etiqueta en test (max / top2 / media) | Evaluación | Hallazgos focales vs difusos |
+| 3 | CoAtNet `coatnet_rmlp_2_rw_384` en lugar de DINOv2 | Modelo | Backbone del mejor notebook público |
+| 3 | Promedio de checkpoints top-3 y mezcla por ranking | Entrenamiento/ensemble | Gratis en precisión |
+| 4 | Ensemble final: 5 folds × 2 semillas × 2 backbones, TTA | Final (desde 8 oct) | Última milla |
 
-Toda época tarda ~11 min con la receta actual (~90 min por fold). Screening siempre con fold 0.
+Cada época tarda ~11 min con la receta actual (~90 min por fold). Screening siempre con fold 0.

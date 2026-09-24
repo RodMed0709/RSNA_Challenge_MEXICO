@@ -8,7 +8,8 @@ Si en esta sesión no has leído los documentos de abajo, léelos ANTES de propo
 2. `docs/02_REGLAS_DEL_EQUIPO.md` — git, carpetas y convivencia en el volumen.
 3. `docs/06_SDD.md` — ciclo SPEC → PLAN → IMPLEMENT → RUN → VERDICT → PROMOTE/ARCHIVE y reglas de decisión.
 4. `docs/EXPERIMENTOS.md` — registro global: referencia actual y lo que ya falló.
-5. `docs/07_SPLIT.md`, `docs/04_DATOS.md`, `docs/05_PLAN_DE_MODELOS.md` — split, datos, roadmap.
+5. `docs/07_SPLIT.md`, `docs/04_DATOS.md`, `docs/05_PLAN_DE_MODELOS.md` — split, datos, backlog priorizado.
+   `docs/08_LO_QUE_HACEN_OTROS.md` — qué hacen los notebooks públicos que están en ~0.94.
 6. La `SPEC.md` del experimento en curso y la de su padre.
 
 ## Reglas no negociables
