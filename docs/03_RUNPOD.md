@@ -18,22 +18,22 @@ GPU, de mayor a menor preferencia práctica:
 
 ## Preparación
 
-Desde una terminal, dentro del repo:
+Desde una terminal, dentro de tu carpeta:
 
 ```bash
-export RSNA_USER=ana
+cd /workspace/users/<tu_nombre>
 bash scripts/setup_pod.sh
-nvidia-smi
 ```
 
-`setup_pod.sh` crea `/workspace/venv` solo una vez y siempre registra el kernel `rsna` para el pod actual.
+`setup_pod.sh` elige el ambiente según la versión de Python de la imagen (3.11 → `/workspace/venv`, 3.12 → `/workspace/venv312`),
+lo crea si falta o está roto, instala `requirements.txt` y registra el kernel `Python (rsna)`. Tu usuario sale del nombre de tu carpeta.
 
 ## Dejar un entrenamiento corriendo
 
 ```bash
-export RSNA_USER=ana
-cd /workspace/users/$RSNA_USER/RSNA_Challenge
-bash scripts/run_notebook.sh notebooks/03_baseline_dinov2.ipynb ana_dinov2s_lr1e4_v1 -p FOLD 0 -p EPOCHS 5
+cd /workspace/users/<tu_nombre>
+bash scripts/run_notebook.sh experiments/exp023_dinov2_base/exp023_dinov2_base.ipynb
+bash scripts/run_notebook.sh experiments/exp023_dinov2_base/exp023_dinov2_base.ipynb -y "FOLDS: [0, 1, 2, 3, 4]"
 ```
 
 Puedes cerrar el navegador: `nohup` mantiene el proceso. El comando imprime el PID y la ruta del log.
@@ -41,7 +41,7 @@ Puedes cerrar el navegador: `nohup` mantiene el proceso. El comando imprime el P
 Para revisar el avance:
 
 ```bash
-tail -f /workspace/users/$RSNA_USER/runs/ana_dinov2s_lr1e4_v1/train.log
+tail -f results/exp023_dinov2_base/run_*.log
 nvidia-smi
 ```
 
@@ -49,6 +49,11 @@ Sal de `tail` con `Ctrl+C`; no detiene el entrenamiento.
 
 ## Costos y convivencia
 
-Detén el pod desde la consola de RunPod apenas termine el trabajo. Detenerlo libera la GPU; el Network Volume permanece y se cobra aparte. Confirma que los resultados estén en `/workspace/users/<nombre>/runs/` antes de terminar el pod.
+Detén el pod desde la consola de RunPod apenas termine el trabajo. Detenerlo libera la GPU; el Network Volume permanece y se cobra aparte. Confirma que `results/expNNN_tag/metrics.json` exista antes de terminar el pod.
 
 El volumen es compartido y los DICOM son cientos de miles de archivos. No abras ni recorras carpetas grandes mientras otras personas entrenan: puede volver lenta la lectura para todos. Usa el cache `.npy` para entrenar.
+
+## Tiempos de referencia
+
+exp003 (DINOv2-small, 224 px, 5 series × 16 cortes, 8 épocas) tarda ~90 min por fold en RTX PRO 6000:
+fold 0 ≈ 1.5 h, 5 folds ≈ 7.5 h. Haz screening con `FOLDS = [0]` y solo confirma con 5 folds lo que promete.

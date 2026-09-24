@@ -1,17 +1,18 @@
-﻿.secrets.env
+.secrets.env
 *.env
 .env*
 .claude/
 .codex/
 .codex-worker/
 .planning/
-CLAUDE.md
-AGENTS.md
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
 data/
 runs/
+results/*/*
+!results/*/metrics.json
+kaggle_bundle/
 *.npy
 *.npz
 *.pt
@@ -23,3 +24,4 @@ runs/
 *.tar.gz
 wandb/
 submission.csv
+ejemplos_locales/

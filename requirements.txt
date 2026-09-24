@@ -15,3 +15,5 @@ papermill
 ipykernel
 matplotlib
 iterative-stratification
+nbstripout
+pyyaml
