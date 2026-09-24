@@ -1,45 +1,71 @@
 # Empieza aquí
 
-## Checklist del primer día
+## Cómo está organizado
 
-0. Pídele a Rodrigo acceso al repo privado de GitHub y al equipo de RunPod.
+```
+/workspace/                      volumen compartido de RunPod
+├── data/        raw (tal cual de Kaggle) · cache/v1_256 · labels · _logs
+├── models/      dinov2-small · Qwen2.5-7B-Instruct
+├── venv/        ambiente Python 3.11      venv312/  ambiente Python 3.12
+└── users/
+    ├── rodrigo/                 clon de GitHub (cada persona tiene el suyo, idénticos)
+    └── <tu_nombre>/
+        ├── CLAUDE.md            reglas (léelas aunque no uses Claude)
+        ├── docs/                compartido: proceso, reglas, registro de experimentos
+        ├── src/knee/            compartido: lectura de cache, dataset, modelo, métricas
+        ├── splits/              compartido: el split canónico (no se edita)
+        ├── prep/                notebooks únicos: explorar, crear cache, pseudo-etiquetas
+        ├── kaggle/              notebook de inferencia para enviar
+        ├── experiments/         expNNN_tag/ → SPEC.md + notebook del experimento
+        └── results/             expNNN_tag/ → pesos, predicciones, metrics.json (solo metrics.json va a git)
+```
 
-1. En RunPod ve a `Storage`, elige el Network Volume `RSNA-KNEE` (región `US-NE-1`) y dale `Deploy`. Usa el template `RSNA-KNEE`; ya trae esta imagen, los puertos y el disco:
+Los números de experimento son **globales**: si Rodrigo va en exp021 y José Javier tomó exp022, el siguiente libre es exp023.
+Nadie los elige a mano; los reparte `nuevo_experimento()`.
 
-   ```text
-   runpod/pytorch:2.8.0-py3.11-cuda12.8.1-cudnn-devel-ubuntu22.04
-   ```
+## Primer día (una sola vez)
 
-   Elige una GPU de 48 GB o más, de preferencia `RTX PRO 6000 96GB`. El volumen queda montado en `/workspace`.
-
-2. Inicia el pod y abre JupyterLab con el botón `Connect`.
-
-3. Abre una terminal, pon tu nombre en minúsculas y clona tu propia copia:
-
+1. En RunPod: `Storage` → volumen `RSNA-KNEE` (región `US-NE-1`) → `Deploy`, template `RSNA-KNEE`,
+   GPU de 48 GB o más (ideal `RTX PRO 6000 96GB`).
+2. Abre Jupyter → `Terminal` y clona el repo en tu carpeta (Rodrigo te da acceso al repo y te dice cómo crear tu token):
    ```bash
-   export RSNA_USER=ana
-   mkdir -p /workspace/users/$RSNA_USER
-   cd /workspace/users/$RSNA_USER
-   git clone https://github.com/RodMed0709/RSNA_Challenge_MEXICO.git RSNA_Challenge
-   cd RSNA_Challenge
-   ```
-
-4. Prepara el ambiente compartido:
-
-   ```bash
+   git clone https://github.com/RodMed0709/RSNA_Challenge_MEXICO.git /workspace/users/<tu_nombre>
+   cd /workspace/users/<tu_nombre>
    bash scripts/setup_pod.sh
    ```
+3. Lee `CLAUDE.md`, `docs/02_REGLAS_DEL_EQUIPO.md` y `docs/06_SDD.md`.
 
-   La primera vez instala los paquetes. En pods nuevos solo vuelve a registrar el kernel porque el volumen conserva `/workspace/venv`.
+## Cada vez que abras un pod
 
-5. Regresa a JupyterLab, abre `notebooks/00_explorar_datos.ipynb` y elige `Kernel > Change Kernel > Python (rsna)`. Corre todas las celdas.
+```bash
+cd /workspace/users/<tu_nombre>
+bash scripts/setup_pod.sh      # elige el ambiente según la versión de Python del pod y registra el kernel
+git switch main && git pull
+```
 
-6. Los notebooks saben quién eres por la carpeta donde está tu copia (`/workspace/users/ana/...`). En la terminal sí hay que definirlo cada sesión antes de usar `scripts/run_notebook.sh`:
+En Jupyter usa siempre el kernel **Python (rsna)**.
 
-   ```bash
-   export RSNA_USER=ana
+## Tu primer experimento
+
+1. Abre cualquier notebook y corre una celda:
+   ```python
+   import sys; sys.path.insert(0, "/workspace/users/<tu_nombre>")
+   from src.knee.experiments import nuevo_experimento, tabla_experimentos
+   nuevo_experimento("dinov2_base", padre="exp003", idea="backbone base en vez de small")
    ```
+   Crea `experiments/expNNN_dinov2_base/` con el notebook del padre y una `SPEC.md` en blanco.
+2. Llena las secciones 1 y 2 de la SPEC (puedes pedirle ayuda a Claude con el prompt de `docs/06_SDD.md`).
+3. Crea tu rama y sube la SPEC: `git switch -c expNNN_dinov2_base && git add experiments docs && git commit -m "Add expNNN spec" && git push -u origin HEAD`.
+4. Cambia solo las celdas del PLAN. Corre el notebook con `SMOKE = True`; si termina bien, `SMOKE = False`, `FOLDS = [0]`.
+5. Para dejarlo entrenando aunque cierres el navegador:
+   ```bash
+   bash scripts/run_notebook.sh experiments/expNNN_dinov2_base/expNNN_dinov2_base.ipynb
+   ```
+6. Llena el verdict (sección 3 de la SPEC y tu fila en `docs/EXPERIMENTOS.md`), commit, push y abre el PR en GitHub.
 
-   GitHub te pedirá usuario y un token personal (Settings > Developer settings > Personal access tokens) la primera vez que clones o hagas push.
+## Ver cómo va el equipo
 
-Si el notebook no ve los datos, confirma que existe `/workspace/data/raw/train.csv`. No copies el dataset a tu carpeta personal.
+```python
+tabla_experimentos()        # todos los experimentos de todos, ordenados, con rutas de pesos
+```
+o en terminal: `python -m src.knee.experiments tabla`.
