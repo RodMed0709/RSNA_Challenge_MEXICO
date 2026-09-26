@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "exp": "exp009_preparacion_v2",
+  "author": "rodrigo",
+  "parent": "exp001",
+  "git": {
+    "commit": "5d53afc",
+    "branch": "paso1-backbones",
+    "src_dirty": false
+  },
+  "timestamp_utc": "2026-09-26T18:50:10.773534+00:00",
+  "phase": "prep",
+  "params": {
+    "MAX_STUDIES": null,
+    "N_THREADS": 16,
+    "SIDE_MM": 15.0,
+    "MIN_PRECISION": 0.95
+  },
+  "outputs": [
+    "/workspace/data/cache/meta_v2/series_meta_v2.csv",
+    "/workspace/data/cache/meta_v2/study_meta_v2.csv"
+  ],
+  "read_minutes": 33.92124814987183,
+  "n_studies": {
+    "test": 3,
+    "train": 4407
+  },
+  "n_series": {
+    "test": 15,
+    "train": 24371
+  },
+  "n_files": 819635,
+  "n_read_errors": 0,
+  "series_without_geometry": 0,
+  "plane_iop_coverage": 0.992905765603215,
+  "plane_counts": {
+    "Sagittal": 9864,
+    "Coronal": 8467,
+    "Axial": 5882,
+    "Oblique": 173
+  },
+  "plane_agree_csv": 1.0,
+  "weighting_counts": {
+    "PD": 13567,
+    "T1": 6126,
+    "T2": 4183,
+    "STIR": 505,
+    "other": 4,
+    "unknown": 1
+  },
+  "weighting_src_counts": {
+    "trte": 22855,
+    "text": 1526,
+    "none": 5
+  },
+  "csv_fluid_equals_csv_fs": 1.0,
+  "side_tag_vs_geom_agree": 0.9869281045751634,
+  "side_tag_vs_geom_n": 2142,
+  "fs_src_counts": {
+    "scan_options": 12279,
+    "csv": 10330,
+    "text": 1272,
+    "stir": 505
+  },
+  "fs_agree_csv": 0.9956532436643976,
+  "fluid_agree_csv": 0.8037398507340278,
+  "localizers": 0,
+  "eligible_frac": 0.992905765603215,
+  "order_reversed_frac": 0.38173542196342164,
+  "median_ps_mm": 0.3125,
+  "median_slice_spacing_mm": 3.500000688853561,
+  "report_side_counts": {
+    "none": 2447,
+    "R": 976,
+    "L": 971,
+    "both": 13
+  },
+  "side_methods": {
+    "tag": {
+      "coverage_all": 0.499546485260771,
+      "n_checked": 1078,
+      "precision": 0.9656771799628943
+    },
+    "text": {
+      "coverage_all": 0.2070294784580499,
+      "n_checked": 575,
+      "precision": 0.9860869565217392
+    },
+    "geom": {
+      "coverage_all": 0.971655328798186,
+      "n_checked": 1830,
+      "precision": 0.9721311475409836
+    }
+  },
+  "side_strong": [
+    "tag",
+    "text",
+    "geom"
+  ],
+  "side_weak": [],
+  "study_side_coverage": 0.9861678004535147,
+  "study_side_src_counts": {
+    "tag": 2203,
+    "geom": 1770,
+    "text": 376,
+    "unknown": 61
+  },
+  "study_side_precision": 0.9703703703703703,
+  "study_side_n_checked": 1890,
+  "slot_coverage": {
+    "test": {
+      "slot1_sag_fluid_fs": 0.6666666666666666,
+      "slot2_cor_fluid_fs": 1.0,
+      "slot3_ax_fluid_fs": 1.0,
+      "slot4_sag_pdt2": 0.6666666666666666,
+      "slot5_cor_t1": 0.3333333333333333,
+      "slot6_sag_t1": 0.3333333333333333
+    },
+    "train": {
+      "slot1_sag_fluid_fs": 0.942591331971863,
+      "slot2_cor_fluid_fs": 0.9643748581801679,
+      "slot3_ax_fluid_fs": 0.9997730882686635,
+      "slot4_sag_pdt2": 0.5684138869979578,
+      "slot5_cor_t1": 0.7644656228727025,
+      "slot6_sag_t1": 0.47447243022464264
+    }
+  },
+  "slot_fallback_train": {
+    "slot1_sag_fluid_fs": 0.0,
+    "slot2_cor_fluid_fs": 0.0,
+    "slot3_ax_fluid_fs": 0.05718175629680054,
+    "slot4_sag_pdt2": 0.0,
+    "slot5_cor_t1": 0.11980939414567733,
+    "slot6_sag_t1": 0.0
+  }
+}
