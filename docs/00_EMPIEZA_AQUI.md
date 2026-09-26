@@ -26,7 +26,7 @@ Nadie los elige a mano; los reparte `nuevo_experimento()`.
 
 ## Primer día (una sola vez)
 
-1. En RunPod: `Storage` → volumen `RSNA-KNEE` (región `US-NE-1`) → `Deploy`, template `RSNA-KNEE`,
+1. En RunPod: `Storage` → volumen `RSNA-KNEE` (región `EU-RO-1`) → `Deploy`, template `RSNA-KNEE`,
    GPU de 48 GB o más (ideal `RTX PRO 6000 96GB`).
 2. Abre Jupyter → `Terminal` y clona el repo en tu carpeta (Rodrigo te da acceso al repo y te dice cómo crear tu token):
    ```bash
