@@ -4,7 +4,7 @@
 
 - Imagen: `runpod/pytorch:2.8.0-py3.11-cuda12.8.1-cudnn-devel-ubuntu22.04`
 - Network Volume: `RSNA-KNEE`
-- Región: `US-NE-1`
+- Región: `EU-RO-1` (desde el 26 sep; el volumen de US-NE-1 se borró)
 - Montaje: `/workspace`
 
 GPU, de mayor a menor preferencia práctica:
