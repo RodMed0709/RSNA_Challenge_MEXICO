@@ -38,7 +38,7 @@ class KneeModel(nn.Module):
             import timm
 
             backbone = timm.create_model(timm_name, pretrained=pretrained, num_classes=0)
-            feature_dim = feature_dim or backbone.num_features
+            feature_dim = feature_dim or getattr(backbone, "head_hidden_size", None) or backbone.num_features
         if backbone is None or feature_dim is None:
             raise ValueError("Indica backbone + feature_dim, backbone_path o timm_name")
 

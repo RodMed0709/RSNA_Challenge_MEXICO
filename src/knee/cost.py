@@ -15,7 +15,7 @@ def dummy_study(max_series, n_slices, image_size, device):
 def measure_cost(model, max_series, n_slices, image_size, device, batch=4, repeats=10):
     model.eval()
     inputs = dummy_study(max_series, n_slices, image_size, device)
-    with FlopCounterMode(display=False) as counter:
+    with torch.enable_grad(), FlopCounterMode(display=False) as counter:
         model(*inputs)
     gmacs = counter.get_total_flops() / 2 / 1e9
 
