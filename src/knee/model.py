@@ -58,6 +58,8 @@ class KneeModel(nn.Module):
         )
         if gradient_checkpointing and hasattr(self.backbone, "gradient_checkpointing_enable"):
             self.backbone.gradient_checkpointing_enable()
+        elif gradient_checkpointing and hasattr(self.backbone, "set_grad_checkpointing"):
+            self.backbone.set_grad_checkpointing(True)
 
     def freeze_backbone(self, frozen: bool = True):
         for parameter in self.backbone.parameters():
