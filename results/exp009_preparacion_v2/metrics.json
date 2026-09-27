@@ -132,5 +132,51 @@
     "slot4_sag_pdt2": 0.0,
     "slot5_cor_t1": 0.11980939414567733,
     "slot6_sag_t1": 0.0
-  }
+  },
+  "cache_v2": {
+    "path": "/workspace/data/cache/v2_05mm",
+    "index": "/workspace/data/cache/v2_05mm/index.csv",
+    "notebook": "results/exp009_preparacion_v2/02_cache_v2_full.ipynb",
+    "spacing_mm": 0.5,
+    "window_px": 320,
+    "workers": 8,
+    "n_series": 20790,
+    "n_series_ok": 20790,
+    "n_errors": 0,
+    "n_series_by_split": {
+      "train": 20775,
+      "test": 15
+    },
+    "n_studies_by_split": {
+      "test": 3,
+      "train": 4407
+    },
+    "n_series_by_slot": {
+      "slot1": 4156,
+      "slot2": 4253,
+      "slot3": 4409,
+      "slot4": 2507,
+      "slot5": 3370,
+      "slot6": 2092
+    },
+    "n_series_by_plane": {
+      "Sagittal": 8757,
+      "Coronal": 7623,
+      "Axial": 4410
+    },
+    "n_slices": 663977,
+    "center_src_counts": {
+      "study": 20741,
+      "image": 49
+    },
+    "side_counts": {
+      "R": 10932,
+      "L": 9611,
+      "unknown": 247
+    },
+    "size_bytes": 67993905920,
+    "size_gb": 67.994,
+    "wall_min": 31.33
+  },
+  "note": "cache_v2 añadido el 2026-09-27 desde v2_05mm/index.csv y 02_cache_v2_full.log (wall_min del log); el resto lo escribió 01_meta_v2."
 }

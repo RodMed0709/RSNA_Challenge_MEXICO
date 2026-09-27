@@ -61,7 +61,7 @@ Notebook nuevo `experiments/exp009_preparacion_v2/01_meta_v2.ipynb` (no hereda c
 
 ## 3. VERDICT (números de `results/exp009_preparacion_v2/metrics.json`)
 
-**Resultado:** worked (parcial: slot 1 no llega al 95 %) · **Fase alcanzada:** prep completa (train 4,407 estudios + test 3)
+**Resultado:** worked (parcial: slot 1 no llega al 95 %) · **Fase alcanzada:** prep completa (train 4,407 estudios + test 3) y cache v2 completo
 
 Corrida: `results/exp009_preparacion_v2/01_meta_v2.ipynb` (papermill). 24,386 series, 819,635 cabeceras,
 0 errores de lectura, 33.9 min de reloj con 16 hilos (dentro del presupuesto de 1 h). 0 GPU-h.
@@ -98,11 +98,17 @@ En el csv `Fluid_Sensitive` es idéntico a `Fat_Suppression` (100 %): no aporta 
 38.17 % de las series tienen InstanceNumber en orden inverso a la posición. Mediana 0.3125 mm/px y 3.5 mm entre cortes.
 No hay localizadores en el dataset.
 
+**Cache v2** (`02_cache_v2.ipynb` con `SMOKE = False`, papermill; números en `metrics.json["cache_v2"]`):
+`/workspace/data/cache/v2_05mm`, 20,790 de 20,790 series OK, 0 errores (sin `errors.csv`). Train 20,775 series de
+4,407 estudios + test 15 de 3. 663,977 cortes, 68.0 GB (`uint8 [cortes, 320, 320]`), 31.3 min de reloj con 8 procesos.
+Por slot: 1 → 4,156 · 2 → 4,253 · 3 → 4,409 · 4 → 2,507 · 5 → 3,370 · 6 → 2,092 (+ 3 series de test sin slot).
+Centro del estudio en 20,741 series; 49 caen al centro de la imagen. QA visual por slot en `qa_v2/`.
+
 **Qué aprendimos:** las cabeceras bastan para plano, secuencia, centro y lado (97 % contra el informe). El slot 1
 falla por protocolo, no por bug: el hospital alemán (260 estudios; slot 1 en 6.5 %) hace sagitales PD/T2 sin FS (el
 csv también dice FS = 0). La regex del informe no reconoce `∆` (U+2206) usado como Δ en informes griegos; recalculado
 aparte con ese carácter normalizado, la precisión global sube a 97.46 % (n = 1,932) y la del griego de 88 % a 98 %
 (no está en `metrics.json`; la regex del notebook no se cambió después de correr).
 
-**Siguiente paso sugerido:** 3a (slots) con respaldo del slot 1 → SAG PD/T2 sin FS; cache v2 centrado con
-`study_cx/cy/cz` y espejado con `study_side` (sin espejar los `unknown`).
+**Siguiente paso sugerido:** 3a (slots) sobre `v2_05mm` con respaldo del slot 1 → SAG PD/T2 sin FS; el cache ya
+está centrado con `study_cx/cy/cz`; el espejado con `study_side` se hace al cargar (sin espejar los `unknown`).
