@@ -5,7 +5,7 @@
 | Autor | rodrigo |
 | Padre | — |
 | Fecha | 2026-09-24 |
-| Estado | running |
+| Estado | worked |
 
 Idea: la referencia del equipo sobre el split canónico. Todos los experimentos siguientes parten de aquí.
 
@@ -29,6 +29,21 @@ porque no usaban el split canónico; su aprendizaje quedó en esta receta.
 ## 2. PLAN
 Notebook con las 8 celdas fijas. Smoke → fold 0 → 5 folds.
 
-## 3. VERDICT
-Pendiente (corriendo). Parcial: fold 0 pseudo 0.827 / gold 0.777; fold 1 pseudo 0.738 / gold 0.690 — la receta es
-inestable al descongelar el backbone.
+## 3. VERDICT (números de `results/exp002_dinov2s_ref/metrics.json`)
+
+**Resultado:** worked · **Fase alcanzada:** 5 folds
+
+| Métrica | Este |
+|---|---|
+| pseudo AUC fold 0 | 0.8266 |
+| pseudo AUC por fold (0–4) | 0.827 · 0.738 · 0.809 · 0.807 · 0.817 |
+| gold AUC (promedio de los 5 modelos) | 0.7884 |
+| OOF pseudo 5 folds | 0.8015 |
+| GPU-h | 7.2 |
+
+**Qué aprendimos:** la receta corre y es reproducible sobre el split canónico (fold 0 igual que la prueba previa).
+Fold 1 colapsa (0.738) al descongelar el backbone. El mejor checkpoint fue la última época en 4 de 5 folds: el modelo
+seguía mejorando, así que 8 épocas se quedan cortas. El run terminó pero papermill falló al guardar porque la carpeta
+se renombró durante el entrenamiento; `metrics.json` se reconstruyó desde `oof_f*`, `gold_f*` e `history_f*`.
+
+**Siguiente paso sugerido:** paso 1 de `docs/Hoja_de_Ruta_Eficiencia.docx` (barrido de backbones con esta receta).
