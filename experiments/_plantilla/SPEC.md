@@ -45,7 +45,7 @@ Todo lo demás igual: split `split_v1_seed42`, semilla, épocas, etiquetas.
 | Métrica | Padre | Este | Δ |
 |---|---|---|---|
 | pseudo AUC fold 0 | | | |
-| gold AUC | | | |
+| gold AUC (screen: fold 0 contra fold 0 del padre) | | | |
 | OOF pseudo 5 folds | | | |
 | GPU-h | | | |
 
