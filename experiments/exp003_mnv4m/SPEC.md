@@ -6,7 +6,7 @@
 | Padre | exp002_dinov2s_ref |
 | Fecha | 2026-09-26 |
 | Rama | paso1-backbones |
-| Estado | spec |
+| Estado | killed |
 
 Idea: paso 1 de `docs/Hoja_de_Ruta_Eficiencia.docx` (barrido de backbones). Backbone MobileNetV4-Medium (CNN, Apache-2.0).
 
@@ -48,16 +48,23 @@ licencia de pesos para el premio.
 
 ## 3. VERDICT (números de `results/exp003_mnv4m/metrics.json`)
 
-**Resultado:** pendiente
+**Resultado:** killed · **Fase alcanzada:** screen (fold 0)
 
 | Métrica | Padre | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | 0.8266 | | |
-| gold AUC | 0.7765 (f0) | | |
-| GMACs por estudio | | | |
-| ms por estudio | | | |
-| GPU-h | 1.46 (f0, RTX PRO 6000) | | |
+| pseudo AUC fold 0 | 0.8266 | 0.7433 | −0.0833 |
+| gold AUC fold 0 | 0.7765 | 0.7006 | −0.0759 |
+| GMACs por estudio | 489.9 | 66.4 | −86 % (×0.14) |
+| ms por estudio (A100, `cost_a100`) | 14.6 | 9.2 | −37 % |
+| GPU-h | 1.46 (f0, RTX PRO 6000) | 1.94 (A100 80GB PCIe) | — |
 
-**Qué aprendimos (2-4 líneas):**
+Δ gold es fold 0 contra fold 0 del padre. La celda 5 lo comparó contra el gold promedio de 5 folds del padre
+(0.7884) y dio `killed`; corregido en `metrics.json` (ver `note`).
+Costo de `results/paso1_cost_a100.json`, medido aparte en la misma A100; el `cost` del run se mantiene.
 
-**Siguiente paso sugerido:**
+**Qué aprendimos:** el más barato del barrido (66.4 GMACs, −86 %; 9.2 vs 14.6 ms) y el que peor aprende: pierde
+−0.083 de pseudo y −0.076 de gold, muy fuera del veto. La curva pseudo está casi plana desde la época 6 y la mejor
+época es la última: con lr de backbone 1e-5 la CNN móvil apenas se adapta. Con esta receta no sirve como extremo
+barato del Pareto.
+
+**Siguiente paso sugerido:** archivar. Idea aparte (no este experimento): CNN con lr de backbone más alto en el paso 2.

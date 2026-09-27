@@ -259,5 +259,11 @@
   },
   "decision_auto": "sin_padre",
   "gpu_hours_total": 7.198510832919014,
-  "note": "reconstruido desde oof/gold/history: el run de 5 folds terminó pero papermill falló al guardar (carpeta renombrada durante el run)"
+  "note": "reconstruido desde oof/gold/history: el run de 5 folds terminó pero papermill falló al guardar (carpeta renombrada durante el run)",
+  "cost_a100": {
+    "params_m": 23.39598,
+    "gmacs_per_study": 489.912013056,
+    "ms_per_study": 14.552765287226066,
+    "device": "NVIDIA A100 80GB PCIe"
+  }
 }

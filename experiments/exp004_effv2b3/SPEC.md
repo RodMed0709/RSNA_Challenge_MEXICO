@@ -6,7 +6,7 @@
 | Padre | exp002_dinov2s_ref |
 | Fecha | 2026-09-26 |
 | Rama | paso1-backbones |
-| Estado | spec |
+| Estado | killed |
 
 Idea: paso 1 de `docs/Hoja_de_Ruta_Eficiencia.docx` (barrido de backbones). Backbone EfficientNetV2-B3 (CNN, Apache-2.0).
 
@@ -48,16 +48,22 @@ licencia de pesos para el premio.
 
 ## 3. VERDICT (números de `results/exp004_effv2b3/metrics.json`)
 
-**Resultado:** pendiente
+**Resultado:** killed · **Fase alcanzada:** screen (fold 0)
 
 | Métrica | Padre | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | 0.8266 | | |
-| gold AUC | 0.7765 (f0) | | |
-| GMACs por estudio | | | |
-| ms por estudio | | | |
-| GPU-h | 1.46 (f0, RTX PRO 6000) | | |
+| pseudo AUC fold 0 | 0.8266 | 0.7706 | −0.0560 |
+| gold AUC fold 0 | 0.7765 | 0.7069 | −0.0696 |
+| GMACs por estudio | 489.9 | 129.1 | −74 % (×0.26) |
+| ms por estudio (A100, `cost_a100`) | 14.6 | 15.9 | +9 % |
+| GPU-h | 1.46 (f0, RTX PRO 6000) | 2.99 (A100 80GB PCIe) | — |
 
-**Qué aprendimos (2-4 líneas):**
+Δ gold es fold 0 contra fold 0 del padre. La celda 5 lo comparó contra el gold promedio de 5 folds del padre
+(0.7884) y dio `killed`; corregido en `metrics.json` (ver `note`).
+Costo de `results/paso1_cost_a100.json`, medido aparte en la misma A100; el `cost` del run se mantiene.
 
-**Siguiente paso sugerido:**
+**Qué aprendimos:** 129.1 GMACs (−74 %) pero no es más rápido que el padre en A100 (15.9 vs 14.6 ms): menos GMACs no
+se traduce en menos tiempo. Pierde −0.056 de pseudo y −0.070 de gold (veto). Mejor época la última, curva casi plana
+al final.
+
+**Siguiente paso sugerido:** archivar.

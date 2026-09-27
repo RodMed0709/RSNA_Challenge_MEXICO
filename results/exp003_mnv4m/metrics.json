@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "exp": "exp003_mnv4m",
+  "author": "rodrigo",
+  "parent": "exp002",
+  "split": "split_v1_seed42",
+  "split_sha256": "9fac0679909efda4e52da6c92816442bcf79bffade391e567dc393c8a13e6a87",
+  "git": {
+    "commit": "5d53afc",
+    "branch": "paso1-backbones",
+    "src_dirty": false
+  },
+  "timestamp_utc": "2026-09-26T19:43:43.046359+00:00",
+  "phase": "screen",
+  "select_on": "pseudo",
+  "params": {
+    "EXP": "exp003_mnv4m",
+    "PADRE": "exp002",
+    "FOLDS": [
+      0
+    ],
+    "SEED": 42,
+    "SPLIT": "split_v1_seed42",
+    "SELECT_ON": "pseudo",
+    "SMOKE": false,
+    "LABELS_CSV": "/workspace/data/labels/report_labels_v1.csv",
+    "CACHE_INDEX": "/workspace/data/cache/v1_256/index.csv",
+    "TIMM_NAME": "mobilenetv4_conv_medium.e250_r384_in12k_ft_in1k",
+    "IMAGE_SIZE": 224,
+    "MAX_SERIES": 5,
+    "N_SLICES": 16,
+    "BATCH_SIZE": 2,
+    "GRAD_ACCUM": 4,
+    "EPOCHS": 8,
+    "FREEZE_EPOCHS": 1,
+    "LR": 0.0001,
+    "BACKBONE_LR": 1e-05,
+    "WEIGHT_DECAY": 0.01,
+    "WARMUP_RATIO": 0.1,
+    "GRAD_CLIP": 1.0,
+    "N_WORKERS": 6,
+    "NOTES": "referencia del equipo sobre split_v1",
+    "LABELS": [
+      "ACL",
+      "MCL",
+      "Medial Meniscus",
+      "Lateral Meniscus",
+      "Medial OA",
+      "Lateral OA",
+      "PF OA",
+      "Effusion",
+      "Synovitis",
+      "Baker's",
+      "Contusion",
+      "Fracture"
+    ],
+    "AUTHOR": "rodrigo"
+  },
+  "per_fold": {
+    "0": {
+      "pseudo_auc": 0.7433415349989776,
+      "gold_auc": 0.7005801169811825,
+      "best_epoch": 8,
+      "pseudo_per_label": {
+        "ACL": 0.7515968349301683,
+        "MCL": 0.7050981617455606,
+        "Medial Meniscus": 0.6742305802474651,
+        "Lateral Meniscus": 0.6826580453086477,
+        "Medial OA": 0.8375386643679327,
+        "Lateral OA": 0.7552976118317372,
+        "PF OA": 0.7625235241679874,
+        "Effusion": 0.8511825096298231,
+        "Synovitis": 0.8854146197681273,
+        "Baker's": 0.7132565453927234,
+        "Contusion": 0.6579675077773937,
+        "Fracture": 0.6433338148201646
+      },
+      "gold_per_label": {
+        "ACL": 0.5698529411764706,
+        "MCL": 0.5941043083900227,
+        "Medial Meniscus": 0.678485576923077,
+        "Lateral Meniscus": 0.7229813664596273,
+        "Medial OA": 0.841860465116279,
+        "Lateral OA": 0.8588007736943907,
+        "PF OA": 0.7084942084942084,
+        "Effusion": 0.7894409937888199,
+        "Synovitis": 0.6869772998805257,
+        "Baker's": 0.7817028985507247,
+        "Contusion": 0.6443994601889338,
+        "Fracture": 0.5298611111111111
+      },
+      "gpu_hours": 1.9354692145850922,
+      "ckpt_path": "/workspace/users/rodrigo/results/exp003_mnv4m/best_f0.pt"
+    }
+  },
+  "gold_auc": 0.7005801169811825,
+  "gold_per_label": {
+    "ACL": 0.5698529411764706,
+    "MCL": 0.5941043083900227,
+    "Medial Meniscus": 0.678485576923077,
+    "Lateral Meniscus": 0.7229813664596273,
+    "Medial OA": 0.841860465116279,
+    "Lateral OA": 0.8588007736943907,
+    "PF OA": 0.7084942084942084,
+    "Effusion": 0.7894409937888199,
+    "Synovitis": 0.6869772998805257,
+    "Baker's": 0.7817028985507247,
+    "Contusion": 0.6443994601889338,
+    "Fracture": 0.5298611111111111
+  },
+  "oof_pseudo_auc": null,
+  "delta": {
+    "pseudo_f0": -0.0832536608279052,
+    "gold": -0.07590551932075995,
+    "gold_vs_parent_mean": -0.08784436991960931
+  },
+  "decision_auto": "killed",
+  "cost": {
+    "params_m": 23.221084,
+    "gmacs_per_study": 66.40965888,
+    "ms_per_study": 20.68364339938853,
+    "device": "NVIDIA A100 80GB PCIe"
+  },
+  "gpu_hours_total": 1.9354692145850922,
+  "decision_auto_original": "killed",
+  "cost_a100": {
+    "params_m": 23.221084,
+    "gmacs_per_study": 66.40965888,
+    "ms_per_study": 9.229728099307977,
+    "device": "NVIDIA A100 80GB PCIe"
+  },
+  "note": "2026-09-27: delta.gold y decision_auto corregidos a mano. La celda 5 comparaba el gold de fold 0 contra el gold promedio de 5 folds del padre (0.7884); lo correcto en screen es contra per_fold['0'].gold_auc del padre (0.7765). Valores originales en delta.gold_vs_parent_mean y decision_auto_original. cost_a100 copiado de results/paso1_cost_a100.json (misma A100, medición aparte); cost es la medición dentro del run."
+}

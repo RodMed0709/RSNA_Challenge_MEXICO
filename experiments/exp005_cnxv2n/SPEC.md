@@ -6,7 +6,7 @@
 | Padre | exp002_dinov2s_ref |
 | Fecha | 2026-09-26 |
 | Rama | paso1-backbones |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: paso 1 de `docs/Hoja_de_Ruta_Eficiencia.docx` (barrido de backbones). Backbone ConvNeXt-V2-Nano (CNN, FCMAE, CC-BY-NC).
 
@@ -48,16 +48,22 @@ licencia de pesos para el premio.
 
 ## 3. VERDICT (números de `results/exp005_cnxv2n/metrics.json`)
 
-**Resultado:** pendiente
+**Resultado:** didnt · **Fase alcanzada:** screen (fold 0)
 
 | Métrica | Padre | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | 0.8266 | | |
-| gold AUC | 0.7765 (f0) | | |
-| GMACs por estudio | | | |
-| ms por estudio | | | |
-| GPU-h | 1.46 (f0, RTX PRO 6000) | | |
+| pseudo AUC fold 0 | 0.8266 | 0.8017 | −0.0249 |
+| gold AUC fold 0 | 0.7765 | 0.7570 | −0.0194 |
+| GMACs por estudio | 489.9 | 195.7 | −60 % (×0.40) |
+| ms por estudio (A100, `cost_a100`) | 14.6 | 24.7 | +70 % |
+| GPU-h | 1.46 (f0, RTX PRO 6000) | 2.93 (A100 80GB PCIe) | — |
 
-**Qué aprendimos (2-4 líneas):**
+Δ gold es fold 0 contra fold 0 del padre. La celda 5 lo comparó contra el gold promedio de 5 folds del padre
+(0.7884) y dio `killed`; corregido en `metrics.json` (ver `note`).
+Costo de `results/paso1_cost_a100.json`, medido aparte en la misma A100; el `cost` del run se mantiene.
 
-**Siguiente paso sugerido:**
+**Qué aprendimos:** la mejor CNN pura en pseudo, pero aun así −0.025 contra el padre; gold −0.019 queda justo dentro
+del veto (0.02). 195.7 GMACs (−60 %) pero más lento (24.7 vs 14.6 ms). Los pesos FCMAE son CC-BY-NC: complica el
+premio.
+
+**Siguiente paso sugerido:** pasa al paso 2 por la regla del barrido (3.º no `killed`), con la duda de licencia anotada.
