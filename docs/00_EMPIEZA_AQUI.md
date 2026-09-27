@@ -1,5 +1,7 @@
 # Empieza aquí
 
+¿Eres nuevo en el equipo? Lee primero [09_GUIA_NUEVO_INTEGRANTE.md](09_GUIA_NUEVO_INTEGRANTE.md).
+
 ## Cómo está organizado
 
 ```
