@@ -6,7 +6,7 @@
 | Padre | exp013_cabeza_hallazgo |
 | Fecha | 2026-10-08 |
 | Rama | exp017_atencion_dispersa |
-| Estado | spec |
+| Estado | killed |
 
 Idea: penalización de entropía sobre la atención por hallazgo para que cada hallazgo elija pocas series.
 
@@ -48,16 +48,19 @@ Todo lo demás igual que exp013 (cache v1_256, 224 px, 8 épocas, lr, semilla, e
 
 ## 3. VERDICT (números de `results/exp017_atencion_dispersa/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen
+**Resultado:** killed · **Fase alcanzada:** screen
 
 | Métrica | Padre (exp013) | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | 0.838 | | |
-| gold AUC fold 0 | 0.789 | | |
-| Entropía normalizada media (val) | ~0.97 | | |
-| Similitud coseno media entre hallazgos | 0.95 | | |
-| GPU-h | | | |
+| pseudo AUC fold 0 | 0.838 | 0.793 | −0.046 |
+| gold AUC fold 0 | 0.789 | 0.732 | −0.057 |
+| Entropía normalizada media (val) | ~0.97 | 0.011 | |
+| Similitud coseno media entre hallazgos | 0.95 | 1.000 | |
+| GPU-h | | 2.81 (169 min de reloj, GPU compartida con exp013 folds 2–4) | |
 
-**Qué aprendimos (2-4 líneas):**
+**Qué aprendimos (2-4 líneas):** se cumplió el riesgo previsto: colapso. Para la época 3 la entropía cae de 0.66 a 0.02 y los 12
+hallazgos miran la MISMA serie coronal (masa coronal 0.999, coseno 1.000). La atención concentrada pero idéntica no sirve para
+poda por hallazgo y cuesta −0.046 pseudo y −0.057 gold. λ = 0.05 es demasiado fuerte y la entropía sola no fuerza diversidad.
 
-**Siguiente paso sugerido:** experimento de poda (inferencia sin reentrenar, top-k series por hallazgo).
+**Siguiente paso sugerido:** λ diez veces menor (0.005) para ver si hay un punto con concentración parcial sin colapso
+(exp022). Si también colapsa, la regularización necesita un término de diversidad entre hallazgos (otro experimento).
