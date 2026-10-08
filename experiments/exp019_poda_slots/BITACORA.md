@@ -1,6 +1,6 @@
 # Bitácora — exp019_poda_slots
 
-Padre: `exp012_entrada_v2` · Rama: `exp019_poda_slots` · Fase SDD actual: **IMPLEMENT, falta RUN**.
+Padre: `exp012_entrada_v2` · Rama: `exp019_poda_slots` · Fase SDD actual: **RUN en curso (screen fold 0)**.
 
 ## 1. Qué es
 
@@ -17,6 +17,14 @@ Objetivo: track de eficiencia y la sección de poda del paper.
   `slot_embedding + series_pool + head`. Se comprueba contra el forward completo (assert |Δprob| < 0.02).
 - Costo de preprocesado: tabla por slot de `costo_inferencia.md` (s/serie v2, 1 hilo) escalada a 281 s para 6 slots;
   se imprime la comprobación contra los 182 s medidos para slots 1–3.
+
+### 2026-10-08 — Smoke y run
+- Smoke 1 falló en el assert del atajo (|Δprob| 0.63): bug `out[rows] = f` escribía la feature en todos los slots.
+  Arreglado (`4ee5773`). Smoke 2 (40 pseudo + 20 gold, checkpoint exp012 época 8): atajo vs forward completo
+  |Δprob| máx 1.95e-03; pipeline completo y `metrics_smoke.json` en el pod.
+- Comprobación de costo: preprocesado slots 1–3 estimado 175 s vs 182 s medidos (−4 %).
+- Primer run real falló en la celda 5 cuando ningún candidato cumple (rama `else` usaba `base` sin columnas Δ);
+  arreglado (`b6ab759`) y relanzado. La extracción tarda ~4.4 min; el setup ~5 min por el volumen de red.
 
 ## 3. Cómo correrlo
 
