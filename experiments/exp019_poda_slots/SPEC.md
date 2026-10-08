@@ -6,7 +6,7 @@
 | Padre | exp012_entrada_v2 |
 | Fecha | 2026-10-08 |
 | Rama | exp019_poda_slots |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: solo inferencia (no se entrena). Con el checkpoint de exp012 fold 0, medir cuánta AUC se pierde y cuánto
 tiempo de Kaggle se gana si en inferencia se usan menos slots. Insumo directo para el track de eficiencia y el paper.
@@ -88,15 +88,20 @@ evalúan sobre features cacheadas). GPU compartida con otros runs.
 
 ## 3. VERDICT (números de `results/exp019_poda_slots/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen
+**Resultado:** didnt · **Fase alcanzada:** screen (subconjunto elegido = los 6 slots)
 
 | Métrica | 6 slots (padre) | Subconjunto elegido | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | | | |
-| gold AUC (58) | | | |
-| costo Kaggle estimado (s) | | | |
-| score de eficiencia (pseudo) | | | |
+| pseudo AUC fold 0 | 0.850 | 0.850 (mejor candidato barato: s1+s3+s5 0.824) | 0 (−0.026) |
+| gold AUC (58) | 0.784 | 0.784 (s1+s3+s5: 0.785) | 0 (+0.001) |
+| costo Kaggle estimado (s) | 344 (281 prepro + 63 modelo) | 344 (s1+s3+s5: 211, 61 %) | 0 (−133) |
+| score de eficiencia (pseudo) | −1.817 | −1.817 (s1+s3+s5: −1.775) | 0 (peor) |
 
-**Qué aprendimos (2-4 líneas):**
+**Qué aprendimos (2-4 líneas):** podar slots en inferencia sin reentrenar no sirve: el modelo entrenado con 6 slots usa todos.
+Quitar uno cuesta 0.009–0.015 de pseudo (sin s2: −0.009 pseudo, −0.017 gold); 3 slots (61 % del costo) cuestan −0.026. Por
+hallazgo, ≤2 slots pierden 0.02–0.08 salvo Medial OA, Contusion y Fracture (≤0.006). Y lo que cambia la lectura de eficiencia:
+con runtime en minutos, ahorrar todo el preprocesado (~280 s) vale solo ~0.004 AUC en la métrica; la poda solo paga si la AUC
+cae menos que eso. 63 subconjuntos evaluados, 0.18 GPU-h.
 
-**Siguiente paso sugerido:**
+**Siguiente paso sugerido:** entrenar con slot dropout (apagar slots al azar) para que la red tolere la poda y medir otra vez
+la curva costo–AUC; la poda por hallazgo del paper necesita ese entrenamiento. Para Kaggle, priorizar AUC (etiquetas) sobre runtime.
