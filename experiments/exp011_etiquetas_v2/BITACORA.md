@@ -151,3 +151,8 @@ si los públicos no están descargados. El notebook nunca los imprime.
 | Etiquetas fuera de la macro (< 8 positivos) | |
 | Fuente de `report_labels_v2.csv` | |
 | Resultado (`worked` / `didnt` / `killed`) | |
+
+### 2026-10-08 · Ajuste antes de correr
+Una etiqueta de L7 con evidencia que no aparece en el informe ya no queda vacía: queda en 0.5 (incierto) y se cuenta como
+alucinación. Antes quedaba vacía y el estudio dejaba de contar como completo, lo que podía sacar a L7 por la regla de
+cobertura ≥ 99 %. Cambio en la SPEC (línea de conversión) y en la celda 3 del notebook. Aún no hay resultados.

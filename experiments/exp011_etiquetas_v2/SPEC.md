@@ -35,7 +35,7 @@ medido contra lectura humana del informe, sube ese techo.
 Prompt L7: definición oficial de cada etiqueta (mismo glosario de exp010), estado `present/absent/uncertain/not_mentioned`,
 lado de la rodilla, frase textual de evidencia por etiqueta, salida JSON validada. Temperatura 0. Una llamada por informe.
 Conversión: present 1, absent 0, not_mentioned 0, uncertain 0.5. Si la frase de evidencia no aparece en el informe,
-la etiqueta se marca como alucinación y se cuenta.
+la etiqueta se marca como alucinación, se cuenta y queda en 0.5 (incierto); no se borra, para no perder cobertura.
 
 **Métrica de selección:** macro AUC sobre las 12 etiquetas contra el dev de exp010, excluyendo `uncertain` del dev.
 Etiquetas con < 8 positivos en el dev se reportan aparte y no entran en la macro. Desempate (Δ < 0.005): menor costo.
