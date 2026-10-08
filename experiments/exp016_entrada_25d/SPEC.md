@@ -6,7 +6,7 @@
 | Padre | exp002_dinov2s_ref |
 | Fecha | 2026-10-08 |
 | Rama | exp016_entrada_25d |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: entrada 2.5D: cada corte muestreado entra con sus dos vecinos como canales RGB, en lugar de repetir el mismo corte 3 veces.
 
@@ -46,14 +46,17 @@ normalización ImageNet por canal, backbone, cabeza, épocas, lr, etiquetas v1, 
 
 ## 3. VERDICT (números de `results/exp016_entrada_25d/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen / 5 folds
+**Resultado:** didnt · **Fase alcanzada:** screen
 
 | Métrica | Padre | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | 0.827 | | |
-| gold AUC (fold 0 contra fold 0 del padre) | 0.777 | | |
-| GPU-h | | | |
+| pseudo AUC fold 0 | 0.827 | 0.824 | −0.003 |
+| gold AUC (fold 0 contra fold 0 del padre) | 0.777 | 0.778 | +0.001 |
+| GPU-h | | 1.69 (102 min de reloj, GPU compartida con exp013 folds 1–4) | |
 
-**Qué aprendimos (2-4 líneas):**
+**Qué aprendimos (2-4 líneas):** meter los cortes vecinos como canales RGB no mueve la AUC (Δ pseudo −0.003, gold +0.001):
+neutral según la regla. El mejor checkpoint sigue siendo la última época (8/8). Con el cache v1_256 el espaciado entre cortes
+muestreados es grande y el contexto local que aporta 2.5D lo cubre ya la agregación entre cortes de la cabeza. Costo igual.
 
-**Siguiente paso sugerido:**
+**Siguiente paso sugerido:** no promover. Si se retoma, probar 2.5D sobre el cache v2 (0.5 mm, más cortes) dentro de la
+referencia combinada, no sobre v1.
