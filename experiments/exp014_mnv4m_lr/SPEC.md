@@ -6,7 +6,7 @@
 | Padre | exp003_mnv4m |
 | Fecha | 2026-10-08 |
 | Rama | exp014_mnv4m_lr |
-| Estado | spec |
+| Estado | killed |
 
 Idea: MobileNetV4-M con lr de backbone 1e-4 (receta CNN) en lugar de 1e-5 (receta pensada para DINOv2).
 
@@ -45,15 +45,18 @@ Todo lo demás igual: split, semilla, épocas, etiquetas v1, cache v1_256, 224 p
 
 ## 3. VERDICT (números de `results/exp014_mnv4m_lr/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen
+**Resultado:** killed · **Fase alcanzada:** screen
 
 | Métrica | Padre (exp003) | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | 0.743 | | |
-| gold AUC fold 0 | 0.701 | | |
-| Distancia a exp002 (pseudo f0 0.827) | | | |
-| GPU-h | | | |
+| pseudo AUC fold 0 | 0.743 | 0.737 | −0.006 |
+| gold AUC fold 0 | 0.701 | 0.633 | −0.068 |
+| Distancia a exp002 (pseudo f0 0.827) | −0.084 | −0.090 | |
+| GPU-h | | ~1.05 (63 min de reloj, GPU compartida con exp013) | |
 
-**Qué aprendimos (2-4 líneas):**
+**Qué aprendimos (2-4 líneas):** subir el lr del backbone a 1e-4 no rescata a MobileNetV4-M; empeora gold (−0.068) y pseudo
+queda igual. El problema no era solo el lr. Sospechas que quedan: pesos r384 usados a 224 px y BatchNorm con batch 2.
+La curva sube hasta la época 8 (0.737) y gold toca máximo en la época 5 (0.645).
 
-**Siguiente paso sugerido:**
+**Siguiente paso sugerido:** no insistir con MobileNetV4 sobre la receta actual. El estudiante eficiente se buscará por
+destilación desde la mejor referencia (con entrada v2), no afinando hiperparámetros de este backbone.
