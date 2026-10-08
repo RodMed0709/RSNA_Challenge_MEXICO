@@ -1,7 +1,7 @@
 # Bitácora — exp021_etiquetas_L2
 
-Estado al 2026-10-08: **SPEC escrita (pendiente de que Rodrigo confirme la desviación: decide el LB), smoke y screen fold 0
-lanzados en el pod A**. Ningún número de este archivo existe hasta que haya `metrics.json` y envío a Kaggle.
+Estado al 2026-10-08: **SPEC escrita (pendiente de que Rodrigo confirme la desviación: decide el LB), smoke pasado, screen fold 0
+corriendo en el pod A**. Ningún número de este archivo existe hasta que haya `metrics.json` y envío a Kaggle.
 
 ## 1. Qué es y para qué sirve
 
@@ -28,3 +28,14 @@ dos; decide el LB público del fold 0 (ver SPEC). Es una desviación del SDD que
 Notebook copiado de exp002 (main). Cambian celdas 0 (`EXP`, `PADRE`, `NOTES`, `TRAIN_LABELS_CSV`, `PARENT_RESULTS_DIR`),
 2 (`pool_train` con L2 para el loader de entrenamiento; `pseudo_l2_bin` para medir) y 5 (pseudo contra L2 del modelo y
 del padre, guardada dentro de `per_fold`). Celda 4 intacta: el checkpoint se elige con pseudo contra v1, como el padre.
+
+### 2026-10-08 · Smoke (pod A, `results/exp021_etiquetas_L2/metrics_smoke.json`)
+`SMOKE = True` corrió completo hasta "Guardado" (git a7c13b6). Celda 2: L2 en 4,348 estudios del pool, 0 con fallback v1.
+1 época, 80 estudios de train, 40 de val: pseudo contra v1 0.480, contra L2 0.504 (40 estudios), gold 0.535; números sin
+sentido con 1 época, solo prueban que el pipeline y los campos nuevos (`pseudo_auc_L2`, `parent_pseudo_auc_L2`,
+`N_TRAIN_L2`, `N_TRAIN_FALLBACK_V1`) llegan a `metrics.json`. 0.029 GPU-h; ~20 min de reloj esperando la carga de pesos
+del volumen (FUSE saturado por exp018/019/020).
+
+### 2026-10-08 · Run real lanzado
+`setsid nohup bash run_notebook.sh ... -p SMOKE False -y 'FOLDS: [0]'`, PID 20119,
+log `results/exp021_etiquetas_L2/run_20261008_204325.log`. GPU compartida con exp018, exp019 y exp020.

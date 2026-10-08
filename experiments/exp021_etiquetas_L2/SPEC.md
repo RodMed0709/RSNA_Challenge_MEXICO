@@ -6,7 +6,7 @@
 | Padre | exp002_dinov2s_ref |
 | Fecha | 2026-10-08 |
 | Rama | exp021_etiquetas_L2 |
-| Estado | spec |
+| Estado | running |
 
 Idea: receta exp002 (8 épocas, cache v1_256) entrenada con las etiquetas L2 en lugar de v1.
 
