@@ -34,6 +34,8 @@ Es un experimento de preparación: no entrena modelo. No hay padre con AUC que c
 | Dónde vive | `/workspace/data/labels/dev_informes_v1.csv` (dato, no va a git). En git solo `metrics.json`. |
 
 **Criterios (no cambian después de correr):**
+- El kappa que decide es el binario (`present` contra el resto), promedio de las 12 etiquetas en los 40 comunes:
+  es la forma en que el dev se usa en exp011. El kappa de 4 categorías se reporta, no decide.
 - Éxito (`worked`): 200 estudios completos; kappa de Cohen macro en los 40 comunes ≥ 0.80; cada etiqueta con ≥ 8 positivos.
 - Parcial: kappa entre 0.60 y 0.80 → se usa, pero se revisa el glosario y se reportan las etiquetas débiles.
 - Kill: kappa < 0.60 → el glosario no sirve; se reescribe y se repite (nuevo experimento).
