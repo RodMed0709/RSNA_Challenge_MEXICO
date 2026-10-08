@@ -6,7 +6,7 @@
 | Padre | exp002_dinov2s_ref |
 | Fecha | 2026-10-08 |
 | Rama | exp015_epocas16 |
-| Estado | spec |
+| Estado | running |
 
 Idea: receta exp002 con 16 épocas en lugar de 8.
 
@@ -44,15 +44,18 @@ Todo lo demás igual: split, semilla, lr, `FREEZE_EPOCHS = 1`, etiquetas v1, cac
 
 ## 3. VERDICT (números de `results/exp015_epocas16/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen / 5 folds
+**Resultado:** promising en screen (5 folds pendientes) · **Fase alcanzada:** screen
 
 | Métrica | Padre | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | 0.827 | | |
-| gold AUC (fold 0 contra fold 0 del padre) | 0.777 | | |
-| Época del mejor checkpoint | 8 de 8 | | |
-| GPU-h | | | |
+| pseudo AUC fold 0 | 0.827 | 0.847 | +0.020 |
+| gold AUC (fold 0 contra fold 0 del padre) | 0.777 | 0.797 | +0.020 |
+| Época del mejor checkpoint | 8 de 8 | 12 de 16 | |
+| GPU-h | | 3.34 (200 min de reloj, GPU compartida con exp012) | 1.11× presupuesto |
 
-**Qué aprendimos (2-4 líneas):**
+**Qué aprendimos (2-4 líneas):** la receta de exp002 estaba subentrenada. Con 16 épocas la pseudo sube +0.020 y gold no cae
+(+0.020). La curva sube hasta la época 8 (0.844) y luego queda plana (0.845–0.847 hasta la 16): la ganancia viene sobre todo
+de la cola del coseno con lr bajo, no de más pasos. Mejor checkpoint en la época 12 (ya no la última): la receta dejó de estar corta.
 
-**Siguiente paso sugerido:**
+**Siguiente paso sugerido:** confirmar con 5 folds dentro de la nueva referencia combinada (entrada v2 + cabeza por hallazgo
++ 16 épocas, o 12 si el costo aprieta), no como run aislado: 5 folds × 3.3 GPU-h no caben en esta sesión.
