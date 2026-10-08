@@ -51,3 +51,10 @@ contra las etiquetas v2 y se compara con el hijo medido contra v2. Gold sigue co
 
 Con la referencia exp014 se sigue con la cabeza por hallazgo (label-query attention), la poda de series y la eficiencia.
 Ver `docs/10_PLAN_PAPER.md`.
+
+## Avance
+
+- 2026-10-08 · **exp010_dev_informes:** notebook listo (commit `48b2ebd`). Falta `OPENAI_API_KEY` para traducir y la anotación de Alejandra y José Javier. Detalle en `experiments/exp010_dev_informes/BITACORA.md`.
+- 2026-10-08 · **exp011_etiquetas_v2:** en construcción.
+- 2026-10-08 · **exp012_entrada_v2:** notebook listo en la rama `exp012_entrada_v2`. Falta el smoke en el pod.
+- 2026-10-08 · **Hallazgo:** las definiciones oficiales de Kaggle son estrictas (ACL y MCL solo alto grado o completa; derrame y Baker solo moderado o grande; OA solo pérdida de cartílago > 50 % en área de ~1 cm o más). Las etiquetas v1 probablemente marcaron hallazgos leves como positivos, lo que puede explicar parte del ~0.80 de acuerdo con gold. Hipótesis central de exp011.
