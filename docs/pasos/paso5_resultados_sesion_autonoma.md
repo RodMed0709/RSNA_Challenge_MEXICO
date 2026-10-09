@@ -17,9 +17,9 @@ Lo que no existe todavía dice "pendiente". Pseudo = pseudo AUC fold 0 contra et
 | exp017_atencion_dispersa | penalización de entropía λ = 0.05 | exp013 | 0.793 (−0.046) | 0.732 (−0.057) | — | 2.81 | killed |
 | exp018_cabeza_hallazgo_v2 | cabeza por hallazgo sobre v2 | exp012 | 0.846 (−0.004) | 0.777 (−0.007) | — | 4.42 | didnt |
 | exp019_poda_slots | poda de slots en inferencia, sin reentrenar | exp012 | 0.850 (6 slots; s1+s3+s5: 0.824) | 0.784 (s1+s3+s5: 0.785) | — | 0.18 | didnt |
-| exp020_cabeza_epocas16 | exp013 con 16 épocas | exp013 | pendiente | pendiente | pendiente | pendiente | pendiente (en curso) |
+| exp020_cabeza_epocas16 | exp013 con 16 épocas | exp013 | 0.850 (+0.012) | 0.802 (+0.013) | no enviado | 5.26 | killed por presupuesto (1.503×, GPU compartida); AUC promising, ganancias se suman |
 | exp021_etiquetas_L2 | etiquetas de entrenamiento L2 en vez de v1 | exp002 | 0.789 (−0.038); contra L2: 0.817 (+0.035) | 0.812 (+0.035) | **0.836** (+0.024, solo fold 0) | 3.17 | worked (decide el LB; falta confirmación de Rodrigo) |
-| exp022_entropia_suave | penalización de entropía λ = 0.005 | exp013 | pendiente | pendiente | pendiente | pendiente | pendiente (en curso) |
+| exp022_entropia_suave | penalización de entropía λ = 0.005 | exp013 | 0.835 (−0.003) | 0.800 (+0.011) | no enviado | 2.91 | didnt (entropía 0.949 > 0.6: no concentra) |
 
 ¹ exp013 aún no tiene `metrics.json` ni verdict (worktree `RSNA_wt013`). 0.838 / 0.789 y el +0.011 se copian de la columna
 "padre" de las SPEC de exp017, exp020 y exp022 (y del texto de exp018). **No verificados contra la fuente primaria**: confirmar
@@ -39,7 +39,7 @@ GPU-h con GPU compartida entre corridas (ver cada SPEC).
   (entropía normalizada 0.992, coseno entre hallazgos 0.976 en exp018), con un sesgo débil pero clínicamente coherente
   (slots FS 1–3 reciben más masa; ACL, Baker y sinovitis al axial FS; meniscos y OA medial al coronal FS).
 - **La entropía sola colapsa:** con λ = 0.05 los 12 hallazgos miran la misma serie coronal (entropía 0.011, coseno 1.000) y
-  pierde −0.046 pseudo / −0.057 gold (exp017). λ = 0.005 en curso (exp022).
+  pierde −0.046 pseudo / −0.057 gold (exp017). λ = 0.005 (exp022) no pierde AUC pero tampoco concentra (entropía 0.949): la entropía sola salta de nada a colapso; hace falta otro mecanismo (top-k duro o diversidad entre hallazgos).
 - **La poda sin reentrenar no paga:** quitar un slot cuesta 0.009–0.015 pseudo; 3 slots (61 % del costo) cuestan −0.026 (exp019).
   En la métrica de Kaggle, ahorrar todo el preprocesado v2 de 6 slots (~281 s, 4 vCPU ideal) vale ~0.004 AUC
   (cota pesimista medida en el pod: 997 s ≈ 0.014; `costo_inferencia.md`). Con runtime en minutos, manda la AUC.
