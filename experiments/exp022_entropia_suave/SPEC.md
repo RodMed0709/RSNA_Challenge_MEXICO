@@ -6,7 +6,7 @@
 | Padre | exp013_cabeza_hallazgo |
 | Fecha | 2026-10-08 |
 | Rama | exp022_entropia_suave |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: la penalización de entropía de exp017 con λ diez veces menor (0.005), buscando concentración parcial sin colapso.
 
@@ -49,16 +49,20 @@ Todo lo demás igual que exp013 (cache v1_256, 224 px, 8 épocas, lr, semilla, e
 
 ## 3. VERDICT (números de `results/exp022_entropia_suave/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen
+**Resultado:** didnt · **Fase alcanzada:** screen
 
 | Métrica | Padre (exp013) | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | 0.838 | | |
-| gold AUC fold 0 | 0.789 | | |
-| Entropía normalizada media (val) | ~0.97 | | |
-| Similitud coseno media entre hallazgos | 0.95 | | |
-| GPU-h | | | |
+| pseudo AUC fold 0 | 0.838 | 0.835 | −0.003 |
+| gold AUC fold 0 | 0.789 | 0.800 | +0.011 |
+| Entropía normalizada media (val) | ~0.97 | 0.949 | |
+| Similitud coseno media entre hallazgos | 0.95 | 0.935 | |
+| GPU-h | | 2.91 (175 min de reloj, GPU compartida con exp013) | |
 
-**Qué aprendimos (2-4 líneas):**
+**Qué aprendimos (2-4 líneas):** con λ = 0.005 la AUC no cae (Δ −0.003, gold +0.011) pero la atención apenas se concentra
+(entropía 0.949 contra el umbral 0.6): λ insuficiente. Con exp017 (λ = 0.05, colapso total a una serie en la época 3) el
+régimen útil, si existe, está entre ambos y es estrecho: la entropía sola pasa de "nada" a "colapso". La curva de H en
+exp017 cae en una época (0.66 → 0.02), señal de inestabilidad, no de un óptimo suave.
 
-**Siguiente paso sugerido:**
+**Siguiente paso sugerido:** en vez de barrer λ, cambiar el mecanismo: top-k duro (k = 2) sobre las series por hallazgo o un
+término de diversidad entre hallazgos; y entrenar con slot dropout para que la poda sea tolerable (exp019).
