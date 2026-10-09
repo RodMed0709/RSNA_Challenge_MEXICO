@@ -10,7 +10,7 @@ Lo que no existe todavía dice "pendiente". Pseudo = pseudo AUC fold 0 contra et
 |---|---|---|---|---|---|---|---|
 | exp002 (ref.) | — | — | 0.827 | 0.777 | 0.812 (5 folds) | — | referencia |
 | exp012_entrada_v2 | cache v2 (recorte físico, 0.5 mm, 336 px, 6 slots) | exp002 | 0.850 (+0.023) | 0.784 (+0.007) | pendiente (no enviado) | 3.65 | promising (5 folds pendientes) |
-| exp013_cabeza_hallazgo | cabeza con 12 queries (una por hallazgo) | exp002 | 0.838 (+0.011)¹ | 0.789¹ | pendiente | pendiente | pendiente (5 folds en curso) |
+| exp013_cabeza_hallazgo | cabeza con 12 queries (una por hallazgo) | exp002 | 0.838 (+0.011); **OOF 5 folds 0.813 (+0.011)** | 0.789 | no enviado | 11.0 | worked (5 folds) |
 | exp014_mnv4m_lr | lr backbone 1e-4 en MobileNetV4-M | exp003 | 0.737 (−0.006) | 0.633 (−0.068) | — | ~1.05 | killed |
 | exp015_epocas16 | 16 épocas en vez de 8 | exp002 | 0.847 (+0.020) | 0.797 (+0.020) | 0.810 (solo fold 0) | 3.34 | promising (5 folds pendientes) |
 | exp016_entrada_25d | 2.5D: vecinos como canales RGB | exp002 | 0.824 (−0.003) | 0.778 (+0.001) | — | 1.69 | didnt |
