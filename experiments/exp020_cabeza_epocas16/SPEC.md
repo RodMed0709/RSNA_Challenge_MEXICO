@@ -6,7 +6,7 @@
 | Padre | exp013_cabeza_hallazgo |
 | Fecha | 2026-10-08 |
 | Rama | exp020_cabeza_epocas16 |
-| Estado | spec |
+| Estado | killed |
 
 Idea: exp013 (cabeza por hallazgo) con 16 épocas en lugar de 8.
 
@@ -47,16 +47,20 @@ El scheduler coseno se estira a 16 épocas.
 
 ## 3. VERDICT (números de `results/exp020_cabeza_epocas16/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen
+**Resultado:** killed por presupuesto (GPU-h 1.503× > 1.5×), con AUC promising · **Fase alcanzada:** screen
 
 | Métrica | Padre (exp013) | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | 0.838 | | |
-| gold AUC fold 0 | 0.789 | | |
-| Época del mejor checkpoint | 8 de 8 | | |
-| Entropía normalizada media (val) | ~0.97 | | |
-| GPU-h | | | |
+| pseudo AUC fold 0 | 0.838 | 0.850 | +0.012 |
+| gold AUC fold 0 | 0.789 | 0.802 | +0.013 |
+| Época del mejor checkpoint | 8 de 8 | 12 de 16 | |
+| Entropía normalizada media (val) | ~0.97 | 0.958 (coseno 0.908) | |
+| GPU-h | | 5.26 (316 min de reloj, GPU compartida por 3 runs) | 1.503× presupuesto (3.5) |
 
-**Qué aprendimos (2-4 líneas):**
+**Qué aprendimos (2-4 líneas):** las ganancias de cabeza (exp013) y épocas (exp015) se suman: +0.012 pseudo y +0.013 gold
+sobre exp013, misma forma de curva que exp015 (meseta desde la época 8, mejor la 12, leve caída al final). El criterio de
+presupuesto lo mata por 0.003× (5.26 GPU-h contra 5.25 de tope): el GPU-h se mide en reloj y la GPU estuvo compartida por 3 runs,
+así que no refleja el costo real, pero el criterio no se cambia después de ver resultados.
 
-**Siguiente paso sugerido:**
+**Siguiente paso sugerido:** el resultado de AUC justifica usar 12 épocas (no 16: la mejor es la 12 y ahorra 25 %) en la
+referencia nueva. Para presupuestos futuros con GPU compartida, fijar el criterio en GPU-h efectivas o en épocas, no en reloj.
