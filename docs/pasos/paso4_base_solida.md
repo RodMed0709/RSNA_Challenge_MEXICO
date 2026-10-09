@@ -58,3 +58,9 @@ Ver `docs/10_PLAN_PAPER.md`.
 - 2026-10-08 · **exp011_etiquetas_v2:** en construcción.
 - 2026-10-08 · **exp012_entrada_v2:** notebook listo en la rama `exp012_entrada_v2`. Falta el smoke en el pod.
 - 2026-10-08 · **Hallazgo:** las definiciones oficiales de Kaggle son estrictas (ACL y MCL solo alto grado o completa; derrame y Baker solo moderado o grande; OA solo pérdida de cartílago > 50 % en área de ~1 cm o más). Las etiquetas v1 probablemente marcaron hallazgos leves como positivos, lo que puede explicar parte del ~0.80 de acuerdo con gold. Hipótesis central de exp011.
+
+## Avance (2026-10-09)
+
+Resultados de exp012–exp022 (entrada v2, 16 épocas, cabeza por hallazgo, poda de slots, etiquetas L2), sus implicaciones para
+el paper y el plan siguiente: `docs/pasos/paso5_resultados_sesion_autonoma.md`. Resumen: las etiquetas L2 son la primera palanca
+que mueve el LB (exp021, 0.836); la vara interna con v1 ya no sirve para elegir modelos.
