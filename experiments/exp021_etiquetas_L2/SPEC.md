@@ -6,7 +6,7 @@
 | Padre | exp002_dinov2s_ref |
 | Fecha | 2026-10-08 |
 | Rama | exp021_etiquetas_L2 |
-| Estado | running |
+| Estado | worked |
 
 Idea: receta exp002 (8 épocas, cache v1_256) entrenada con las etiquetas L2 en lugar de v1.
 
@@ -77,17 +77,22 @@ El envío a Kaggle (kernel de inferencia con `best_f0.pt`) va aparte y no cuenta
 
 ## 3. VERDICT (números de `results/exp021_etiquetas_L2/metrics.json` y LB de Kaggle)
 
-**Resultado:** · **Fase alcanzada:**
+**Resultado:** worked (sujeto a que Rodrigo confirme la desviación: decide el LB) · **Fase alcanzada:** screen + LB público
 
 | Métrica | Padre (exp002 f0) | Este | Δ |
 |---|---|---|---|
-| LB público fold 0 (decide) | 0.812 (5 folds) / exp015 f0 0.810 | | |
-| pseudo AUC fold 0 contra v1 (informa) | 0.827 | | |
-| pseudo AUC fold 0 contra L2 (informa) | | | |
-| gold AUC (fold 0 contra fold 0) | 0.777 | | |
-| Época del mejor checkpoint | 8 de 8 | | |
-| GPU-h | | | |
+| LB público fold 0 (decide) | 0.812 (5 folds) / exp015 f0 0.810 | **0.836** (envío 56981839) | +0.024 / +0.026 |
+| pseudo AUC fold 0 contra v1 (informa) | 0.827 | 0.789 | −0.038 |
+| pseudo AUC fold 0 contra L2 (informa) | 0.782 | 0.817 | +0.035 |
+| gold AUC (fold 0 contra fold 0) | 0.777 | 0.812 | +0.035 |
+| Época del mejor checkpoint | 8 de 8 | 7 de 8 (elegida por pseudo v1) | |
+| GPU-h | | 3.17 (190 min de reloj, GPU compartida) | 1.27× presupuesto |
 
-**Qué aprendimos (2-4 líneas):**
+**Qué aprendimos (2-4 líneas):** las etiquetas son la palanca del LB: con la misma arquitectura y receta, cambiar v1 → L2 sube
+el LB +0.024 (primer movimiento real del LB; exp012/exp015 subían la pseudo v1 sin mover el LB). La pseudo contra v1 baja −0.038
+y gold y la pseudo contra L2 suben +0.035: la validación interna con v1 ya no sirve para elegir modelos que apunten al LB. Gold
+está parcialmente contaminado (L2 se afinó con gold), por eso el LB decide.
 
-**Siguiente paso sugerido:**
+**Siguiente paso sugerido:** (1) cambiar la vara interna: pseudo contra L2 (o contra la etiqueta que gane exp011) para todo lo
+que sigue; (2) referencia nueva = entrada v2 (exp012) + 16 épocas (exp015) + etiquetas L2, con 5 folds; (3) probar L3/L4/L7 y el
+consenso L8 como etiquetas de entrenamiento, decididas por LB y por el dev humano de exp010.
