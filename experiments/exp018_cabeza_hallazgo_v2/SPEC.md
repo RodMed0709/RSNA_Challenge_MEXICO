@@ -6,7 +6,7 @@
 | Padre | exp012_entrada_v2 |
 | Fecha | 2026-10-08 |
 | Rama | exp018_cabeza_hallazgo_v2 |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: la cabeza por hallazgo de exp013 (12 queries, una por hallazgo) sobre la entrada v2 de exp012 (cache v2_05mm,
 336 px, 6 slots).
@@ -61,22 +61,38 @@ slot), `slot_coverage`, `plane_mass`, `entropy_norm` y `mean_pairwise_cosine`. A
 
 ## 3. VERDICT (números de `results/exp018_cabeza_hallazgo_v2/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen / 5 folds
+**Resultado:** didnt · **Fase alcanzada:** screen
 
 | Métrica | Padre (exp012) | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | pendiente (exp012 en curso) | | |
-| gold AUC (fold 0 contra fold 0 del padre) | pendiente (exp012 en curso) | | |
-| OOF pseudo 5 folds | | | |
-| Entropía normalizada media (val) | — | | |
-| Similitud coseno media entre hallazgos (val) | — | | |
-| GPU-h | | | |
+| pseudo AUC fold 0 | 0.850 | 0.846 | −0.004 |
+| gold AUC (fold 0 contra fold 0 del padre) | 0.784 | 0.777 | −0.007 |
+| OOF pseudo 5 folds | — | — | |
+| Entropía normalizada media (val) | — | 0.992 | |
+| Similitud coseno media entre hallazgos (val) | — | 0.976 | |
+| GPU-h | | 4.42 (265 min de reloj, GPU compartida con exp012/exp020/exp021) | 0.98× presupuesto |
 
 `slot_mass` por hallazgo (val, fold 0):
 
 | Hallazgo | slot1 SAG FS | slot2 COR FS | slot3 AX FS | slot4 SAG PD/T2 | slot5 COR T1 | slot6 SAG T1 |
 |---|---|---|---|---|---|---|
+| ACL | 0.17 | 0.19 | **0.28** | 0.11 | 0.14 | 0.10 |
+| MCL | **0.19** | 0.19 | 0.19 | 0.14 | 0.16 | 0.13 |
+| Medial Meniscus | 0.19 | **0.23** | 0.15 | 0.15 | 0.17 | 0.12 |
+| Lateral Meniscus | 0.21 | **0.21** | 0.19 | 0.14 | 0.16 | 0.10 |
+| Medial OA | 0.20 | **0.23** | 0.19 | 0.13 | 0.16 | 0.09 |
+| Lateral OA | **0.21** | 0.20 | 0.20 | 0.13 | 0.16 | 0.09 |
+| PF OA | 0.17 | 0.21 | **0.21** | 0.14 | 0.15 | 0.11 |
+| Effusion | 0.25 | 0.18 | **0.25** | 0.09 | 0.15 | 0.08 |
+| Synovitis | 0.20 | 0.20 | **0.26** | 0.11 | 0.15 | 0.08 |
+| Baker's | 0.18 | 0.22 | **0.30** | 0.10 | 0.12 | 0.08 |
+| Contusion | 0.20 | 0.18 | **0.31** | 0.09 | 0.14 | 0.08 |
+| Fracture | 0.21 | 0.21 | **0.27** | 0.10 | 0.14 | 0.08 |
 
-**Qué aprendimos (2-4 líneas):**
+**Qué aprendimos (2-4 líneas):** sobre la entrada v2 la cabeza por hallazgo no suma (Δ −0.004 pseudo, −0.007 gold): la ganancia
+de exp013 en v1 (+0.011) la absorbe la entrada v2, que ya separa las series por slot. La atención sigue casi uniforme (entropía
+~0.99), pero el sesgo débil es clínicamente coherente: los slots con supresión grasa (1–3) reciben más masa y el sagital T1
+(slot 6) menos; ACL, Baker's y Synovitis tiran al axial FS, meniscos y OA medial al coronal FS.
 
-**Siguiente paso sugerido:**
+**Siguiente paso sugerido:** la referencia v2 sigue con la cabeza de exp012. El método de poda por hallazgo necesita una atención
+que concentre sin colapsar (exp022) y entrenamiento con slot dropout (exp019 mostró que sin reentrenar no tolera la poda).
