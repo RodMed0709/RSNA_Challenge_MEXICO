@@ -7,8 +7,12 @@ sesión); aquí solo los números. Kernels privados, sin internet, GPU T4.
 |---|---|---|---|---|---|---|
 | 2026-10-08 | 56963705 | rsna-knee-exp002-inference v2 | exp002, ensamble 5 folds (8 épocas) | 0.812 | ~4368 / 5530 | 47.2 s |
 | 2026-10-08 | 56969845 | rsna-knee-exp015-inference v1 | exp015, solo fold 0 (16 épocas) | 0.810 | ~4374 / 5530 | 45.0 s |
+| 2026-10-09 | 56981839 | rsna-knee-exp021-inference v1 | exp021, solo fold 0 (8 épocas, etiquetas L2) | **0.836** | ~4266 / 5543 | 62.7 s |
 
 ## Lectura
+
+- **exp021 confirma la hipótesis de las etiquetas:** misma arquitectura y receta que exp002, solo etiquetas L2 → LB +0.024.
+  Es el primer movimiento real del LB. La pseudo contra v1 bajó (−0.038) mientras el LB subió: v1 ya no sirve de vara interna.
 
 - 1 fold de 16 épocas empata con el ensamble de 5 folds de 8 épocas, con 1/5 del cómputo del modelo (forward 0.52 s/estudio
   contra 0.94 s). Para el track de eficiencia, el ensamble no paga.
