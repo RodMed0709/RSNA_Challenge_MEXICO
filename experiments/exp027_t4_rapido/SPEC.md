@@ -31,6 +31,7 @@ fp16 puro y `torch.compile`. Alimenta el envío al premio de eficiencia
 | D | A + `torch.compile(backbone, mode="max-autotune-no-cudagraphs")`; compilación y autoajuste en el hilo principal antes de lanzar los consumidores; tiempo de compilación aparte y sumado a los costes fijos | A |
 | E1 | B + C (224 + half) | combinación |
 | E2 | B + C + D (224 + half + compile) | combinación |
+| E2d | B + C + `torch.compile` en modo `default` (compilación barata; añadida tras el smoke, antes de correr) | combinación |
 | F | si la imagen trae `torch_tensorrt` o `onnxruntime` con CUDA/TensorRT EP: backbone 224 half por ese runtime. Si no existe, se reporta y no se instala | B+C |
 
 `reduce-overhead` (CUDA graphs) se descarta de antemano: los grafos de CUDA se graban por hilo y el
@@ -80,8 +81,12 @@ poco (IC del bootstrap). Fallo de una variante → se registra y la corrida sigu
   (como exp026).
 - Estudios: los 150 `main` + 2 `warmup` de exp026 y 150 de fold 0 nuevos (rol `cold`, semilla 1 sobre
   `split_v1_seed42`, excluidos los de exp026) → `exp027_studies.csv` (solo en scratchpad, con etiquetas).
-- Orden en el kernel: entorno (versiones, ORT/TensorRT) → R frío → R, A, B, B94, C, D, E1, E2, F, Rb en
-  caliente (disco + RAM) → mejor combinación en frío sobre `cold`.
+- Orden en el kernel: entorno (versiones, ORT/TensorRT) → R frío → R, A, B, B94, C, E1, Rb en caliente
+  (disco + RAM) → la más rápida de B/B94/E1 en frío sobre `cold` + preparación sola en caliente → D, E2,
+  E2d, F (compiladas al final) → E1b (= E1 otra vez, control de carga residual tras compilar).
+  Cambio tras el smoke (antes de correr en Kaggle): en el smoke todo lo que corrió después de compilar fue
+  más lento, así que las compiladas van al final, se apagan los workers de inductor tras compilar y E1b lo
+  controla; la variante en frío pasa a ser la 224 sin compilar más rápida.
 - `analyze.py` → `results/exp027_t4_rapido/metrics.json` y la tabla; kernels de envío (sin enviar) en
   `scratchpad/kaggle_exp027/` para la mejor variante con AUC ≈ R y la más eficiente.
 
