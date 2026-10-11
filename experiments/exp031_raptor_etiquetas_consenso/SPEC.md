@@ -6,7 +6,7 @@
 | Padre | exp029_raptor_entreno |
 | Fecha | 2026-10-11 |
 | Rama | exp031_raptor_etiquetas_consenso |
-| Estado | run (fold 0) |
+| Estado | worked |
 
 Idea: en la receta Raptor/nartaa d96/384 de exp029, entrenar con un consenso de las 4 fuentes blandas públicas de
 etiquetas (promedio por celda) en lugar de solo las de Raptor. Mismo espíritu que exp035 (promedio L2/L3/L4 sobre la
@@ -68,17 +68,28 @@ los objetivos (y por tanto `pos_weight`); el padre aún corre, la comparación s
 
 ## 3. VERDICT (números de `results/exp031_raptor_etiquetas_consenso/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** screen fold 0 en curso
+**Resultado:** `worked` · **Fase alcanzada:** screen fold 0 (un fold; 5 folds no corridos)
 
 | Métrica | Padre (exp029) | Este | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 (mejor época) | pendiente (exp029 en curso) | | |
-| pseudo L2 fold 0 (SWA top-3) | pendiente (exp029 en curso) | | |
-| v1 fold 0 | pendiente (exp029 en curso) | | |
-| gold (veto) | pendiente (exp029 en curso) | | |
-| GPU-h | pendiente (exp029 en curso) | | |
-| LB modelo fold 0 (árbitro final) | pendiente | pendiente | |
+| pseudo L2 fold 0 (mejor época) | 0.8682 (ep 15) | **0.8836** (ep 15) | **+0.0155** |
+| pseudo L2 fold 0 (SWA top-3) | 0.8679 (ep 15, 14, 13) | 0.8835 (ep 15, 13, 14) | +0.0156 |
+| v1 fold 0 | 0.8329 | 0.8368 | +0.0039 |
+| gold (veto) | 0.9115 | 0.9144 (SWA 0.9151) | +0.0028 |
+| GPU-h | 2.51 | 2.49 | −0.02 |
+| LB modelo fold 0 (árbitro final) | 0.933 | pendiente | |
 
-**Qué aprendimos:**
+Criterio: Δ pseudo +0.0155 ≥ +0.005 y gold no cae (+0.003) → **worked** (`decision_auto` = `promising`).
+El `metrics.json` subido es el del fold 0 (en el pod se guardó como `metrics_f0_backup.json`, porque el run all-data
+posterior escribe `metrics.json` en la misma carpeta).
 
-**Siguiente paso sugerido:**
+**Qué aprendimos:** el consenso de 4 fuentes sube la pseudo L2 +0.015 con el mismo coste. La subida se concentra en
+Synovitis (+0.081), MCL (+0.039), Effusion (+0.033), ACL (+0.026) y Contusion (+0.016); Medial OA (−0.009) y
+Fracture (−0.008) bajan algo. Acuerdo binarizado en train: Raptor–L2 0.870, Raptor–L3 0.847, Raptor–L4 0.874,
+L2–L4 0.992, L2–L3 0.954, L3–L4 0.950; media del objetivo: consenso 0.301, Raptor 0.257, L2 0.338, L3 0.351, L4 0.260.
+**Ojo con el sesgo declarado:** el consenso contiene L2 (y su casi-copia L4) y la vara es L2, así que parte de la subida
+puede ser acuerdo con L2. v1 (otra vara) sube solo +0.004 y gold +0.003: dirección consistente pero pequeña. El LB del
+modelo fold 0 decide.
+
+**Siguiente paso sugerido:** envío del modelo fold 0 (o all-data, ya corriendo en rsna-f) para medir LB contra 0.933;
+sub031_1: añadir JEV como 5.ª fuente.
