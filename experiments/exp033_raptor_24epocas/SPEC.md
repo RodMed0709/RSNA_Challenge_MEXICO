@@ -6,7 +6,7 @@
 | Padre | exp029_raptor_entreno |
 | Fecha | 2026-10-11 |
 | Rama | exp033_raptor_24epocas |
-| Estado | run (fold 0) |
+| Estado | didnt |
 
 Idea: en la receta Raptor/nartaa d96/384 de exp029, entrenar 24 épocas en lugar de 16. Origen: en nuestra línea
 más épocas sumó (exp015: 8 → 16 épocas, +0.020 pseudo y +0.020 gold en fold 0; exp020: 8 → 16 sobre la cabeza por
@@ -50,16 +50,21 @@ el padre aún corre, la comparación se completa cuando termine.
 
 ## 3. VERDICT (números de `results/exp033_raptor_24epocas/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** screen fold 0 en curso
+**Resultado:** `didnt` · **Fase alcanzada:** screen fold 0
 
 | Métrica | Padre (exp029) | Este | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 (mejor época) | pendiente (exp029 en curso) | | |
-| pseudo L2 fold 0 (SWA top-3) | pendiente (exp029 en curso) | | |
-| v1 fold 0 | pendiente (exp029 en curso) | | |
-| gold (veto) | pendiente (exp029 en curso) | | |
-| GPU-h | pendiente (exp029 en curso) | | |
+| pseudo L2 fold 0 (mejor época) | 0.8682 (ep 15 de 16) | 0.8695 (ep 14 de 24) | +0.0013 |
+| pseudo L2 fold 0 (SWA top-3) | 0.8679 (ep 15, 14, 13) | 0.8715 (ep 14, 15, 17) | +0.0037 |
+| v1 fold 0 | 0.8329 | 0.8302 | −0.0026 |
+| gold (veto) | 0.9115 | 0.9195 (SWA 0.9212) | +0.0080 |
+| GPU-h | 2.51 | 3.79 | ×1.51 |
 
-**Qué aprendimos:**
+Criterio: Δ pseudo +0.0013 está entre −0.005 y +0.005 y gold no cae → **didnt** (`decision_auto` = `neutral`).
 
-**Siguiente paso sugerido:**
+**Qué aprendimos:** con 24 épocas la pseudo L2 toca techo en la época 14 (0.8695) y después baja lentamente hasta
+0.8651 en la 23; el OneCycle más largo no aporta sobre 16 épocas y cuesta ×1.5 GPU-h. A diferencia de exp015/exp020
+(DINOv2, 8 → 16), en la receta Raptor 16 épocas ya están en la meseta. Gold sube +0.008 (solo veto, 58 estudios: no
+decide). Mantener 16 épocas.
+
+**Siguiente paso sugerido:** ninguno en esta línea; cerrar.
