@@ -10,3 +10,6 @@
   `git -c filter.nbstripout.clean=cat -c filter.nbstripout.smudge=cat merge --ff-only FETCH_HEAD`.
 - 21:39 UTC run real fold 0 (lanzador `/root/run043.sh`, PID papermill en `results/exp043_raptor_3slots/pid`,
   log `results/exp043_raptor_3slots/run_20261011_213858.log` en wt_exp043).
+- Run fold 0 (PID papermill 2698): train 3477 · val 871 · 434 pasos/época · 1.17 s/paso (padre ~1.19) · VRAM ~19 GB.
+  ep0 pseudo L2 0.7214 · v1 0.6964 · gold 0.7114 (padre ep0: 0.7181 / 0.6902 / 0.7171). 508 s train + 73 s eval por
+  época → 16 épocas ≈ 2.6 h (fin ≈ 00:15 UTC).
