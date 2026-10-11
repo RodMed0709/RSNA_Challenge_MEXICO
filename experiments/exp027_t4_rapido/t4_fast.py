@@ -194,7 +194,8 @@ class GpuMon:
                 pass
 
     def summary(self, phase):
-        df = pd.DataFrame(self.rows, columns=["t", "phase", "gpu", "util", "mem", "clk", "temp"])
+        # snapshot: the reader thread appends while we build the frame (lost the D ram run in kernel v1)
+        df = pd.DataFrame(list(self.rows), columns=["t", "phase", "gpu", "util", "mem", "clk", "temp"])
         df = df[df.phase == phase]
         return {int(g): dict(util_mean=round(float(x.util.mean()), 1), mem_max=float(x.mem.max()),
                              clk_mean=round(float(x.clk.mean())), temp_max=float(x.temp.max()), n=int(len(x)))

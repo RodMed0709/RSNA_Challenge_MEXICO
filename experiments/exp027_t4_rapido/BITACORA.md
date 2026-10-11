@@ -19,3 +19,15 @@
   sin compilar más rápida. Bug del smoke corregido: la corrida fría heredaba `cudnn.benchmark=True` de Rb.
   Segundo smoke cortado a mitad: alguien lanzó exp033 en rsna-g (no compito por la GPU).
 - Push del bench `medellinrodrigo/exp027-t4-rapido` v1: RUNNING sin cola.
+- Kernel v1 COMPLETE, 2 299 s, sin cola. Salidas en `scratchpad/kaggle_exp027/bench_out/` (no van a git).
+  `analyze.py` → `results/exp027_t4_rapido/metrics.json` (bootstrap 1 000, ~4 min en Windows).
+- Incidencias del run: la corrida RAM de D murió por una carrera en `GpuMon.summary` (el hilo lector añadía
+  filas mientras se armaba el DataFrame) → corregido después en el código (snapshot `list(self.rows)`); no
+  afecta a los números. E2d (compile `default`) no compiló: 0.5 s y resultados = E1 → límite de
+  recompilaciones de dynamo tras D y E2; se reporta como no válida. F: la imagen no trae torch_tensorrt,
+  tensorrt, onnxruntime ni onnx; no se instaló nada.
+- Kernels de envío (sin enviar, cupo agotado hoy) en `scratchpad/kaggle_exp027/`: `submit_C` (AUC ≈ R) y
+  `submit_B94` (más eficiente medida); también `submit_E1_94`, `submit_E1`, `submit_B`, `submit_A`,
+  `submit_R`. C, B94, E1 y E1_94 probados en rsna-f (`/kaggle` simulado, 3 estudios de test): exit 0,
+  escriben `submission.csv`. Imagen sin fijar (la última de Kaggle), como el bench.
+- Resultado en SPEC §3.
