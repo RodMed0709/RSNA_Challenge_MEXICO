@@ -11,3 +11,8 @@
 - Smoke en rsna-f (PRO 4500, `/kaggle` simulado, 3 estudios, junto a un entrenamiento ajeno, ~2 min):
   todas las variantes corren; identidad 3 slots == primeros 66 cortes: True.
 - Push del bench `medellinrodrigo/exp041-t4-sin-slots` v1: RUNNING sin cola.
+- Kernel v1 COMPLETE, 1 152 s. Salidas en `scratchpad/kaggle_exp041/bench_out/` (no van a git);
+  `analyze.py` → `results/exp041_t4_sin_slots/metrics.json`.
+- Kernels de envío (sin enviar) en `scratchpad/kaggle_exp041/`: `submit_C` (AUC) y `submit_E1_94` (= Ch,
+  eficiencia); también `submit_C3`, `submit_C3h`, `submit_C3t` (dominadas, sin probar en pod).
+- Resultado en SPEC §3.
