@@ -13,3 +13,6 @@
 - Smoke (corpus pequeño gold + 150, 64 train / 28 val, 1 época): pasa todas las celdas; 8 pasos en 25 s; metrics.json OK
   (renombrado a `metrics_smoke.json`).
 - 17:39 UTC run real fold 0: train 3477 · val 871 · 434 pasos/época · ~1.5 s/paso, VRAM ~19 GB.
+- Run fold 0 (PID papermill 360626, log `results/exp029_raptor_entreno/run_20261011_173928.log` en wt_exp029 del pod):
+  ep0 pseudo L2 0.7040 · v1 0.6865 · gold 0.7033 · ep1 pseudo L2 0.7613 · v1 0.7514 · gold 0.7736.
+  ~500 s train + ~65 s eval por época (1.15 s/paso) → 16 épocas ≈ 2.5 h (fin ≈ 20:15 UTC).
