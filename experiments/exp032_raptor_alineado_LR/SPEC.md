@@ -6,7 +6,7 @@
 | Padre | exp029_raptor_entreno |
 | Fecha | 2026-10-11 |
 | Rama | exp032_raptor_alineado_LR |
-| Estado | smoke |
+| Estado | didnt |
 
 Idea: entrenar y evaluar la receta Raptor d96 de exp029 con todas las rodillas alineadas a la misma lateralidad
 (izquierdas espejadas a derechas), como hacía nuestro cache v2 (exp009). Raptor no alinea; solo aplica TTA espejo en inferencia.
@@ -102,16 +102,28 @@ semilla entre runs (no medida para esta receta) del orden del umbral.
 
 ## 3. VERDICT (números de `results/exp032_raptor_alineado_LR/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:**
+**Resultado:** didnt (Δ pseudo L2 +0.0022 < +0.005; gold no cae) · **Fase alcanzada:** screen fold 0 (rsna-d2, 20:12–22:45 UTC)
 
 | Métrica | exp029 (padre) | Este | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 (mejor época) | | | |
-| pseudo L2 fold 0 (SWA top-3) | | | |
-| v1 fold 0 | | | |
-| gold (veto) | | | |
-| GPU-h | | | |
+| pseudo L2 fold 0 (mejor época) | 0.8682 (ep15) | 0.8704 (ep13) | +0.0022 |
+| pseudo L2 fold 0 (SWA top-3) | 0.8679 [15,14,13] | 0.8703 [13,15,14] | +0.0024 |
+| v1 fold 0 (mejor época) | 0.8329 | 0.8299 | −0.0030 |
+| gold (veto, mejor época) | 0.9115 | 0.9143 | +0.0028 |
+| gold (SWA) | 0.9111 | 0.9154 | +0.0043 |
+| GPU-h | 2.51 | 2.50 | −0.01 |
 
-**Qué aprendimos:**
+Decisión automática de la celda 5: `neutral` → `didnt` según los criterios de la sección 1.
 
-**Siguiente paso sugerido:**
+pseudo L2 por etiqueta (mejor época, este − padre): MCL **+0.040** (0.8164 vs 0.7764) · Contusion +0.008 ·
+Synovitis +0.005 · Lateral Meniscus +0.002 · Medial Meniscus +0.002 · Lateral OA +0.002 · Effusion +0.001 ·
+Baker's −0.002 · Medial OA −0.004 · Fracture −0.004 · PF OA −0.006 · ACL **−0.017**.
+
+**Qué aprendimos:** alinear L/R no cambia la AUC macro de la receta Raptor por encima del umbral (+0.002 pseudo,
++0.003 gold, −0.003 v1): CoAtNet con atención MIL ya aprende ambas orientaciones con ~50/50 de L/R. La ganancia
+grande y aislada es MCL (+0.04, estructura claramente medial), compensada por ACL (−0.017, estructura central); el resto
+es ruido de semilla. El costo es nulo (mismo tiempo de entrenamiento, tabla de espejo de 1 min).
+
+**Siguiente paso sugerido:** no promover la alineación como base. Como fuente de diversidad, el modelo alineado puede
+entrar en un ensamble con exp029/exp030 (con su propia inferencia alineada, sin TTA espejo). Si se quiere confirmar
+el efecto en MCL, hacerlo con 5 folds solo si se usa el modelo en el envío.

@@ -21,3 +21,5 @@
   wt_exp032 del pod): train 3477 · val 871 · 434 pasos/época · VRAM ~19 GB.
   ep0 pseudo L2 0.7095 · v1 0.7033 · gold 0.7132 (exp029 ep0: 0.7040 / 0.6865 / 0.7033) · train 512 s + eval 72 s
   (padre 499 + 62 s) → 16 épocas ≈ 2.6 h (fin ≈ 22:50 UTC).
+- ~22:45 UTC run terminado: mejor época 13 pseudo L2 0.8704 · v1 0.8299 · gold 0.9143; SWA [13,15,14] 0.8703 / 0.9154;
+  2.50 GPU-h. Δ pseudo +0.0022 → **didnt**. metrics.json copiado al repo.
