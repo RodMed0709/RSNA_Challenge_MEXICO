@@ -15,3 +15,9 @@
 - 19:14 UTC `/root/exp032/launch_real.sh` (setsid nohup, `RSNA_USER=rodrigo`) espera a que muera el PID 360626 de exp029
   y lanza `run_notebook.sh ... -p SMOKE False -y 'FOLDS: [0]'`. Log del lanzador: `/root/exp032/launch_real.log`.
   `results/exp029_raptor_entreno` enlazado en el clon para los Δ.
+- exp029 terminó 20:11 UTC: mejor época 15 pseudo L2 **0.8682**, gold 0.9115; SWA [15,14,13] 0.8679 / 0.9111 (su
+  metrics.json). Umbrales fijos de exp032: worked ≥ 0.8732 (gold ≥ 0.8915); killed ≤ 0.8632 o gold < 0.8915.
+- 20:12 UTC run real fold 0 (PID papermill 367818, log `results/exp032_raptor_alineado_LR/run_20261011_201202.log` en
+  wt_exp032 del pod): train 3477 · val 871 · 434 pasos/época · VRAM ~19 GB.
+  ep0 pseudo L2 0.7095 · v1 0.7033 · gold 0.7132 (exp029 ep0: 0.7040 / 0.6865 / 0.7033) · train 512 s + eval 72 s
+  (padre 499 + 62 s) → 16 épocas ≈ 2.6 h (fin ≈ 22:50 UTC).
