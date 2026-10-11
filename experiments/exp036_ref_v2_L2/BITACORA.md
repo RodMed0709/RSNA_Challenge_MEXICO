@@ -27,5 +27,9 @@ un worktree sin `RSNA_USER`: se relanzó con `export RSNA_USER=rodrigo`). Celda 
 esos 40: 0.784. Números sin sentido con 1 época; solo prueban el pipeline. 0.010 GPU-h.
 
 ### 2026-10-11 · Run real lanzado
-`setsid nohup bash run_notebook.sh ... -p SMOKE False -y 'FOLDS: [0]'` con `RSNA_USER=rodrigo`, PID 2836,
-log `wt_exp036/results/exp036_ref_v2_L2/run_20261011_164215.log`. GPU compartida con exp035.
+Primer intento (PID 2836, 16:42) murió sin traceback al cerrar la época 1 (~16:52): papermill y kernel desaparecieron,
+`history_f0.csv` y el `executed_*.ipynb` quedaron en 0 bytes; sin OOM en `memory.events` del contenedor. Dos relanzamientos
+inline por ssh murieron al instante (logs de 0 bytes). Logs fallidos en `results/exp036_ref_v2_L2/failed_*`.
+Relanzado desde un script en el pod (`setsid nohup bash /root/launch036.sh`, que llama a `run_notebook.sh ... -p SMOKE False
+-y 'FOLDS: [0]'` con `RSNA_USER=rodrigo`): PID 5680, log `wt_exp036/results/exp036_ref_v2_L2/run_20261011_165655.log`.
+Época 1 cerrada a los 10.0 min (17:07). GPU compartida con exp035.
