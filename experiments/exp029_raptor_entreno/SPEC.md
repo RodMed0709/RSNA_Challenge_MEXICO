@@ -6,7 +6,7 @@
 | Padre | — (reproducción de receta pública; referencia interna: exp021, mejor LB propio 0.836) |
 | Fecha | 2026-10-11 |
 | Rama | exp029_raptor_entreno |
-| Estado | run (fold 0) |
+| Estado | didnt (verdict 2026-10-11) |
 
 Idea: reproducir el entrenamiento público Raptor en su variante nartaa d96/384 sobre nuestro split, con nuestra
 regla de selección (pseudo, nunca gold). Base: `docs/pasos/raptor_receta.md` (rama exp010_dev_informes).
@@ -68,16 +68,32 @@ el LB solo se mide con envío (otro paso).
 
 ## 3. VERDICT (números de `results/exp029_raptor_entreno/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** screen fold 0 en curso
+**Resultado:** `didnt` (pseudo L2 0.868 < 0.90; sin kill: gold 0.912 ≥ 0.80, 2.51 GPU-h ≤ 6) · **Fase alcanzada:** screen fold 0 + envío Kaggle del modelo fold 0
 
 | Métrica | Referencia | Este |
 |---|---|---|
-| pseudo L2 fold 0 (mejor época) | ≥ 0.90 (criterio) | |
-| pseudo L2 fold 0 (SWA top-3) | | |
-| v1 fold 0 | | |
-| gold (veto) | publicado ~0.915–0.919 (seleccionado en gold) | |
-| GPU-h | ≤ 6 | |
+| pseudo L2 fold 0 (mejor época, ep 15) | ≥ 0.90 (criterio) · exp021 0.817 | **0.8682** |
+| pseudo L2 fold 0 (SWA top-3, ép. 15/14/13) | | 0.8679 |
+| v1 fold 0 (mejor época) | | 0.8329 |
+| gold (veto, mejor época) | publicado ~0.915–0.919 (seleccionado en gold) · exp021 0.812 | 0.9115 (SWA 0.9111) |
+| GPU-h | ≤ 6 | 2.51 |
+| LB público (best_f0.pt + TTA espejo, kernel `exp029-raptor-f0`, envío 57084774) | ≥ 0.91 · exp021 0.836 · pesos nartaa 0.949 | **0.933** |
+
+Checkpoint enviado: `best_f0.pt` (época 15), porque su pseudo L2 (0.8682) supera la del SWA (0.8679). Inferencia = notebook
+de nartaa 0949 (copia exp026 V1: 94 ventanas, recorte central 320, ImageNet, TTA espejo anatómico) con solo el checkpoint
+cambiado; claves cargan `strict=True` con `img_size=320`. Runtime del kernel en el test visible (3 estudios): script 25 s,
+notebook ~63 s.
 
 **Qué aprendimos:**
+- La receta Raptor/nartaa reproducida en nuestro split da el mayor salto propio: LB 0.836 → **0.933** (+0.097) con un solo
+  fold, y gold 0.812 → 0.912. El pipeline (corpus, entrada, modelo) está bien reproducido.
+- Por el criterio escrito es `didnt`: la pseudo L2 se queda en 0.868. La vara interna (L2 binarizada) mide acuerdo con otra
+  fuente LLM distinta de las etiquetas de entrenamiento (Raptor); el umbral 0.90 resultó demasiado exigente para esa vara,
+  mientras el LB sí pasó su umbral (≥ 0.91). No se cambia el criterio; se anota.
+- Brecha con los pesos públicos de nartaa (0.949 con TTA): ~0.016. Diferencias conocidas: nartaa entrena con todos los
+  datos (4349, aquí 3477 sin fold 0), etiquetas blend JEV+OAI y SWA elegido en gold.
+- SWA top-3 ≈ mejor época (la curva sigue subiendo hasta la época 15: casi sin meseta).
+- Peores hallazgos (pseudo, mejor época): MCL 0.776, Synovitis 0.802, Effusion 0.834.
 
-**Siguiente paso sugerido:**
+**Siguiente paso sugerido:** all-data (`ALL_DATA=True`, `SWA_EPOCHS=[13, 14, 15]` fijadas con el fold 0) para cerrar parte
+de la brecha con nartaa; después variantes de una variable con exp029 como padre (etiquetas, 224/eficiencia, TTA on/off).
