@@ -102,7 +102,7 @@ semilla entre runs (no medida para esta receta) del orden del umbral.
 
 ## 3. VERDICT (números de `results/exp032_raptor_alineado_LR/metrics.json`)
 
-**Resultado:** didnt (Δ pseudo L2 +0.0022 < +0.005; gold no cae) · **Fase alcanzada:** screen fold 0 (rsna-d2, 20:12–22:45 UTC)
+**Resultado:** didnt (Δ pseudo L2 +0.0022 < +0.005; gold no cae) · **Fase alcanzada:** screen fold 0 (rsna-d2, 20:12–22:43 UTC)
 
 | Métrica | exp029 (padre) | Este | Δ |
 |---|---|---|---|
