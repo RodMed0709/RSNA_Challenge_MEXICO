@@ -6,7 +6,7 @@
 | Padre | exp025_perfil_raptor (perfilado en RunPod; aquí se mide en la T4 real de Kaggle) |
 | Fecha | 2026-10-11 |
 | Rama | exp026_t4_variantes |
-| Estado | running |
+| Estado | worked |
 
 Idea: medir en un kernel de Kaggle (GPU T4 ×2, 4 vCPU, disco real, sin internet, misma imagen Docker
 que el notebook) la inferencia Raptor del notebook público `nartaa/rsna-knee-0949-anatomical-mirror`
@@ -83,6 +83,61 @@ puede sesgar por temperatura de la T4 (V0b lo controla). 58 gold es poco: el boo
 - Salidas del kernel: `exp026_results.json`, `preds_<V>.csv`. `analyze.py` → `results/exp026_t4_variantes/metrics.json`.
 - Deja en `scratchpad/kaggle_exp026/` los kernels de envío de V1 y de la mejor variante rápida (sin enviar).
 
-## 3. VERDICT
+## 3. VERDICT (números de `results/exp026_t4_variantes/metrics.json`)
 
-(pendiente)
+**Resultado:** worked (la medida salió) · **H1:** rechazada (channels_last apenas ayuda en T4) ·
+**H2:** confirmada (sin TTA −50 % de runtime, ΔAUC dentro de ±0.002).
+
+Kernel `medellinrodrigo/exp026-t4-variantes` v1: 2 × Tesla T4, 4 vCPU, 33.7 GB RAM, torch 2.11.0+cu128,
+timm 1.0.29 (imagen más reciente de Kaggle, sin fijar), `nproc` = 4. 2 297 s en total. Lector instrumentado
+idéntico byte a byte al del notebook (3/3).
+
+**El notebook sí usa las 2 T4:** un hilo consumidor por GPU; V0 repartió 79/71 estudios (cuda:0/cuda:1),
+`nvidia-smi` 87.8 % / 87.9 % de utilización media. La cuda:1 fue ~10 % más lenta por estudio en todas las
+corridas.
+
+Serie en frío, 30 estudios aparte, ms por estudio (una T4): list 55 · hdr_read 65 · select 1 · px_read 111
+(58 MB/estudio, 525 MB/s) · decode 70 · pct_norm 55 · crop_resize 133 · **prep 494** · windows 41 ·
+**fwd_plain 1 040 · fwd_mirror 1 048** · total 2 624. La T4 es **5.3× más lenta** que la PRO 4500 en el
+forward (1 040 vs 196 ms por pasada).
+
+Pipeline del notebook, 150 estudios (58 gold + 92 fold 0). "steady" = reloj sin el exceso de autoajuste
+de cudnn del primer estudio de cada hilo; minutos a 1 300 estudios = steady × 1 300 + ~0.8 min fijos
+(imports 14 s, carga de modelos 7 s, autoajuste 18–36 s):
+
+| Var | s/est. reloj | steady disco | steady RAM | autoajuste s | min @1300 | AUC gold | pseudo 150 | Pearson vs V0 | media \|Δp\| | ΔAUC gold vs V0 [IC95] | Δ pseudo 150 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| V0 (frío) | 1.329 | 1.201 | — | 19 | 26.8 | — | — | — | — | — | — |
+| V0 | 1.320 | 1.200 | 1.169 | 18 | 26.8 | 0.9229 | 0.9267 | 1 | 0 | 0 | 0 |
+| V1 | 1.336 | 1.162 | 1.141 | 26 | 26.0 | 0.9229 | 0.9267 | 1.00000 | 2.5e-5 | +0.0000 | −0.0000 |
+| V2 | 0.761 | **0.594** | 0.565 | 25 | **13.7** | 0.9219 | 0.9282 | 0.99798 | 0.0101 | −0.0010 [−0.0045, +0.0026] | +0.0015 |
+| V3 | 1.116 | 0.878 | 0.858 | 36 | 19.9 | 0.9214 | 0.9278 | 0.99862 | 0.0068 | −0.0015 [−0.0045, +0.0017] | +0.0011 |
+| V4 | 0.768 | 0.600 | 0.563 | 25 | 13.8 | 0.9196 | 0.9255 | 0.99716 | 0.0103 | −0.0034 [−0.0079, +0.0006] | −0.0012 |
+| V0b | 1.331 | 1.201 | 1.175 | 20 | 26.8 | 0.9229 | 0.9267 | 1.00000 | 1.4e-5 | +0.0000 | +0.0000 |
+
+(AUC infladas: Raptor se entrenó con todo train. V0b ≈ V0 en tiempo y predicción: no hay deriva por
+temperatura; la diferencia V1–V0 en |Δp| es del mismo tamaño que el ruido de una corrida a otra.)
+
+**Criterios:**
+- H1: V1/V0 steady = 0.968 (−3.2 %; en reloj a 150 estudios 1.336 vs 1.320, peor por 8 s más de
+  autoajuste) → no llega a ≤ 0.90. Predicciones idénticas (Pearson 1.00000, |Δp| 2.5e-5, ΔAUC 0). **Rechazada**:
+  el −12 % de la PRO 4500 (Blackwell) no se traslada a la T4 (Turing). Ahorro a 1 300 estudios ≈ −0.7 min.
+- H2: V2/V0 steady = 0.495 (−50.5 %) ≥ 35 % y |ΔAUC| gold 0.0010, pseudo 0.0015 ≤ 0.005. **Confirmada.**
+- Sanity: AUC gold V0 0.923 > 0.85. OK.
+- Eficiencia contra V1 (1 min ≈ 0.00086 de AUC): V2 ahorra 12.3 min ≈ 0.0106 de AUC equivalente frente a
+  ΔAUC −0.0010 (gold) / +0.0015 (pseudo) → V2 gana con mucho margen. V4 cuesta lo mismo que V2 y pierde más
+  AUC (dominada). V3 ahorra 6.2 min (≈ 0.0053) con ΔAUC similar a V2 → dominada por V2.
+
+**Disco y CPU:** V0 en frío (primera lectura) = 1.329 s/estudio vs 1.320 en caliente: el disco de Kaggle no
+importa mientras manda la GPU. Con V2/V4 (~0.6 s/estudio) las GPU casi no esperan (2.5 s de espera total
+por GPU en caliente; RAM 0.565 vs disco 0.594 = 5 %); la prep en frío a ese ritmo no está medida en pool
+(la serie da 0.49 s/estudio con 1 proceso; el pool tiene 4).
+
+**Qué aprendimos:** en Kaggle el runtime es el forward de la T4 (≈ 1.04 s por pasada de 94 ventanas);
+la TTA espejo cuesta la mitad del runtime y aporta ≈ 0 en nuestros datos (±0.002, dentro del ruido de 58
+gold). channels_last no sirve en T4. Reducir ventanas a 47 ahorra lo mismo que quitar la TTA pero pierde más.
+cudnn.benchmark re-autoajusta en cada hilo nuevo (18–36 s por corrida, una vez por GPU).
+
+**Recomendación:** para AUC enviar **V1** (idéntico a V0, −0.7 min; mantiene la TTA que el autor validó
+en LB). Para eficiencia enviar **V2** (sin TTA, ≈ 13.7 min estimados contra 26.8 de V0, ΔAUC ≈ 0).
+Siguiente: V2 + quitar `cudnn.benchmark`/autoajuste por hilo, TensorRT/compile en T4, o fp16 puro sin autocast.

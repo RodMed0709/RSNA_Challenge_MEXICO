@@ -18,3 +18,9 @@
   bench y envíos usan la misma imagen (la última de Kaggle).
 - Kaggle limita a 2 sesiones GPU batch simultáneas: el push del bench reintenta cada 2 min mientras otro
   agente ocupa las dos (`scratchpad/kaggle_exp026/push_retry.sh`).
+- Push del bench a las 11:28 (se liberó un hueco GPU), QUEUED ~25 min, RUNNING 11:55–12:35, COMPLETE,
+  2 297 s. Salidas bajadas a `scratchpad/kaggle_exp026/bench_out/` (preds y JSON crudos, no van a git).
+- `analyze.py`: el bootstrap con `roc_auc_score` tardaba > 20 min en Windows → AUC Mann-Whitney con
+  `rankdata` (igual a sklearn, comprobado) y 1 000 réplicas: 45 s.
+- Resultado en SPEC §3. Kernels de envío listos (sin enviar): `scratchpad/kaggle_exp026/submit_V1`
+  (AUC) y `submit_V2` (eficiencia); V3 y V4 también están generados pero quedan dominados por V2.

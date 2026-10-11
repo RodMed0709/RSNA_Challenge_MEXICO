@@ -5,13 +5,14 @@
 
 Agreement vs V0 (warm, disk run): Pearson of the 150x12 probabilities, mean / max |dp|.
 AUC: gold (58, train.csv labels) macro AUC and pseudo AUC vs L2 > 0.5 (150 main and the 92 of fold 0);
-paired bootstrap (2000) of dAUC gold vs V0 and vs V1. Absolute AUCs are inflated (Raptor was trained on
+paired bootstrap (1000) of dAUC gold vs V0 and vs V1. Absolute AUCs are inflated (Raptor was trained on
 all train data); only the differences matter.
 """
 import argparse, json, os
 import numpy as np
 import pandas as pd
-from sklearn.metrics import roc_auc_score
+from scipy.stats import rankdata
+from sklearn.metrics import roc_auc_score  # noqa: F401 (reference implementation)
 
 LAB = ["ACL", "MCL", "Medial Meniscus", "Lateral Meniscus", "Medial OA", "Lateral OA",
        "PF OA", "Effusion", "Synovitis", "Baker's", "Contusion", "Fracture"]
@@ -20,16 +21,22 @@ N_PER_MIN = 1300
 AUC_PER_MIN = 0.00086
 
 
+def _auc(y, s):
+    """Mann-Whitney AUC with average ranks for ties (== sklearn roc_auc_score)."""
+    r = rankdata(s); n1 = y.sum(); n0 = len(y) - n1
+    return (r[y == 1].sum() - n1 * (n1 + 1) / 2) / (n1 * n0)
+
+
 def macro_auc(y, p):
     a = []
     for j in range(y.shape[1]):
         m = ~np.isnan(y[:, j]); yy = y[m, j]
         if m.sum() > 1 and 0 < yy.sum() < len(yy):
-            a.append(roc_auc_score(yy, p[m, j]))
+            a.append(_auc(yy, p[m, j]))
     return float(np.mean(a)) if a else float("nan")
 
 
-def boot_delta(y, pa, pb, n=2000, seed=0):
+def boot_delta(y, pa, pb, n=1000, seed=0):
     rng = np.random.default_rng(seed); d = []
     N = len(y)
     for _ in range(n):
@@ -49,6 +56,8 @@ def main():
     R = json.load(open(os.path.join(a.out_dir, "exp026_results.json")))
     st = pd.read_csv(a.studies); st["StudyInstanceUID"] = st.StudyInstanceUID.astype(str)
     st = st[st.role == "main"].set_index("StudyInstanceUID")
+    have = set(pd.read_csv(os.path.join(a.out_dir, "preds_V0_disk.csv")).StudyInstanceUID.astype(str))
+    st = st[st.index.isin(have)]                          # smoke runs cover a prefix only
     sids = list(st.index)
     gold = st.fold.values == -1; f0 = st.fold.values == 0
     yg = st[[f"gt_{c}" for c in LAB]].values.astype(float)
@@ -61,7 +70,6 @@ def main():
         if os.path.exists(f):
             d = pd.read_csv(f); d["StudyInstanceUID"] = d.StudyInstanceUID.astype(str)
             P[v] = d.set_index("StudyInstanceUID").loc[sids, LAB].values.astype(float)
-    cold = os.path.join(a.out_dir, "preds_V0_disk.csv")
 
     runs = {(r["variant"], r["source"]): r for r in R.get("runs", [])}
     out = dict(exp="exp026_t4_variantes", env=R.get("env"), nproc=R.get("nproc"), n_main=len(sids),
