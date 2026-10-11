@@ -8,9 +8,17 @@ sesión); aquí solo los números. Kernels privados, sin internet, GPU T4.
 | 2026-10-08 | 56963705 | rsna-knee-exp002-inference v2 | exp002, ensamble 5 folds (8 épocas) | 0.812 | ~4368 / 5530 | 47.2 s |
 | 2026-10-08 | 56969845 | rsna-knee-exp015-inference v1 | exp015, solo fold 0 (16 épocas) | 0.810 | ~4374 / 5530 | 45.0 s |
 | 2026-10-09 | 56981839 | rsna-knee-exp021-inference v1 | exp021, solo fold 0 (8 épocas, etiquetas L2) | **0.836** | ~4266 / 5543 | 62.7 s |
+| 2026-10-11 | 57081163 | mirror-exp023 v1 | exp023: copia tal cual de `nartaa/rsna-knee-0949-anatomical-mirror` (CoAtNet Raptor SWA + espejo L/R) | 0.949 | ~1175–1305 / 5760 (empate) | 66.6 s (score en ~25–29 min) |
+| 2026-10-11 | 57081259 | velci-exp023 v1 | exp023: copia tal cual de `bliverrigpdoge/velci-kcd25-20`; `rsna-knee-kcd25leg` privado → queda la base 0.954 (Raptor 0.7 + compact S6 0.3) | **0.954** | ~135–535 / 5760 (empate) | 194.1 s (score en ~3 h 25 min) |
+| 2026-10-11 | 57082625 | blendmine-exp023 v2 | exp023: copia tal cual de `heliosli/blend-mine-in-private-lb-luck-to-all-upvoters` (Raptor 0.5 + compact S6 0.5); `rsna-knee-compact-r6cnxfsss` v2 re-alojado privado | **0.954** | ~135–535 / 5760 (empate) | 184.3 s (score en ~4 h 10 min) |
 | 2026-10-11 | 57084774 | exp029-raptor-f0 v1 | exp029, solo fold 0 (receta Raptor/nartaa CoAtNet-2 MIL, etiquetas blandas Raptor, best_f0 ép. 15) + TTA espejo, inferencia nartaa 0949 | **0.933** | — | 63 s (script 25 s) |
 
 ## Lectura
+
+- **exp023 (reproducción de públicos):** la base pública se reproduce en nuestra cuenta: velci y blend-mine dan 0.954,
+  el CoAtNet solo de nartaa 0.949. El "runtime" de la columna es el del run sobre el test visible (3 estudios); el tiempo
+  hasta tener score (incluye cola de Kaggle y test oculto) es la cota que tenemos del runtime real: ~0.5 h el CoAtNet solo,
+  ~3.5–4 h los blends con el compact S6. Para el premio de eficiencia, el compact cuesta ~3 h por +0.005 AUC.
 
 - **exp021 confirma la hipótesis de las etiquetas:** misma arquitectura y receta que exp002, solo etiquetas L2 → LB +0.024.
   Es el primer movimiento real del LB. La pseudo contra v1 bajó (−0.038) mientras el LB subió: v1 ya no sirve de vara interna.
