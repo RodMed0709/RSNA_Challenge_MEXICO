@@ -13,3 +13,5 @@
 - Run fold 0 (PID papermill 2698): train 3477 · val 871 · 434 pasos/época · 1.17 s/paso (padre ~1.19) · VRAM ~19 GB.
   ep0 pseudo L2 0.7214 · v1 0.6964 · gold 0.7114 (padre ep0: 0.7181 / 0.6902 / 0.7171). 508 s train + 73 s eval por
   época → 16 épocas ≈ 2.6 h (fin ≈ 00:15 UTC).
+- Fin del run (≈ 00:15 UTC): mejor época 12, pseudo L2 0.8785, gold 0.8856; SWA [12,10,15] 0.8800 / 0.8850; 2.47 GPU-h.
+  Verdict `killed` por el veto gold (−0.027). Reevaluaciones a 48 ventanas en la SPEC. metrics.json copiado al repo.

@@ -6,7 +6,7 @@
 | Padre | exp030_raptor_etiquetas_L2 (pseudo L2 f0 0.8795, gold 0.9123, mejor época 12; SWA [12,15,14] 0.8793 / 0.9115) |
 | Fecha | 2026-10-11 |
 | Rama | exp043_raptor_3slots |
-| Estado | run (fold 0) |
+| Estado | killed |
 
 Idea: eficiencia por diseño. exp040 (análisis de robustez del modelo exp029) mostró que quitar el slot Axial (4) y el
 Coronal no fluido (3) en inferencia no cambia la AUC (Δ ≈ 0). Si el modelo se entrena y evalúa solo con los 3 slots
@@ -56,17 +56,43 @@ el criterio de no inferioridad con un solo fold tiene ruido del orden de ±0.003
 
 ## 3. VERDICT (números de `results/exp043_raptor_3slots/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** screen fold 0 en curso
+**Resultado:** killed · **Fase alcanzada:** screen fold 0
 
-| Métrica | Padre | Este | Δ |
+| Métrica | Padre (exp030) | Este (exp043) | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 (mejor época, k 24) | 0.8795 | | |
-| pseudo L2 fold 0 (SWA top-3) | 0.8793 | | |
-| gold (veto) | 0.9123 | | |
-| s/paso entrenamiento | ~1.19 | | |
-| ventanas cobertura completa | 94 | 64 | −32 % |
-| GPU-h | 2.50 | | |
+| pseudo L2 fold 0 (mejor época, k 24) | 0.8795 (ép. 12) | 0.8785 (ép. 12) | −0.001 |
+| pseudo L2 fold 0 (SWA top-3, k 24) | 0.8793 [12,15,14] | 0.8800 [12,10,15] | +0.001 |
+| v1 fold 0 (mejor época) | 0.8340 | 0.8333 | −0.001 |
+| gold (veto, mejor época) | 0.9123 | 0.8856 | **−0.027** |
+| gold (SWA) | 0.9115 | 0.8850 | −0.027 |
+| s/paso entrenamiento | ~1.19 | 1.17 (494 s/época) | ≈ 0 |
+| ventanas por estudio train / eval | 12 / 24 | 12 / 24 | 0 |
+| ventanas cobertura completa (inferencia) | 94 | 64 | −32 % |
+| GPU-h fold 0 | 2.50 | 2.47 | −1 % |
 
-**Qué aprendimos:**
+Reevaluación informativa a 48 ventanas (no decide):
 
-**Siguiente paso sugerido:**
+| Modelo | cortes | pseudo L2 | v1 | gold |
+|---|---|---|---|---|
+| exp043 mejor época | 66 | 0.8811 | 0.8354 | 0.8901 |
+| exp043 SWA | 66 | 0.8820 | 0.8355 | 0.8901 |
+| exp030 SWA, 5 slots | 96 | 0.8836 | 0.8347 | 0.9108 |
+| exp030 SWA, solo 3 slots en inferencia | 66 | 0.8830 | 0.8359 | 0.9085 |
+
+Gold por hallazgo (mejor época, exp043 vs exp030): las caídas se concentran en Effusion 0.853 vs 0.925, Fracture
+0.851 vs 0.919, Synovitis 0.712 vs 0.773, Baker's 0.955 vs 0.986, Lateral OA 0.805 vs 0.836; sube Medial Meniscus
+0.977 vs 0.948.
+
+Criterio fijo: pseudo cumple la no inferioridad (Δ −0.001 ≥ −0.003) pero gold cae 0.027 > 0.02 → **killed**
+(`noninferiority_worked = false`).
+
+**Qué aprendimos:** quitar los slots Cor no fluido y Axial no cambia la pseudo L2 (val 871) pero baja gold 0.027,
+con las mayores caídas en hallazgos que se ven bien en axial (derrame, Baker, sinovitis) y en fractura. Gold son 58
+estudios y su IC es ancho (una diferencia de 0.027 puede ser ruido), pero la señal coincide con la anatomía: el slot
+axial parece aportar en gold. Llamativo: el modelo de 5 slots evaluado solo con 3 slots conserva gold (0.9085 a 48
+ventanas), así que lo que se pierde es entrenar sin esos cortes, no verlos en inferencia. La pseudo L2 (etiquetas de
+informes) no capta esta diferencia.
+
+**Siguiente paso sugerido:** para eficiencia, mantener el entrenamiento con 5 slots y recortar solo en inferencia
+(exp030 con 3 slots: −32 % ventanas, gold −0.002 a 48 ventanas), o probar 4 slots (0,1,2,4: sin Cor no fluido)
+conservando el axial. Evaluar con 48 ventanas.
