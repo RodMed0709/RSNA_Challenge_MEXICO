@@ -41,12 +41,29 @@ Todo lo demás idéntico (corpus 96×384, fold 0, etiquetas consenso, 16 épocas
 
 ## 3. VERDICT (números de `results/sub031_2_semilla/metrics.json`)
 
-**Resultado:** · **Fase alcanzada:** screen
+**Resultado:** worked (informativo: es una medición de ruido, no una mejora) · **Fase alcanzada:** screen fold 0
 
 | Métrica | exp031 (seed 42) | sub031_2 (seed 7) | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 | 0.8836 | | |
-| gold | 0.9144 | | |
-| pseudo L2 ensamble 2 semillas | — | | |
+| pseudo L2 fold 0 (mejor época) | 0.8836 (ép. 15) | 0.8852 (ép. 15) | +0.0015 |
+| pseudo L2 fold 0 (SWA top-3) | 0.8835 [15,13,14] | 0.8849 [15,14,13] | +0.0013 |
+| v1 fold 0 (mejor época) | — | 0.8394 | |
+| gold (mejor época) | 0.9144 | 0.9178 | +0.0035 |
+| gold (SWA) | 0.9151 | 0.9172 | +0.0021 |
+| pseudo L2 ensamble por rangos 2 semillas (SWA) | — | 0.8878 | +0.0036 vs seed 42 |
+| GPU-h | 2.49 | 2.50 | |
 
-**Qué aprendimos:**
+El ensamble por rangos lo calculó el orquestador sobre las predicciones de val fold 0 de ambas semillas; no está en
+`metrics.json`.
+
+Criterio: |Δ pseudo L2| = 0.0013 (SWA) / 0.0015 (mejor época) < 0.003 → **worked**: el ruido entre semillas es pequeño.
+Hipótesis secundaria (ensamble ≥ +0.002): se cumple, +0.0036.
+
+**Qué aprendimos:** con esta receta el ruido de semilla en pseudo L2 de fold 0 es ~0.0015, por debajo de los umbrales de
+±0.005 de exp030–exp033 (y del de no inferioridad de 0.003), así que esas decisiones no las explica la semilla. En gold
+la diferencia entre semillas es ~0.002–0.0035: gold-58 es más ruidoso que pseudo, como se esperaba. Promediar dos
+semillas por rangos da +0.0036 en pseudo, más que la diferencia entre semillas.
+
+**Siguiente paso sugerido:** usar el ensamble de 2 semillas (o de 2 recetas distintas) en el envío si el coste de
+inferencia lo permite (×2 en tiempo de kernel); para la eficiencia, comparar contra un modelo con TTA espejo, que cuesta
+lo mismo.
