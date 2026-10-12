@@ -6,7 +6,7 @@
 | Padre | exp031_raptor_etiquetas_consenso |
 | Fecha | 2026-10-12 |
 | Rama | exp047_raptor_slot_dropout |
-| Estado | spec |
+| Estado | didnt |
 
 Idea (paso 7, track T2 estructura): la receta Raptor casi no tiene augmentation; en train solo baraja ventanas.
 exp040 (robustez de exp029) mide −0.028 sin sagital y −0.007 con 50 % de cortes; exp043 mostró que un modelo de
@@ -58,16 +58,27 @@ un solo plano y bajar la pseudo con 16 épocas; el jitter ±1 es casi neutro por
 
 ## 3. VERDICT (números de `results/exp047_raptor_slot_dropout/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** spec
+**Resultado:** `didnt` · **Fase alcanzada:** screen fold 0 (rsna-d2, 2026-10-12 02:45–05:16 UTC)
 
 | Métrica | Padre (exp031) | Este | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | | |
-| pseudo L2 fold 0 (SWA top-3) | 0.8835 | | |
-| v1 fold 0 | 0.8368 | | |
-| gold (veto) | 0.9144 | | |
-| GPU-h | 2.49 | | |
+| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | 0.8844 (ep 14) | +0.0007 |
+| pseudo L2 fold 0 (SWA top-3) | 0.8835 | 0.8849 (ep 14, 15, 11) | +0.0014 |
+| v1 fold 0 | 0.8368 | 0.8398 | +0.0030 |
+| gold (veto) | 0.9144 | 0.9139 (SWA 0.9147) | −0.0005 |
+| GPU-h | 2.49 | 2.50 | +0.01 |
 
-**Qué aprendimos:**
+Criterio: worked exige ≥ 0.8866; killed ≤ 0.8786 o gold < 0.8944 → `didnt` (Δ dentro del ruido de semilla 0.0013).
+Δ pseudo por hallazgo (mejor época): MCL +0.014, Medial Meniscus +0.008, Contusion +0.008, Effusion +0.005,
+Lateral Meniscus +0.005; PF OA −0.011, Baker's −0.007, Fracture −0.007, Lateral OA −0.005.
 
-**Siguiente paso sugerido:**
+**Qué aprendimos:** quitar slots completos en train (p 0.15, ~66 % de las bolsas pierden ≥ 1 slot presente contra
+~29 % en el padre) no daña ni ayuda la pseudo L2 con 16 épocas: la curva es casi idéntica a la del padre época a
+época (ep 11–15: 0.8837–0.8844 contra 0.8811–0.8836). Coste igual. No es una augmentation que suba AUC en
+distribución; su posible valor es robustez a slots ausentes (inferencia con 3 slots para el track de eficiencia),
+que este screen no mide.
+
+**Siguiente paso sugerido:** no hace falta sub de intensidad ni all-data por AUC. Si el track de eficiencia quiere
+podar slots, evaluar (solo inferencia, ~0.2 GPU-h) `best_f0.pt` de exp047 contra el de exp031 en val fold 0 con
+3 slots / sin Cor no-fluid / sin sagital, como exp040/exp043; si exp047 pierde menos, usarlo como base del modelo
+podado.
