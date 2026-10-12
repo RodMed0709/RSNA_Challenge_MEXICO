@@ -6,7 +6,7 @@
 | Padre | exp031_raptor_etiquetas_consenso |
 | Fecha | 2026-10-12 |
 | Rama | exp050_raptor_res384 (desde exp031_raptor_etiquetas_consenso) |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: track T3 del paso 7. El corpus guarda 384 px (140 mm), pero la receta (como la inferencia nartaa) recorta el centro a 320 px: tira el 30 % del área (bordes del campo de 140 mm: inserciones, Baker posterior, bursas) y entrena el CoAtNet `_384` fuera de su resolución nativa.
 
@@ -43,6 +43,25 @@ semilla 42, `split_v1_seed42` fold 0, selección por pseudo L2 (L2 binarizada > 
 - Smoke `SMOKE=True` (mide VRAM y s/paso) → run real `FOLDS=[0]` en rsna-c2 (tras exp044).
 - Costo de inferencia: ratio s/paso 384 vs 320 del log (entrenamiento) y del eval (k_eval 24).
 
-## 3. VERDICT (números de `results/<EXP>/metrics.json`)
+## 3. VERDICT (números de `results/exp050_raptor_res384/metrics.json`)
 
-Pendiente.
+**Resultado:** `didnt` · **Fase alcanzada:** screen fold 0 (rsna-c2, 2026-10-12 03:28–07:07 UTC)
+
+| Métrica | Padre (exp031, 320) | Este (384) | Δ |
+|---|---|---|---|
+| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | 0.8856 (ep 15) | **+0.0019** |
+| pseudo L2 fold 0 (SWA top-3) | 0.8835 | 0.8861 (ep 15, 14, 11) | +0.0026 |
+| v1 fold 0 | 0.8368 | 0.8370 | +0.0002 |
+| gold (veto) | 0.9144 | 0.9172 (SWA 0.9171) | +0.0028 |
+| GPU-h | 2.49 | 3.63 | +1.14 (×1.46) |
+| s por época train / eval | 498 / 62 | 726 / 90 | ×1.46 / ×1.45 |
+
+Criterio: Δ pseudo +0.0019 < +0.003 → **didnt** (gold no veta). No se lanza all-data. (`decision_auto` = `neutral`.)
+
+**Qué aprendimos:** el campo completo de 384 apenas mueve la pseudo L2 (+0.002, ~1.5× el ruido de semilla) y cuesta
+×1.45 en inferencia (eval k_eval 24: 90 s vs 62 s por 871+58 estudios) y 26.7 GB de VRAM en entrenamiento (bs 8 × k 12,
+grad-ckpt; cabe sin cambiar batch). Por hallazgo: sube Contusion +0.014, MCL +0.007, Effusion +0.006; baja Lateral
+Meniscus −0.010 y Synovitis −0.005. Para el premio de eficiencia es claramente peor que 320. **Ensamble (informativo):**
+media de rangos OOF SWA con exp031 = 0.8883 (correlación 0.954), como una semilla más pero a ×1.45 de costo.
+
+**Siguiente paso sugerido:** quedarse en 320. El recorte no tira información útil de forma medible.
