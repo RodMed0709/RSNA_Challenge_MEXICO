@@ -6,7 +6,7 @@
 | Padre | exp031_raptor_etiquetas_consenso |
 | Fecha | 2026-10-12 |
 | Rama | sub031_3_lr_backbone |
-| Estado | run (fold 0) |
+| Estado | didnt |
 
 Idea: en exp031 (receta Raptor d96 con etiquetas de consenso de 4 fuentes) subir la LR del backbone CoAtNet-2 de 3e-5 a
 6e-5; la curva de exp029–exp031 sigue subiendo hasta las últimas épocas (mejor época 15 de 16 en exp031), lo que sugiere
@@ -50,16 +50,26 @@ recorte 320, 16 épocas, bs 8 × k 12, semilla 42, fold 0, selección por pseudo
 
 ## 3. VERDICT (números de `results/sub031_3_lr_backbone/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** screen fold 0 en curso
+**Resultado:** didnt · **Fase alcanzada:** screen fold 0 (rsna-d2)
 
 | Métrica | exp031 (padre) | Este | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 (mejor época) | 0.8836 | | |
-| pseudo L2 fold 0 (SWA top-3) | 0.8835 | | |
-| v1 fold 0 | 0.8368 | | |
-| gold (veto) | 0.9144 | | |
-| GPU-h | 2.49 | | |
+| pseudo L2 fold 0 (mejor época) | 0.8836 (ep15) | 0.8832 (ep15) | −0.0005 |
+| pseudo L2 fold 0 (SWA top-3) | 0.8835 | 0.8840 [15,14,11] | +0.0005 |
+| v1 fold 0 (mejor época) | 0.8368 | 0.8372 | +0.0004 |
+| gold (veto, mejor época) | 0.9144 | 0.9146 | +0.0003 |
+| gold (SWA) | 0.9151 | 0.9148 | −0.0003 |
+| GPU-h | 2.49 | 2.50 | — |
 
-**Qué aprendimos:**
+Decisión automática de la celda 5: `neutral` → `didnt` (Δ −0.0005: ni ≥ +0.003 ni ≤ −0.005; gold estable).
 
-**Siguiente paso sugerido:**
+pseudo L2 por etiqueta (este − padre): MCL +0.023 · Medial OA +0.007 · Lateral Meniscus +0.006 · Medial Meniscus +0.003 ·
+Contusion −0.002 · ACL −0.003 · PF OA −0.004 · Effusion −0.004 · Lateral OA −0.006 · Synovitis −0.006 · Fracture −0.008 ·
+Baker's −0.013. Curva: ep0 0.7204 (padre 0.6955), luego converge al mismo nivel desde ep11 (0.8824).
+
+**Qué aprendimos:** duplicar la LR del backbone acelera las primeras épocas (+0.025 en ep0) pero termina en el mismo
+sitio: Δ −0.0005 (mejor época) / +0.0005 (SWA), muy dentro del ruido de semilla medido en sub031_2 (0.0013). La mejor
+época sigue siendo la última, así que el límite no es la LR del backbone sino otra cosa (épocas, datos o etiquetas).
+
+**Siguiente paso sugerido:** mantener `BB_LR = 3e-5`. No vale la pena barrer más LR; si se busca un segundo miembro de
+ensamble, este modelo (distinta LR, mismo nivel) puede servir igual que otra semilla.
