@@ -19,3 +19,4 @@ Estados: `spec`, `running`, `worked`, `didnt`, `killed`. Los números salen de `
 | exp029 | raptor_entreno | rodrigo | — | reproducción receta Raptor/nartaa d96/384 (CoAtNet-2, MIL por hallazgo, etiquetas blandas Raptor) en fold 0, selección pseudo L2 | run | | | | |
 | exp031 | raptor_etiquetas_consenso | rodrigo | exp029 | etiquetas de entrenamiento = promedio por celda de Raptor, L2, L3 y L4 (en vez de solo Raptor `labels_llm_soft`) | worked | 0.884 (pseudo L2) | 0.914 (f0) | — | Δ pseudo L2 +0.0155, gold +0.003, v1 +0.004, 2.49 GPU-h; sube Synovitis/MCL/Effusion/ACL; vara L2 sesgada a favor (consenso contiene L2) |
 | exp053 | raptor_etiqueta_temperatura | rodrigo | exp031 | consenso afilado p^(1/T)/(p^(1/T)+(1-p)^(1/T)), T = 0.7 | running | — | — | — | — |
+| sub053_1 | temperatura_suave | rodrigo | exp031 | consenso suavizado por temperatura, T = 1.5 (sub de exp053) | running | — | — | — | — |
