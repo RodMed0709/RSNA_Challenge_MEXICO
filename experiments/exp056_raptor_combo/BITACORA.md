@@ -11,3 +11,4 @@
 - 2026-10-12 10:50 · all-data seed 42 (rsna-j, PID 348) y seed 7 (rsna-k, PID 218, worktree wt_exp056_seed7), SWA [13,14,15]; 5090 a 0.60 s/paso.
 - 2026-10-12 11:41 · fold 0 terminado: pseudo L2 0.8857 (ep 15), SWA 0.8854, gold 0.9198, 2.51 GPU-h → didnt (umbral 0.8889). 11:42 parados folds 1–4 (F, C2, I, H) y all-data (j, k); paradas de pods automáticas.
 - exp045 5 folds: OOF pseudo L2 0.8844, gold ensamble 5 folds 0.9244.
+- 2026-10-12 11:45–14:47 · all-data relanzados en rsna-k (5090) en serie a pedido del orquestador (para prueba en LB el 14-oct pese al didnt): seed 7 13:13 → /workspace/users/rodrigo/wt_exp056_seed7/results/exp056_raptor_combo/swa_alldata.pt (SWA [13,14,15], gold 0.9198, 1.47 GPU-h); seed 42 ~14:45 → /workspace/users/rodrigo/wt_exp056_raptor_combo/results/exp056_raptor_combo/swa_alldata.pt. rsna-k detenida 14:47.
