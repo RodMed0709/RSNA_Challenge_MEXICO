@@ -37,3 +37,12 @@ sesión); aquí solo los números. Kernels privados, sin internet, GPU T4.
   Esto sube la prioridad de exp011 (etiquetas v2 por LLM con las definiciones oficiales) por encima de más arquitectura.
 - En el notebook, leer DICOM domina (22 s de workers en 3 estudios); el forward es menor. Coincide con
   `costo_inferencia.md`: el preprocesado manda el runtime.
+
+- **exp038 (12-oct):** sumar nuestro CoAtNet all-data a blend-mine con peso 0.35 resta: exp030 → 0.950, exp031 → 0.952,
+  contra 0.954 de blend-mine solo (los dos tardaron ~3 h 50 min–4 h hasta el score). Solos: exp030 0.930, exp031 0.939.
+  Siguientes ensambles con el bloque nuestro a peso bajo (0.15).
+- **Datos externos (exp044 / exp042):** los pesos de nartaa que exp044 afina traen supervisión externa (OAI). Las reglas
+  dicen "Freely & publicly available external data is allowed, including pre-trained models"
+  (`docs/papers/00_competencia/README.md`); los pesos son un dataset público de Kaggle y blend-mine, público, ya los usa.
+  OAI pide registro y acuerdo de uso (gratuito): si la organización lo considerara "no libre", afectaría por igual a
+  blend-mine y a todo lo que use esos pesos.
