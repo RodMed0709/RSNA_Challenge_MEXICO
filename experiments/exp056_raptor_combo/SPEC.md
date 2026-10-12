@@ -69,6 +69,20 @@ Lo mismo para exp045 (respaldo).
   el worktree del volumen `wt_exp056_raptor_combo` (nombres por fold: `history_fK`, `oof_swa_fK`, `swa_fK.pt`).
 - exp045 folds 1–4 (respaldo, notebook de exp045 sin cambios): worktrees `wt_exp045_fK`; F 06:51, C2 07:12, I 07:30, H 07:45.
 
-## 3. VERDICT
+## 3. VERDICT (números de `results/exp056_raptor_combo/metrics.json`, fase screen, timestamp 2026-10-12T11:41:42Z)
 
-Pendiente.
+**Resultado: `didnt`** (escrito por el orquestador en la nube, 2026-10-12 ~13:15 UTC).
+
+| | pseudo L2 f0 | v1 | gold (solo veto) |
+|---|---|---|---|
+| mejor época (ep 15) | **0.8857** | 0.8407 | 0.9198 |
+| SWA top-3 (ep 15, 14, 13) | 0.8854 | 0.8407 | 0.9212 |
+| exp045 (padre, mejor época) | 0.8899 | | 0.9201 |
+
+- Δ pseudo vs exp045 = −0.0042 (`delta.pseudo_f0` de metrics.json); Δ gold = −0.0003.
+- Criterios fijos: `worked` exige ≥ 0.8889 → no; `killed` si ≤ 0.8849 o gold < 0.9002 → no. Queda **`didnt`**.
+- Combinar aug espacial (exp045) + L5 (exp054) no suma: cada uno daba ≈ +0.006 sobre exp031 y juntos quedan por debajo
+  de cada uno por separado (0.8857 vs 0.8899 / 0.8896).
+- Según la SPEC, folds 1–4 del combo parados (pods F, C2, H, I detenidos 11:45 UTC; última época completa: f1 ep13,
+  f2 ep11, f3 ep9, f4 ep7). Entregable = los 5 folds de exp045 (OOF 0.8844, gold ens 5 folds 0.9244; `oof5_exp045.json`).
+- GPU-h fold 0: 2.51.
