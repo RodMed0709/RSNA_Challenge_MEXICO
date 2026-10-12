@@ -141,6 +141,6 @@ Lateral Meniscus +0.008, Medial OA +0.006, Lateral OA +0.005, ACL/PF OA/Effusion
 Synovitis −0.003 y Baker's −0.003. L5 es más estricta (media 0.182) y baja la media del objetivo de 0.301 a 0.278.
 La diversidad de prompts/modelo parece contar más que la calidad individual: L5 sola no es mejor que L2 en gold.
 
-**Siguiente paso sugerido:** all-data con `SWA_EPOCHS: [15, 14, 13]` (lanzador listo en `/root/run054_alldata.sh`
+**Siguiente paso sugerido:** all-data con `SWA_EPOCHS: [15, 14, 13]` (lanzador listo en el volumen: `wt_exp054_etiquetas_L5/run054_alldata.sh`, no versionado;
 de rsna-d2, que quedó ocupado por sub045_2) → pesos al ensamble; sumar L5 al combo exp056; probar L5 con más
 lecturas (k = 5, otro modelo barato) como sub054_k.
