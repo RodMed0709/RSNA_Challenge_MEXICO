@@ -6,3 +6,4 @@
 - 2026-10-12 02:21 run fold 0 lanzado en rsna-h (PID 1349).
 - 2026-10-12 04:55 fold 0 terminado: pseudo L2 0.8899 (ep 15), SWA 0.8895, gold 0.9202, 2.51 GPU-h → worked.
 - 2026-10-12 04:56 all-data lanzado en rsna-h (PID 4917), SWA_EPOCHS [13, 14, 15].
+- 2026-10-12 07:45 all-data terminado: SWA [13, 14, 15], gold 0.9186, 2.81 GPU-h → swa_alldata.pt en results/ del worktree del pod.

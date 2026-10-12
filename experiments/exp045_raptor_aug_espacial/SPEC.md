@@ -6,7 +6,7 @@
 | Padre | exp031_raptor_etiquetas_consenso |
 | Fecha | 2026-10-12 |
 | Rama | exp045_raptor_aug_espacial |
-| Estado | worked (fold 0) · all-data en curso |
+| Estado | worked · all-data hecho |
 
 Idea: paso 7, track T2a. La receta Raptor (exp031) casi no tiene augmentation (solo ganancia ×U(0.9,1.1) y muestreo
 aleatorio de ventanas). Añadir augmentation espacial por estudio: espejo L/R anatómico + afín leve.
@@ -65,7 +65,11 @@ TTA). El afín interpola (suaviza ligeramente) siempre; puede retrasar la conver
 
 ## 3. VERDICT (números de `results/exp045_raptor_aug_espacial/metrics.json`)
 
-**Resultado:** `worked` (promete) · **Fase alcanzada:** screen fold 0 → all-data lanzado en rsna-h (SWA_EPOCHS [13, 14, 15])
+**Resultado:** `worked` (promete) · **Fase alcanzada:** screen fold 0 → all-data hecho en rsna-h
+
+All-data (`results/exp045_raptor_aug_espacial/alldata/metrics.json`): 4349 estudios no-gold, 16 épocas, SWA sobre épocas
+[13, 14, 15] (las 3 mejores por pseudo L2 del fold 0), gold 0.9186 (solo informativo), 2.81 GPU-h. Pesos en el volumen:
+`/workspace/users/rodrigo/wt_exp045_raptor_aug_espacial/results/exp045_raptor_aug_espacial/swa_alldata.pt`.
 
 | Métrica | Padre (exp031) | Este | Δ |
 |---|---|---|---|
@@ -84,5 +88,5 @@ medial y contusión +0.007; bajan levemente PF OA −0.004 y fractura −0.005. 
 época 7 y sigue subiendo en la 15 (0.8896 → 0.8899): con más épocas podría dar algo más. Coste nulo: 501 s/época como
 el padre (aug en GPU ≈ 8 ms/batch).
 
-**Siguiente paso sugerido:** pesos all-data (`results/exp045_raptor_aug_espacial/swa_alldata.pt`) al ensamble;
+**Siguiente paso sugerido:** pesos all-data (`swa_alldata.pt`, ruta arriba) al ensamble (inferencia con TTA espejo igual que exp031);
 apilar en exp056 combo; probar sub045_1 con afín más fuerte (rot ±15°, escala 0.85–1.15) o 20 épocas, una variable.
