@@ -6,7 +6,7 @@
 | Padre | exp012_entrada_v2 |
 | Fecha | 2026-10-11 |
 | Rama | exp036_ref_v2_L2 |
-| Estado | running |
+| Estado | worked |
 
 Idea: **referencia combinada**. Receta exp012 (cache v2_05mm, 336 px, 6 slots, DINOv2-S) entrenada con etiquetas L2 y 12
 épocas.
@@ -74,17 +74,23 @@ rsna-e compartiendo GPU con exp035.
 
 ## 3. VERDICT (números de `results/exp036_ref_v2_L2/metrics.json`)
 
-**Resultado:** · **Fase alcanzada:**
+**Resultado:** worked · **Fase alcanzada:** screen fold 0 (sin envío a Kaggle)
 
 | Métrica | exp012 f0 (padre) | exp021 f0 (vara) | Este | Δ vs exp021 |
 |---|---|---|---|---|
-| pseudo AUC fold 0 contra L2 (decide) | | 0.817 | | |
-| pseudo AUC fold 0 contra v1 (informa) | 0.850 | 0.789 | | |
-| gold AUC (fold 0) | 0.784 | 0.812 | | |
-| LB público fold 0 (informa, después) | — | 0.836 | | |
-| Época del mejor checkpoint | 8 de 8 | 7 de 8 | | |
-| GPU-h | 3.65 | 3.17 | | |
+| pseudo AUC fold 0 contra L2 (decide) | 0.8002 | 0.817 | 0.8524 | +0.035 |
+| pseudo AUC fold 0 contra v1 (informa) | 0.850 | 0.789 | 0.8147 | +0.026 |
+| gold AUC (fold 0) | 0.784 | 0.812 | 0.8416 | +0.030 |
+| LB público fold 0 (informa, después) | — | 0.836 | no medido | — |
+| Época del mejor checkpoint | 8 de 8 | 7 de 8 | 12 de 12 | |
+| GPU-h | 3.65 | 3.17 | 3.50 | |
 
-**Qué aprendimos (2-4 líneas):**
+Criterio: pseudo L2 0.8524 ≥ 0.827 y gold 0.842 ≥ 0.792; GPU-h 3.50 ≤ 9 → `worked`. La `decision_auto` del notebook
+(Δ pseudo v1 contra exp012, −0.012) dice `didnt` pero es informativa: cambiar a etiquetas L2 baja la pseudo contra v1.
 
-**Siguiente paso sugerido:**
+**Qué aprendimos (2-4 líneas):** las ganancias de entrada v2, etiquetas L2 y 12 épocas se suman: 0.852 pseudo L2 y 0.842
+gold, la mejor referencia DINOv2-S propia, con el mejor checkpoint en la última época (aún no satura). Sigue muy por debajo
+de la línea Raptor (exp029–exp031: pseudo L2 0.87–0.88, gold ≈ 0.91), así que no cambia la base del envío.
+
+**Siguiente paso sugerido:** guardar exp036 como referencia DINOv2/v2 (y candidato barato para el track de eficiencia si
+se mide su LB con un kernel v2); no invertir más en esta línea mientras Raptor esté arriba.
