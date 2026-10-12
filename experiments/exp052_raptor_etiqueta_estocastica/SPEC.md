@@ -6,7 +6,7 @@
 | Padre | exp031_raptor_etiquetas_consenso |
 | Fecha | 2026-10-12 |
 | Rama | exp052_raptor_etiqueta_estocastica (desde exp031_raptor_etiquetas_consenso) |
-| Estado | en curso |
+| Estado | didnt |
 
 Idea ("augmentation de texto", paso 7 T4): en vez de entrenar contra el promedio fijo de las 4 fuentes de etiquetas, en
 cada época cada estudio recibe como objetivo **una** fuente elegida al azar. El modelo ve el desacuerdo entre LLMs como
@@ -56,6 +56,30 @@ convergencia en 16 épocas (el padre mejora hasta la última).
 - Smoke `SMOKE=True` → `metrics_smoke.json`; run real `FOLDS=[0]` en rsna-g tras sub031_1.
 - Post-hoc: `multi_vara.py` (scratchpad del agente; lee `oof_{best,swa}_f0.csv`) para las varas Raptor/L3/L4/v1.
 
-## 3. VERDICT
+## 3. VERDICT (números de `results/exp052_raptor_etiqueta_estocastica/metrics.json`; varas extra con `multi_vara.py` sobre `oof_*_f0.csv`)
 
-Pendiente.
+**Resultado:** `didnt` · **Fase alcanzada:** screen fold 0
+
+| Métrica (fold 0, val 871) | Padre (exp031) | Este | Δ | ruido semilla |
+|---|---|---|---|---|
+| pseudo L2 (mejor época) | 0.8836 (ep 15) | **0.8851** (ep 15) | **+0.0014** | +0.0016 |
+| pseudo L2 (SWA top-3) | 0.8835 | 0.8847 (ep 15, 14, 13) | +0.0012 | |
+| pseudo Raptor bin (best) | 0.8927 | 0.9003 | +0.0076 | +0.0034 |
+| pseudo L3 bin (best) | 0.8742 | 0.8720 | −0.0022 | −0.0006 |
+| pseudo L4 bin (best) | 0.8836 | 0.8847 | +0.0011 | +0.0019 |
+| v1 (best) | 0.8368 | 0.8392 | +0.0024 | +0.0026 |
+| gold (veto) | 0.9144 | 0.9150 (SWA 0.9153) | +0.0006 | |
+| GPU-h | 2.49 | 2.53 | +0.04 | |
+
+Criterio: Δ pseudo L2 +0.0014 < +0.003 (y > −0.003, gold no cae) → **didnt** (`decision_auto` = `neutral`).
+Δ medio (Raptor, L3) = +0.0027, pero el criterio principal no se cumple; no se lanza all-data.
+
+**Qué aprendimos:** el objetivo estocástico converge más lento al principio (ep 1: 0.761 vs 0.793 del padre) y
+alcanza al padre hacia la ép. 11; termina dentro del ruido de semilla contra L2/L4/v1. El único movimiento fuera del
+ruido es **contra Raptor (+0.008)**: entrenar con la fila cruda de Raptor 1/4 de las veces (en vez de diluida en la
+media) acerca el modelo a la "opinión" de Raptor, y baja algo contra L3 (−0.002). Es decir: cada vara premia la
+fuente que el objetivo expone más, sin ganancia neta clara. Por hallazgo (pseudo L2): MCL +0.016, Contusion +0.010;
+ACL −0.008, Fracture −0.008, Synovitis −0.006. Como regularizador de ruido de etiqueta no aporta en 16 épocas.
+
+**Siguiente paso sugerido:** ninguno directo. Si se reintenta: más épocas (la curva aún sube en la 14–15) o muestreo
+por celda en vez de por estudio; prioridad baja.
