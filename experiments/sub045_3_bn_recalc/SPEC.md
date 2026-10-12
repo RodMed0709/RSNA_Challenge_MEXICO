@@ -40,5 +40,12 @@ y `swa_bn_alldata.pt` (junto a `swa_alldata.pt`, BN con 800 estudios no-gold), c
 Notebook `sub045_3_bn_recalc.ipynb`, corre en un pod GPU con auto-stop (worker `/workspace/users/rodrigo/p7c/`).
 Solo inferencia (~0.3 GPU-h f0; ~1 GPU-h con folds 1–4 + all-data).
 
-## 3. VERDICT
-(pendiente; números de results/sub045_3_bn_recalc/metrics.json)
+## 3. VERDICT (números de `results/sub045_3_bn_recalc/metrics.json`)
+
+**Verdict: `didnt`** (orquestador en la nube, 2026-10-12 21:15 UTC, criterios fijos de la sección 1).
+- pseudo L2 f0 SWA + BN recalculada **0.8907** vs swa_f0 0.8895: Δ **+0.0012**
+  < +0.002 (umbral worked 0.8915).
+- gold 0.9217 (Δ +0.0016; veto < 0.9001 no se activa). v1 0.8437.
+- Sanidad: gold de swa_f0 sin tocar = 0.92011 (esperado 0.92011) ✔.
+- Lectura: recalcular BN tras SWA mejora un poco pero no llega al umbral; no se generan swa_bn_f1..f4 ni all-data y no
+  hay envío. Solo queda `swa_bn_f0.pt`.
