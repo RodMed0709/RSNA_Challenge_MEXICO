@@ -6,7 +6,7 @@
 | Padre | exp031_raptor_etiquetas_consenso |
 | Fecha | 2026-10-12 |
 | Rama | exp049_raptor_clahe (desde exp031_raptor_etiquetas_consenso) |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: track T3 (preprocesado) del paso 7. El corpus Raptor es uint8 normalizado por percentiles 2–98 de cada serie; el contraste local queda plano en tejidos blandos (meniscos, ligamentos, edema óseo) y varía mucho entre sitios. CLAHE ecualiza el contraste local y es barato en inferencia (cv2 en Kaggle).
 
@@ -43,6 +43,27 @@ semilla 42, `split_v1_seed42` fold 0, selección por pseudo L2 (L2 binarizada > 
 - Notebook = copia del de exp031; cambio: celda 0 (`EXP`, `PADRE`, `CORPUS`, `NOTES`). Ninguna otra celda cambia.
 - Smoke `SMOKE=True` → run real `FOLDS=[0]` en rsna-e2 (tras el all-data seed 7).
 
-## 3. VERDICT (números de `results/<EXP>/metrics.json`)
+## 3. VERDICT (números de `results/exp049_raptor_clahe/metrics.json`)
 
-Pendiente.
+**Resultado:** `didnt` · **Fase alcanzada:** screen fold 0 (rsna-e2, 2026-10-12 03:29–05:58 UTC)
+
+| Métrica | Padre (exp031) | Este | Δ |
+|---|---|---|---|
+| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | 0.8864 (ep 14) | **+0.0028** |
+| pseudo L2 fold 0 (SWA top-3) | 0.8835 | 0.8861 (ep 14, 15, 13) | +0.0025 |
+| v1 fold 0 | 0.8368 | 0.8383 | +0.0015 |
+| gold (veto) | 0.9144 | 0.9083 (SWA 0.9085) | −0.0061 |
+| GPU-h | 2.49 | 2.47 | −0.02 |
+
+Criterio: Δ pseudo +0.0028 < +0.003 (umbral de promesa) y > −0.003; gold −0.006 (no veta) → **didnt**. No se lanza
+all-data. (`decision_auto` = `neutral`.)
+
+**Qué aprendimos:** CLAHE (clip 2.0, 8×8) da una subida pequeña, justo bajo el umbral y ~2× el ruido de semilla
+(0.0013): sube MCL +0.010, Lateral Meniscus +0.008, Contusion +0.006, Fracture +0.006, Baker +0.005, Effusion +0.005;
+baja PF OA −0.004. Gold baja −0.006 (dentro del veto; con 58 estudios es ruido grande). Costo de inferencia: 66 ms por
+estudio en un hilo (despreciable frente al modelo). **Para ensamble (informativo, no decide):** media de rangos de los
+OOF SWA fold 0 exp049 + exp031 = **0.8888** (correlación media de predicciones 0.949), parecido al par de semillas
+42 + 7 (0.8878): CLAHE aporta diversidad del orden de una semilla más.
+
+**Siguiente paso sugerido:** no apilar en el combo como mejora individual; si sobra un pod, probar CLAHE más suave
+(clip 1.0) como sub049_1, o usar el modelo CLAHE como miembro de ensamble en lugar de una semilla extra.
