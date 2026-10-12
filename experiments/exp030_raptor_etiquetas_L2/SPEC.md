@@ -6,7 +6,7 @@
 | Padre | exp029_raptor_entreno |
 | Fecha | 2026-10-11 |
 | Rama | exp030_raptor_etiquetas_L2 |
-| Estado | run (fold 0) |
+| Estado | worked |
 
 Idea: en la receta Raptor/nartaa d96/384 de exp029, entrenar con las etiquetas L2 (las mismas que nos dieron el mejor
 LB propio en exp021) en lugar de las etiquetas blandas públicas de Raptor.
@@ -55,17 +55,29 @@ que cambia la escala de los targets negativos; el padre aún corre, la comparaci
 
 ## 3. VERDICT (números de `results/exp030_raptor_etiquetas_L2/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** screen fold 0 en curso
+**Resultado:** worked (criterio de la SPEC sobre pseudo L2) · **Fase alcanzada:** screen fold 0 + all-data + envío a Kaggle
 
 | Métrica | Padre (exp029) | Este | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 (mejor época) | pendiente (exp029 en curso) | | |
-| pseudo L2 fold 0 (SWA top-3) | pendiente (exp029 en curso) | | |
-| v1 fold 0 | pendiente (exp029 en curso) | | |
-| gold (veto) | pendiente (exp029 en curso) | | |
-| GPU-h | pendiente (exp029 en curso) | | |
-| LB modelo fold 0 (árbitro final) | pendiente | pendiente | |
+| pseudo L2 fold 0 (mejor época) | 0.8682 (ep15) | 0.8795 (ep12) | +0.0113 |
+| pseudo L2 fold 0 (SWA top-3) | 0.8679 | 0.8793 [12,15,14] | +0.0114 |
+| v1 fold 0 | 0.8329 | 0.8340 | +0.0011 |
+| gold (veto) | 0.9115 | 0.9123 | +0.0008 |
+| GPU-h fold 0 | 2.51 | 2.50 | — |
+| all-data (4349 no-gold, SWA [12,14,15]): gold / GPU-h | — | 0.8983 / 2.80 | — |
+| LB público all-data (envío 57088360; árbitro final) | 0.933 | **0.930** | −0.003 |
 
-**Qué aprendimos:**
+Decisión automática de la celda 5: `promising` (Δ pseudo +0.0113 ≥ +0.005, gold +0.0008) → `worked` según la SPEC.
+Números de `results/exp030_raptor_etiquetas_L2/metrics.json` (fold 0; idéntico a `metrics_f0_backup.json`) y de
+`results/exp030_raptor_etiquetas_L2/alldata/metrics.json` en el volumen (no versionado).
 
-**Siguiente paso sugerido:**
+**Ojo, LB:** la SPEC fijó el LB como árbitro final entre exp029 y exp030 por el sesgo de la vara (entrenar con L2 y medir
+contra L2). El LB se midió con el modelo **all-data** (no con el fold 0) y quedó **por debajo de exp029: 0.930 vs 0.933**.
+La subida de pseudo L2 es, al menos en parte, acuerdo con la propia fuente L2, no mejora real.
+
+**Qué aprendimos:** entrenar con L2 sube la pseudo L2 +0.011 y deja gold igual, pero en el LB público rinde −0.003 frente a
+las etiquetas de Raptor: la vara pseudo L2 está sesgada a favor de los modelos entrenados con L2 y no sirve para comparar
+fuentes de etiquetas. Las etiquetas de consenso (exp031) son la continuación natural.
+
+**Siguiente paso sugerido:** no usar exp030 como base del envío; comparar fuentes de etiquetas solo por LB (o por gold
+como veto) y seguir con exp031 (consenso de 4 fuentes).
