@@ -6,7 +6,7 @@
 | Padre | exp056_raptor_combo (exp045 aug espacial + consenso de 5 fuentes con L5) |
 | Fecha | 2026-10-12 |
 | Rama | sub056_2_L5v2 (desde exp056_raptor_combo, 2083da0) |
-| Estado | spec · fase 1 (L5v2) en curso · fase 2 esperando pod (lo asigna el orquestador tras exp056, ~12:50 UTC) |
+| Estado | fase 1 hecha (L5v2 sana) · fase 2 en cola en rsna-d2 (arranca al terminar el fold 0 de exp056) |
 
 Idea (autorizada por Rodrigo vía orquestador): mejorar la 5.ª fuente del consenso con **más lecturas por informe**.
 L5 = 3 lecturas (gpt-4.1-mini). **L5v2 = las mismas 3 + 2 lecturas nuevas** con prompts distintos y un modelo más
@@ -67,4 +67,27 @@ tocó L5v2.
 
 ## 3. VERDICT
 
-Pendiente.
+**Resultado:** pendiente · **Fase alcanzada:** fase 1 completa; fase 2 en cola
+
+### Fase 1 — L5v2 (números de `L5v2_validacion.json`)
+
+L5v2 **sana** (pasa los 4 chequeos y el costo). Costo de las 2 lecturas nuevas: D_strict US$8.27 (gpt-5.4-mini, 5.95 M
+tokens in / 0.85 M out) + E_checklist US$3.46 (gpt-5.4-nano, 6.38 M in / 1.75 M out) + pilotos de selección de modelo
+≈ US$0.17 → **≈ US$11.9** (≤ US$15). El precio de gpt-5.4-nano es el de lista supuesto (US$0.20 / 1.25 por M).
+0 errores; cobertura 4407/4407.
+
+| Referencia (binarizada > 0.5) | macro AUC L5v2 | macro κ | (L5, exp054) |
+|---|---|---|---|
+| L2 | 0.9944 | 0.634 | 0.9925 |
+| L3 | 0.9926 | 0.562 | 0.9895 |
+| L4 | 0.9938 | 0.645 | 0.9917 |
+| Raptor | 0.9606 | 0.703 | 0.9567 |
+| consenso de las 4 | 0.9939 (mín. Contusion 0.984) | 0.638 | 0.9920 |
+| L5 (3 lecturas) | 0.9984 | 0.889 | — |
+
+- Por lectura, macro AUC vs consenso de las 4: A 0.969 · B 0.986 · C 0.983 · **D 0.985** · **E 0.971**. κ de las nuevas
+  con las viejas 0.70–0.77; D–E 0.734.
+- L5v2 ordena un poco mejor que L5 contra todas las referencias (+0.002–0.004) y es algo más estricta (media 0.176 vs
+  0.182). Muy correlada con L5 (AUC 0.998): 3 de 5 lecturas son las mismas, así que el efecto en el entrenamiento puede
+  ser pequeño.
+- Gold (solo reporte): L5v2 0.896 · L5 0.889 · consenso de las 4 0.895 · L2 0.893.
