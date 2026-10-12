@@ -6,7 +6,7 @@
 | Padre | exp045_raptor_aug_espacial |
 | Fecha | 2026-10-12 |
 | Rama | exp057_raptor_eficiente |
-| Estado | spec → corriendo (fold 0, luego all-data) |
+| Estado | worked (fold 0 + all-data hechos) |
 
 Idea: producto para el premio de eficiencia (score = AUC relativo + RuntimeSeconds/32400; menos runtime es mejor).
 exp045 (mejor receta Raptor propia) entrenado e inferido a menor coste: entrada 224, 3 slots, sin TTA.
@@ -77,4 +77,20 @@ distintas por estudio el SWA puede ser algo más ruidoso. El kernel de Kaggle de
 
 ## 3. VERDICT (números de `results/exp057_raptor_eficiente/metrics.json`)
 
-(pendiente)
+**Verdict: `worked`** (escrito por el orquestador en la nube, 2026-10-12 21:10 UTC, con los criterios fijos de la sección 1).
+
+| Medida | exp057 | Umbral worked | Padre exp045 |
+|---|---|---|---|
+| pseudo L2 fold 0, mejor época (ep 15) | **0.8892** | ≥ 0.8799 ✔ | 0.8899 |
+| pseudo L2 SWA top-3 (ép. 15, 14, 13) | 0.8889 | (se reporta) | 0.8895 |
+| gold (58) mejor época | **0.9092** | ≥ 0.9002 ✔ | 0.9202 |
+| gold SWA | 0.9096 | — | — |
+| v1 mejor época / SWA | 0.8452 / 0.8448 | — | — |
+| `bench_inference.speedup` (64 estudios, RTX PRO 4500) | **6.64×** (0.3713 → 0.0560 s/estudio) | ≥ 2.5 ✔ | — |
+
+- Δ pseudo L2 f0 −0.0007 (`delta.pseudo_f0`), Δ gold −0.0110 (`delta.gold`, dentro del veto de 0.02). 1.20 GPU-h fold 0.
+- Lectura: a 224 px, 3 slots y sin TTA la pseudo L2 queda prácticamente igual que el padre con 6.6× menos tiempo de GPU
+  por estudio. El gold baja 0.011 (Lateral OA 0.795, Synovitis 0.792 en gold), sin llegar al veto; vigilarlo en el LB.
+- All-data (`alldata/metrics.json`): SWA = épocas [15, 14, 13] de fold 0 (regla de la SPEC), 1.34 GPU-h, bench 6.63×
+  sobre 58 estudios. Pesos `results/exp057_raptor_eficiente/swa_alldata.pt`. Como el verdict no es `killed`, se envía a
+  Kaggle como candidato al premio de eficiencia (kernel `exp057-eff-alldata`; el runtime real lo da el envío).
