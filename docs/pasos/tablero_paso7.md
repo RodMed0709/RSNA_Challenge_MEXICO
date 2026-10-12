@@ -1,13 +1,13 @@
 # Tablero paso 7 — seguimiento RSNA Knee
 
-Actualizado: 2026-10-12T05:00Z. Espejo del dashboard (artifact privado). Números de `metrics.json` / `history_f0.csv` de cada experimento, de `docs/pasos/envios_kaggle.md` y de la CLI de Kaggle. Lo que no tiene número todavía va como corriendo / en cola.
+Actualizado: 2026-10-12T08:05Z. Espejo del dashboard (artifact privado). Números de `metrics.json` / `history_f0.csv` de cada experimento, de `docs/pasos/envios_kaggle.md` y de la CLI de Kaggle. Lo que no tiene número todavía va como corriendo / en cola.
 
 ## Lo esencial
 
 - Mejor LB público (base pública reproducida): **0.954** (exp023: velci-kcd25-20 tal cual (base 0.954), envío 57081259).
 - Mejor modelo propio en LB: **0.939** (exp031 all-data (consenso) + TTA, envío 57091516).
 - Mejor eficiencia en LB: **0.945** con Ch (nartaa 224 half, sin TTA; ~8 min hasta score, envío 57089745).
-- Saldo RunPod: **US$51.57** (2026-10-12T05:01:32Z).
+- Saldo RunPod: **US$35.60** (2026-10-12T08:01:52Z).
 - Padre del paso 7: exp031, pseudo L2 0.8836; promete si Δ ≥ +0.003 (ruido de semilla 0.0013).
 
 ## Experimentos (desde exp021)
@@ -32,25 +32,27 @@ Actualizado: 2026-10-12T05:00Z. Espejo del dashboard (artifact privado). Número
 | exp040 robustez | Raptor | exp029 | análisis de robustez (solo inferencia) | — | — | 0.9118 | — | — | 0.59 | — | worked | rsna-e | ruido 5 % −0.011, sin sagital −0.028, TTA +0.002, ECE 0.20 |
 | exp043 raptor_3slots | Raptor | exp030 | entrenar solo con 3 slots (eficiencia) | 0.8785 | 0.8800 | 0.8856 | -0.0010 | -0.0267 | 2.47 | — | killed | — | veto gold −0.027; podar slots solo en inferencia sí sirve |
 | exp044 raptor_ft_nartaa | T1 Kaggle | exp031 | fine-tune pesos nartaa con etiquetas consenso, all-data | — | — | — | — | — | — | — | en cola | rsna-c2 | all-data listo; pseudo/gold contaminados; decide el LB vía exp042. Revisar regla de datos externos (OAI) |
-| sub031_1 consenso_jev | Paso 7 · T5 | exp031 | consenso + JEV como 5.ª fuente | 0.8846 | 0.8846 | 0.9107 | +0.0010 | -0.0037 | 2.53 | — | sin verdict | rsna-g | terminado; Δ dentro del ruido |
+| sub031_1 consenso_jev | Paso 7 · T5 | exp031 | consenso + JEV como 5.ª fuente | 0.8846 | 0.8846 | 0.9107 | +0.0010 | -0.0037 | 2.53 | — | didnt | rsna-g | dentro del ruido |
 | sub031_2 semilla | Paso 7 · T5 | exp031 | semilla 42 → 7 (ruido) | 0.8852 | 0.8849 | 0.9178 | +0.0015 | +0.0035 | 2.50 | — | worked | rsna-c2 | verdict 1bfa45f (informativo). Ruido de semilla 0.0013; ensamble 2 semillas 0.8878 |
 | sub031_3 lr_backbone | Paso 7 · T5 | exp031 | lr backbone 6e-5 | 0.8832 | 0.8840 | 0.9146 | -0.0005 | +0.0003 | 2.50 | — | didnt | rsna-d2 | verdict 6e5c640. Dentro del ruido |
-| sub031_4 drop_path | Paso 7 · T5 | exp031 | drop_path 0.2 | 0.8849 | 0.8847 | 0.9097 | +0.0013 | -0.0047 | 2.55 | — | sin verdict | rsna-f | terminado; Δ dentro del ruido |
-| exp045 raptor_aug_espacial | Paso 7 · T2 | exp031 | aug espacial: espejo L/R + afín | 0.8899 | 0.8895 | 0.9202 | +0.0063 | +0.0058 | 2.51 | — | worked | rsna-h | primera aug que pasa el umbral; all-data corriendo en rsna-h |
-| exp046 raptor_aug_intensidad | Paso 7 · T2 | exp031 | aug intensidad: gamma, contraste, ruido, blur, sesgo | 0.8854 | 0.8858 | 0.9039 | +0.0018 | -0.0105 | 2.51 | — | didnt | rsna-i | no llega al umbral (+0.003); gold SWA 0.9077. Se prueba versión suave (sub046_1) |
-| sub046_1 aug_intensidad_suave | Paso 7 · T2 | exp046 | intensidad de exp046 en versión suave | — | — | — | — | — | — | — | corriendo | rsna-i | arrancó ~04:55 |
-| exp047 raptor_slot_dropout | Paso 7 · T2 | exp031 | dropout de slot p 0.15 + jitter de cortes | (0.8842 ép. 14/16) | — | — | — | — | — | — | corriendo | rsna-d2 |  |
-| exp048 raptor_mixup | Paso 7 · T2 | exp031 | mixup a nivel estudio | (0.8243 ép. 4/16) | — | — | — | — | — | — | corriendo | rsna-f | desde 04:16, fin ~06:50 |
-| exp049 raptor_clahe | Paso 7 · T3 | exp031 | CLAHE por corte | (0.8733 ép. 9/16) | — | — | — | — | — | — | corriendo | rsna-e2 |  |
-| exp050 raptor_res384 | Paso 7 · T3 | exp031 | entrada 384 completa (sin recorte 320) | (0.8598 ép. 6/16) | — | — | — | — | — | — | corriendo | rsna-c2 |  |
-| exp051 raptor_norm | Paso 7 · T3 | exp031 | percentiles 0.5–99.5 por serie | — | — | — | — | — | — | — | en cola | — | smoke hecho |
-| exp052 raptor_etiqueta_estocastica | Paso 7 · T4 | exp031 | fuente de etiqueta al azar por estudio y época | (0.8205 ép. 4/16) | — | — | — | — | — | — | corriendo | rsna-g |  |
-| exp053 raptor_etiqueta_temperatura | Paso 7 · T4 | exp031 | consenso afilado T 0.7 | — | — | — | — | — | — | — | en cola | — |  |
-| exp054 etiquetas_L5 | Paso 7 · T4 | exp031 | + L5 (GPT, 3 prompts) al consenso | — | — | — | — | — | — | — | en cola | — | L5 lista (US$8.78); espera pod |
-| exp056 combo | Paso 7 · T6 | exp031 | todas las ideas worked juntas, fold 0 | — | — | — | — | — | — | — | en cola | — | arranca ~07:30 UTC tras la primera tanda. Si gana: folds 1–4 en paralelo en 4 pods → ensamble 5 folds + blend-mine, pesos por OOF (corrigiendo que los públicos vieron todo el train) o fijos si no se puede |
-| exp038 ens_blendmine_nuestro | T1 Kaggle | exp023 | blend-mine + exp030/exp031 all-data, rangos 0.35/0.30/0.35 | — | — | — | — | — | — | 0.950 | corriendo | Kaggle | con exp030: 0.950 (< 0.954 de blend-mine solo); con exp031: en score |
-| exp039 ens_bloque_nuestro | T1 Kaggle | exp038 | blend-mine + bloque nuestro (exp031 + seed 7 all-data) | — | — | — | — | — | — | — | en cola | Kaggle |  |
-| exp042 ens_ft_nartaa | T1 Kaggle | exp038 | blend-mine con CoAtNet nartaa → exp044 | — | — | — | — | — | — | — | en cola | Kaggle |  |
+| sub031_4 drop_path | Paso 7 · T5 | exp031 | drop_path 0.2 | 0.8849 | 0.8847 | 0.9097 | +0.0013 | -0.0047 | 2.55 | — | didnt | rsna-f | dentro del ruido |
+| exp045 raptor_aug_espacial | Paso 7 · T2 | exp031 | aug espacial: espejo L/R + afín | 0.8899 | 0.8895 | 0.9202 | +0.0063 | +0.0058 | 2.51 | — | worked | rsna-h | único worked de la tanda; v1 +0.008; MCL +0.024, ACL +0.021, LatMen +0.015; all-data listo (gold 0.9186); 5-fold en curso (f1 F, f2 C2, f3 I, f4 H; fin ~10:20). La curva aún sube en ép. 15 |
+| sub045_1 afin_fuerte | Paso 7 · T2 | exp045 | afín más fuerte | — | — | — | — | — | — | — | en cola | — | tras 10:20 |
+| sub045_2 20_epocas | Paso 7 · T2 | exp045 | exp045 con 20 épocas (la curva aún sube) | — | — | — | — | — | — | — | en cola | — | tras 10:20 |
+| exp046 raptor_aug_intensidad | Paso 7 · T2 | exp031 | aug intensidad: gamma, contraste, ruido, blur, sesgo | 0.8854 | 0.8858 | 0.9039 | +0.0018 | -0.0105 | 2.51 | — | didnt | rsna-i | no llega al umbral (+0.003); gold SWA 0.9077 |
+| sub046_1 aug_intensidad_suave | Paso 7 · T2 | exp046 | intensidad de exp046 en versión suave | 0.8850 | 0.8849 | 0.9131 | +0.0014 | -0.0013 | 2.51 | — | didnt | rsna-i | versión suave tampoco llega |
+| exp047 raptor_slot_dropout | Paso 7 · T2 | exp031 | dropout de slot p 0.15 + jitter de cortes | 0.8844 | 0.8849 | 0.9139 | +0.0007 | -0.0005 | 2.50 | — | didnt | rsna-d2 | análisis de robustez en curso |
+| exp048 raptor_mixup | Paso 7 · T2 | exp031 | mixup a nivel estudio | 0.8845 | 0.8847 | 0.9067 | +0.0009 | -0.0077 | 2.49 | — | didnt | rsna-f |  |
+| exp049 raptor_clahe | Paso 7 · T3 | exp031 | CLAHE por corte | 0.8864 | 0.8861 | 0.9083 | +0.0028 | -0.0061 | 2.47 | — | didnt | rsna-e2 | al borde del umbral; rank-ens exp049+exp031 = 0.8888 (≈ semilla); candidato a sub056_k |
+| exp050 raptor_res384 | Paso 7 · T3 | exp031 | entrada 384 completa (sin recorte 320) | 0.8856 | 0.8861 | 0.9172 | +0.0019 | +0.0028 | 3.63 | — | didnt | rsna-c2 | coste ×1.46 |
+| exp051 raptor_norm | Paso 7 · T3 | exp031 | percentiles 0.5–99.5 por serie | (0.8816 ép. 13/16) | — | — | — | — | — | — | corriendo | rsna-e2 | fin ~08:35 |
+| exp052 raptor_etiqueta_estocastica | Paso 7 · T4 | exp031 | fuente de etiqueta al azar por estudio y época | 0.8851 | 0.8847 | 0.9150 | +0.0014 | +0.0006 | 2.53 | — | didnt | rsna-g |  |
+| exp053 raptor_etiqueta_temperatura | Paso 7 · T4 | exp031 | consenso afilado T 0.7 | (0.8756 ép. 8/16) | — | — | — | — | — | — | corriendo | rsna-g |  |
+| exp054 etiquetas_L5 | Paso 7 · T4 | exp031 | + L5 (GPT, 3 prompts) al consenso | (0.8789 ép. 9/16) | — | — | — | — | — | — | corriendo | rsna-d2 | fin ~09:20 |
+| exp056 combo | Paso 7 · T6 | exp031 | combo sobre exp045 (único worked) ± exp049 al borde como sub056_k | — | — | — | — | — | — | — | en cola | — | 5-fold de exp045 en curso (fin ~10:20) → ensamble 5 folds + blend-mine; pesos por OOF o fijos |
+| exp038 ens_blendmine_nuestro | T1 Kaggle | exp023 | blend-mine + exp030/exp031 all-data, rangos 0.35/0.30/0.35 | — | — | — | — | — | — | 0.952 | didnt | Kaggle | con exp030 0.950, con exp031 0.952: ambos < 0.954 de blend-mine solo → bloque propio a 0.15 en exp039 |
+| exp039 ens_bloque_nuestro | T1 Kaggle | exp038 | blend-mine + bloque nuestro a peso 0.15 | — | — | — | — | — | — | — | en cola | Kaggle | kernel ens-exp039-w15 listo; envío 13-oct |
+| exp042 ens_ft_nartaa | T1 Kaggle | exp038 | blend-mine con CoAtNet nartaa → exp044 | — | — | — | — | — | — | — | en cola | Kaggle | exp042b: nartaa → rank(nartaa + exp044); envío 13-oct |
 | exp055 eficiencia_3slots | Eficiencia | exp031 | exp031 all-data, 3 slots, sin TTA, half en T4 | — | — | — | — | — | — | — | en cola | Kaggle |  |
 
 Δ = mejor época contra la mejor época del padre (como en los verdicts). Entre paréntesis: valor parcial del run en curso, no es resultado.
@@ -71,21 +73,25 @@ Actualizado: 2026-10-12T05:00Z. Espejo del dashboard (artifact privado). Número
 | 2026-10-12 00:28 | 57089745 | Ch: nartaa 224 half, 94 ventanas, sin TTA (eficiencia) | no | 0.945 | 54.1 | ~8 min |
 | 2026-10-12 00:37 | 57089954 | exp038: blend-mine + exp030 all-data | mixto | 0.950 | 198.6 | > 3 h (listo antes de 05:00) |
 | 2026-10-12 01:44 | 57091516 | exp031 all-data (consenso) + TTA | sí | 0.939 | 64.6 | ~28 min |
-| 2026-10-12 02:13 | 57092253 | exp038: blend-mine + exp031 all-data | mixto | pendiente | 209.1 | en score |
+| 2026-10-12 02:13 | 57092253 | exp038: blend-mine + exp031 all-data | mixto | 0.952 | 209.1 | listo antes de 08:04 |
+| 2026-10-13 00:05 | prog-1 | exp045 all-data solo (aug espacial) | sí | programado | — | programado |
+| 2026-10-13 00:05 | prog-2 | exp039: blend-mine + bloque nuestro a 0.15 | mixto | programado | — | programado |
+| 2026-10-13 00:05 | prog-3 | exp042b: blend-mine con rank(nartaa + exp044) | mixto | programado | — | programado |
+| 2026-10-13 00:05 | prog-4 | ensamble 5 folds exp045 (+ blend-mine) | mixto | programado | — | programado |
 
 ## Recursos
 
 | pod | GPU | corre | fin estimado (UTC) | siguiente |
 |---|---|---|---|---|
-| rsna-c2 | RTX PRO 4500 32 GB | exp050 res384 (6/16 ép.) | ~06:30 | — |
-| rsna-d2 | RTX PRO 4500 32 GB | exp047 slot dropout (14/16 ép.) | ~05:20 | — |
-| rsna-e2 | RTX PRO 4500 32 GB | exp049 CLAHE (9/16 ép.) | ~06:05 | — |
-| rsna-f | RTX PRO 4500 32 GB | exp048 mixup (4/16 ép.) | ~06:50 | — |
-| rsna-g | RTX PRO 4500 32 GB | exp052 etiqueta estocástica (4/16 ép.) | ~06:45 | — |
-| rsna-h | RTX PRO 4500 32 GB | exp045 all-data | ~07:45 (all-data ~2.8 h) | → ensamble / exp056 |
-| rsna-i | RTX PRO 4500 32 GB | sub046_1 intensidad suave | ~07:30 | — |
+| rsna-c2 | RTX PRO 4500 32 GB | exp045 fold 2 | ~10:20 | — |
+| rsna-d2 | RTX PRO 4500 32 GB | exp054 L5 (9/16 ép.) | ~09:20 | — |
+| rsna-e2 | RTX PRO 4500 32 GB | exp051 norm (13/16 ép.) | ~08:35 | — |
+| rsna-f | RTX PRO 4500 32 GB | exp045 fold 1 | ~10:20 | sub045_k / exp056 |
+| rsna-g | RTX PRO 4500 32 GB | exp053 temperatura (8/16 ép.) | ~09:20 | — |
+| rsna-h | RTX PRO 4500 32 GB | exp045 fold 4 | ~10:20 | exp056 fold 0 |
+| rsna-i | RTX PRO 4500 32 GB | exp045 fold 3 | ~10:20 | — |
 
-Saldo RunPod 2026-10-12T05:01:32Z: US$51.57 (antes de la recarga: US$52.44). 7 pods ≈ US$5.2/h.
+Saldo RunPod 2026-10-12T08:01:52Z: US$35.60. 7 pods ≈ US$5.2/h.
 
 ## Linaje
 
@@ -95,15 +101,20 @@ exp029 (Raptor propio, LB 0.933)
  │                                 └─ exp043 3 slots (killed)
  ├─ exp031 etiquetas consenso ── worked, PADRE paso 7, LB 0.939 all-data
  │    ├─ sub031_1..4 (semilla, lr, drop_path, JEV)
- │    ├─ exp045..exp054 (augs, preprocesado, etiquetas) ──(los worked, todos juntos)──▶ exp056 combo fold 0 (~07:30 UTC)
- │    │      └─ si gana: folds 1–4 en 4 pods ──▶ ensamble 5 folds + blend-mine (pesos OOF o fijos)
+ │    ├─ exp045 aug espacial (ÚNICO worked) ──▶ all-data (listo) + 5 folds (f1–f4 corriendo) ──▶ ensamble 5 folds + blend-mine
+ │    │      ├─ sub045_1 afín fuerte, sub045_2 20 épocas (en cola)
+ │    │      └─▶ exp056 combo (exp045 ± exp049 al borde como sub056_k)
+ │    ├─ exp046..exp054 didnt (augs de intensidad, slot dropout, mixup, CLAHE, res384, etiqueta estocástica); exp051/053/054 corriendo
  │    └─ exp044 fine-tune nartaa ──▶ exp042
  ├─ exp032 alineado L/R (didnt)
  └─ exp033 24 épocas (didnt)
-exp023 base pública 0.954 ──▶ exp038 (blend-mine + exp030/031 all-data) ──▶ exp039 (+ seed 7, + exp056) / exp042
+exp023 base pública 0.954 ──▶ exp038 (bloque propio a 0.35: 0.950 / 0.952, resta) ──▶ exp039 (bloque a 0.15) / exp042b (rank nartaa+exp044)
 ```
 
 ## Lectura
+
+**Resumen de la primera tanda del paso 7:** de 11 ideas solo la augmentation geométrica (exp045) cruzó el umbral. La receta Raptor ya está
+afinada: épocas, lr, drop_path, fuentes extra de etiqueta, intensidad, mixup, CLAHE, resolución y dropout de slot quedan dentro de ~+0.003.
 
 **Qué funcionó y por qué**
 
@@ -127,15 +138,17 @@ exp023 base pública 0.954 ──▶ exp038 (blend-mine + exp030/031 all-data) �
 - **Entrenar con 3 slots** (exp043): pseudo igual pero gold −0.027 (veto). El axial aporta en derrame, fractura, sinovitis y Baker.
 - **lr del backbone** (sub031_3), **JEV como 5.ª fuente** (sub031_1) y **drop_path 0.2** (sub031_4): +0.001 o menos, dentro del ruido.
 - **Aug de intensidad** (exp046): +0.0018, no llega al umbral y gold baja (−0.0105). Se prueba una versión suave (sub046_1).
-- **Ensamble con pesos fijos 0.35/0.30/0.35** (exp038 con exp030): 0.950, por debajo de blend-mine solo (0.954). Sumar un modelo propio más débil
-  con tanto peso resta; falta el resultado con exp031.
+- **Ensambles con nuestro bloque a 0.35** (exp038): con exp030 0.950, con exp031 0.952, ambos por debajo de blend-mine solo (0.954).
+  Un modelo propio más débil con tanto peso resta → exp039 baja el peso del bloque a 0.15.
+- **Resto de la tanda** (didnt): slot dropout exp047 +0.0007, mixup exp048 +0.0009, CLAHE exp049 +0.0028 (al borde; candidato a sub056_k),
+  res384 exp050 +0.0019 con coste ×1.46, etiqueta estocástica exp052 +0.0014, intensidad suave sub046_1 +0.0014.
 - **Brecha fold 0 vs LB:** un fold 0 propio da 0.933; la versión pública con todos los datos y supervisión externa da 0.949. Por eso los envíos propios son all-data.
 
 **Cómo se apila lo que funciona**
 
 1. Cada ablation del paso 7 (augs T2, preprocesado T3, etiquetas T4) se mide contra exp031 en fold 0. Promete con Δ ≥ +0.003.
-2. **exp056 combo** = todas las ideas worked juntas en fold 0 (arranca ~07:30 UTC, cuando termine la primera tanda).
-3. Si gana a exp031: folds 1–4 en paralelo en 4 pods → **ensamble de 5 folds + blend-mine**. Pesos elegidos con OOF, corrigiendo que los
+2. **exp056 combo** = exp045 (único worked) ± exp049 al borde como sub056_k. En paralelo, exp045 corre los folds 1–4 en 4 pods.
+3. **Ensamble de 5 folds de exp045 + blend-mine**. Pesos elegidos con OOF, corrigiendo que los
    públicos vieron todo el train; si no se puede corregir, pesos de rango fijos decididos antes de mirar el LB.
 4. Mientras tanto, T1 sigue con los all-data actuales (exp038 → exp039/exp042). El LB solo elige entre ≤ 2 variantes por día.
 
@@ -143,5 +156,6 @@ exp023 base pública 0.954 ──▶ exp038 (blend-mine + exp030/031 all-data) �
 
 - exp044 parte de pesos nartaa que traen supervisión externa (OAI): revisar las reglas de datos externos antes del envío final / premio.
 - exp030 worked en pseudo L2 pero su all-data (0.930) queda bajo exp029 (0.933) en LB: la vara pseudo L2 premia en parte el sesgo hacia L2. exp035 quedó no concluyente.
-- Pendientes de verdict formal: sub031_1 y sub031_4 (terminados, dentro del ruido). exp047, exp049, exp050, exp048 y exp052 siguen corriendo.
+- Corriendo: exp045 folds 1–4 (F, C2, I, H; fin ~10:20), exp051 (E2), exp053 (G), exp054 (D2). Envíos del 13-oct programados: exp045 solo,
+  ens-exp039-w15, ens-exp042b y ensamble 5-fold de exp045.
 
