@@ -6,7 +6,7 @@
 | Padre | exp045_raptor_aug_espacial (abuelo: exp031_raptor_etiquetas_consenso) |
 | Fecha | 2026-10-12 |
 | Rama | exp056_raptor_combo (desde exp045_raptor_aug_espacial, 72de635) |
-| Estado | SPEC · esperando verdicts de la primera tanda |
+| Estado | combo = exp045 (ningún otro componente worked) · folds 1–4 corriendo |
 
 Idea: paso 7, track T6. Apilar sobre exp045 (aug espacial, único worked hasta 06:30 UTC) los demás cambios de la
 primera tanda del paso 7 que salgan `worked`, y entrenar los 5 folds para tener OOF y un ensamble de 5 folds.
@@ -56,8 +56,21 @@ con etiquetas de ruido estocástico duplica el ruido del objetivo.
   - celda 4: objetivo estocástico de exp052 (si `LABEL_MODE == "stochastic"`), mixup de exp048 sobre la entrada ya
     aumentada (si `USE_MIXUP`); el `metrics.json` de un run de fold k ≠ 0 va a `results/<EXP>/fold<k>/`.
   - Con todos los interruptores apagados y `RES = 320` el notebook es exp045 (mismo consumo de RNG).
-- Valores de los interruptores: **pendiente de los verdicts** (se rellena aquí al cerrarse la primera tanda).
-- Smoke `SMOKE=True`; run fold 0 en rsna-h (cuando termine el all-data de exp045); folds 1–4 en pods libres.
+- Valores de los interruptores, aplicando la regla de inclusión a los verdicts de fold 0 (pseudo L2 mejor época,
+  de cada `metrics.json`; umbral 0.8866, 0.8886 para exp050):
+
+  | componente | pseudo L2 f0 | Δ vs exp031 | gold | ¿entra? |
+  |---|---|---|---|---|
+  | exp048 mixup | 0.8845 | +0.0009 | 0.9067 | no |
+  | exp050 res384 | 0.8856 | +0.0020 | 0.9172 | no (además ×1.46 coste) |
+  | exp052 etiqueta estocástica | 0.8851 | +0.0015 | 0.9150 | no |
+  | sub046_1 intensidad suave | 0.8850 | +0.0014 | 0.9131 | no |
+
+  Ninguno entra → **combo = exp045 tal cual** (interruptores apagados, RES 320). Según la SPEC no se repite el fold 0
+  (se usa el de exp045: pseudo L2 0.8899, SWA 0.8895, gold 0.9202) y se va directo a los folds 1–4.
+  Los folds 1–4 se corren con el notebook de exp045 sin cambios (rama exp045, commit 5b401f2: el notebook es idéntico
+  al de 72de635), un worktree del volumen por fold (`wt_exp045_fK`) para no pisar resultados.
+- Pods: fold 1 rsna-f (06:51), fold 2 rsna-c2 (07:12), fold 3 rsna-i (07:30), fold 4 rsna-h (tras el all-data de exp045).
 
 ## 3. VERDICT
 
