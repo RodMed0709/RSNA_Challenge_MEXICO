@@ -6,7 +6,7 @@
 | Padre | exp030_raptor_etiquetas_L2 |
 | Fecha | 2026-10-11 |
 | Rama | exp034_raptor_convnext |
-| Estado | smoke |
+| Estado | didnt |
 
 Idea: misma receta que exp030 (Raptor d96 + etiquetas L2), pero con un backbone ConvNeXt en lugar de CoAtNet-2, para
 tener un segundo modelo que se equivoque distinto y sirva para ensamblar.
@@ -77,18 +77,32 @@ de botella puede pasar a ser el dataloader (12 workers) con un backbone 2× más
 
 ## 3. VERDICT (números de `results/exp034_raptor_convnext/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:**
+**Resultado:** didnt (`DECISION_SPEC`) · **Fase alcanzada:** screen fold 0 (rsna-d2, 22:54–00:08 UTC)
 
 | Métrica | exp030 (padre) | Este | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 (mejor época) | 0.8795 | | |
-| pseudo L2 fold 0 (SWA top-3) | | | |
-| Spearman medio val vs exp030 | — | | |
-| pseudo ensamble por rangos exp030+exp034 | — | | |
-| v1 fold 0 | | | |
-| gold (veto) | 0.9123 | | |
-| GPU-h | | | |
+| pseudo L2 fold 0 (mejor época) | 0.8795 (ep12) | 0.8587 (ep11) | −0.0207 |
+| pseudo L2 fold 0 (SWA top-3) | 0.8793 | 0.8584 [11,14,15] | −0.0210 |
+| Spearman medio val vs exp030 (Pearson) | — | 0.883 (0.892) | < 0.97 |
+| pseudo ensamble por rangos exp030+exp034 | — | 0.8769 | −0.0026 vs exp030 |
+| v1 fold 0 | 0.8340 | 0.8209 | −0.0131 |
+| gold (veto) | 0.9123 | 0.8681 | −0.0442 |
+| GPU-h | 2.50 | 1.21 | −52 % |
 
-**Qué aprendimos:**
+Por qué `didnt` y no `worked`: la correlación sí baja de 0.97 (0.883), pero la pseudo queda por debajo de
+exp030 − 0.01 (0.8587 < 0.8695); no llega a `killed` (≥ 0.8495). La decisión automática de la celda 5 (`decision()`,
+veto de gold del SDD) dice `killed` por gold −0.044; la SPEC fijó gold solo como información/veto para el envío, así que
+cuenta como riesgo: **este modelo no va al envío**.
 
-**Siguiente paso sugerido:**
+pseudo L2 por etiqueta (este − padre): MCL −0.070 · Lateral Meniscus −0.039 · Fracture −0.028 · ACL −0.027 ·
+Baker's −0.027 · Contusion −0.022 · Medial Meniscus −0.012 · Medial OA −0.009 · PF OA −0.009 · Synovitis −0.008 ·
+Lateral OA 0.000 · Effusion 0.000. Peor en casi todo, sin ninguna etiqueta donde gane.
+
+**Qué aprendimos:** ConvNeXt-B es 2× más rápido (1.21 vs 2.50 GPU-h; 0.60 vs ~1.19 s/paso) pero pierde −0.02 pseudo y
+−0.044 gold con la misma receta; sus predicciones sí son distintas (Spearman 0.883), pero la diversidad no compensa
+la caída: el ensamble por rangos con exp030 queda −0.0026 por debajo de exp030 solo. Con esta receta (LR 3e-5, 16 épocas,
+sin drop_path) CoAtNet-2 es claramente mejor por modelo.
+
+**Siguiente paso sugerido:** no seguir con ConvNeXt-B como segundo miembro del ensamble con esta receta. Si se busca
+diversidad, probar variantes del propio CoAtNet (semilla, etiquetas, alineación L/R de exp032) o, si se insiste en
+ConvNeXt por eficiencia, ajustar su receta (LR/drop_path/épocas) como experimentos aparte.
