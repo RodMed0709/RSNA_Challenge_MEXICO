@@ -6,7 +6,7 @@
 | Padre | exp031_raptor_etiquetas_consenso |
 | Fecha | 2026-10-12 |
 | Rama | exp053_raptor_etiqueta_temperatura (desde exp031_raptor_etiquetas_consenso) |
-| Estado | en curso |
+| Estado | didnt |
 
 Idea (paso 7 T4): las etiquetas de consenso son muy blandas (promedio de 4 LLMs con escalas distintas). Afilarlas con
 una temperatura las acerca a 0/1 sin cambiar qué lado de 0.5 queda cada celda (la binarización no cambia).
@@ -50,6 +50,28 @@ L2 binarizada más que el padre; sí cambia la escala del objetivo y por tanto l
 - Smoke `SMOKE=True` → `metrics_smoke.json`; run real `FOLDS=[0]` en rsna-g tras exp052.
 - Post-hoc: `multi_vara.py` para las varas Raptor/L3/L4/v1.
 
-## 3. VERDICT
+## 3. VERDICT (números de `results/exp053_raptor_etiqueta_temperatura/metrics.json`; varas extra con `multi_vara.py` sobre `oof_*_f0.csv`)
 
-Pendiente.
+**Resultado:** `didnt` · **Fase alcanzada:** screen fold 0
+
+| Métrica (fold 0, val 871) | Padre (exp031) | Este (T = 0.7) | Δ | ruido semilla |
+|---|---|---|---|---|
+| pseudo L2 (mejor época) | 0.8836 (ep 15) | **0.8854** (ep 15) | **+0.0018** | +0.0016 |
+| pseudo L2 (SWA top-3) | 0.8835 | 0.8862 (ep 15, 14, 11) | +0.0027 | |
+| pseudo Raptor bin (best) | 0.8927 | 0.8933 | +0.0006 | +0.0034 |
+| pseudo L3 bin (best) | 0.8742 | 0.8739 | −0.0003 | −0.0006 |
+| pseudo L4 bin (best) | 0.8836 | 0.8851 | +0.0015 | +0.0019 |
+| v1 (best) | 0.8368 | 0.8409 | +0.0041 | +0.0026 |
+| gold (veto) | 0.9144 | 0.9121 (SWA 0.9125) | −0.0023 | |
+| GPU-h | 2.49 | 2.53 | +0.04 | |
+
+Criterio: Δ pseudo L2 +0.0018 < +0.003 (y > −0.003; gold −0.002, sin veto) → **didnt** (`decision_auto` = `neutral`).
+Δ medio (Raptor, L3) = +0.0002. Queda "cerca" (|Δ| < 0.003) → se lanza sub053_1 (T = 1.5) según la SPEC; no all-data.
+
+**Qué aprendimos:** afilar a T = 0.7 (media del objetivo 0.302 → 0.282; celdas en (0.2, 0.8) 20 % → 14 %; binarización
+idéntica) deja el modelo dentro del ruido de semilla contra todas las varas de etiquetas (L2 +0.002, Raptor +0.001,
+L3 0.000); solo v1 sube algo por encima del ruido (+0.004) y gold baja −0.002. Como la binarización no cambia, no hay
+sesgo hacia L2: simplemente el afilado no aporta señal. `pos_weight` sube por el cambio de prevalencia (Fracture
+5.7 → 8.9). Por hallazgo (pseudo L2): Contusion +0.013, MCL +0.008, Fracture +0.007; ACL −0.012, PF OA −0.007.
+
+**Siguiente paso:** sub053_1 (T = 1.5, dirección opuesta) en rsna-g.
