@@ -1,0 +1,60 @@
+{
+ "criterio": {
+  "worked_if_pseudo_ge": 0.8914654941741685,
+  "gold_veto_lt": 0.9001083029612394,
+  "base_pseudo": 0.8894654941741685,
+  "base_gold": 0.9201083029612395
+ },
+ "n_bn": 800,
+ "per_fold": {
+  "0": {
+   "pseudo_auc": 0.8906924307696839,
+   "v1_auc": 0.8436505866109449,
+   "gold_auc": 0.9217011804122133,
+   "pseudo_per_label": {
+    "ACL": 0.9143819143819145,
+    "MCL": 0.8423935901749662,
+    "Medial Meniscus": 0.9144799015406255,
+    "Lateral Meniscus": 0.9121016477544455,
+    "Medial OA": 0.9003741923488124,
+    "Lateral OA": 0.8643000705453288,
+    "PF OA": 0.8511000495614887,
+    "Effusion": 0.8713290947623372,
+    "Synovitis": 0.8815266987298064,
+    "Baker's": 0.9345052369442614,
+    "Contusion": 0.8899238708732888,
+    "Fracture": 0.911892901618929
+   },
+   "gold_per_label": {
+    "ACL": 0.991421568627451,
+    "MCL": 0.9727891156462585,
+    "Medial Meniscus": 0.9639423076923077,
+    "Lateral Meniscus": 0.8795031055900621,
+    "Medial OA": 0.9813953488372092,
+    "Lateral OA": 0.8529980657640232,
+    "PF OA": 0.8133848133848134,
+    "Effusion": 0.9639751552795032,
+    "Synovitis": 0.8052568697729987,
+    "Baker's": 0.9728260869565217,
+    "Contusion": 0.9379217273954116,
+    "Fracture": 0.9249999999999999
+   },
+   "n_val": 871,
+   "minutes": 2.509868045647939
+  }
+ },
+ "sanity_gold_swa_f0_sin_cambio": 0.9201083029612395,
+ "delta_pseudo_f0": 0.0012269365955153155,
+ "delta_gold_f0": 0.0015928774509738064,
+ "verdict": "didnt",
+ "schema_version": 1,
+ "exp": "sub045_3_bn_recalc",
+ "padre": "exp045_raptor_aug_espacial",
+ "author": "rodrigo",
+ "git": {
+  "commit": "4b14a2c",
+  "branch": "sub045_3_bn_recalc",
+  "src_dirty": false
+ },
+ "written_utc": "2026-10-12T19:06:52.587208+00:00"
+}
