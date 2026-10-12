@@ -6,7 +6,7 @@
 | Padre | exp021_etiquetas_L2 |
 | Fecha | 2026-10-11 |
 | Rama | exp035_etiquetas_combinadas |
-| Estado | running |
+| Estado | didnt |
 
 Idea: receta exp021 (DINOv2-S, cache v1_256, 8 épocas) entrenada con el **promedio por celda** de tres fuentes blandas
 públicas (L2, L3, L4) en lugar de solo L2.
@@ -85,18 +85,23 @@ exp036: el reloj no es comparable. El envío a Kaggle (kernel de inferencia con 
 
 ## 3. VERDICT (números de `results/exp035_etiquetas_combinadas/metrics.json` y LB de Kaggle)
 
-**Resultado:** · **Fase alcanzada:**
+**Resultado:** didnt — **no concluyente según la SPEC**: la métrica que decide (LB público del fold 0) **no se midió**
+(no se envió a Kaggle). Se cierra sin promover. · **Fase alcanzada:** screen fold 0 (sin envío)
 
 | Métrica | Padre (exp021 f0) | Este | Δ |
 |---|---|---|---|
-| LB público fold 0 (decide) | 0.836 | | |
-| pseudo AUC fold 0 contra v1 (informa) | 0.789 | | |
-| pseudo AUC fold 0 contra L2 (informa) | 0.817 | | |
-| pseudo AUC fold 0 contra promedio (informa) | | | |
-| gold AUC (fold 0 contra fold 0) | 0.812 | | |
-| Época del mejor checkpoint | 7 de 8 | | |
-| GPU-h | 3.17 | | |
+| LB público fold 0 (decide) | 0.836 | no medido | — |
+| pseudo AUC fold 0 contra v1 (informa) | 0.789 | 0.7938 | +0.0049 |
+| pseudo AUC fold 0 contra L2 (informa) | 0.817 | 0.8248 | +0.0078 |
+| pseudo AUC fold 0 contra promedio (informa) | 0.8176 | 0.8256 | +0.0080 |
+| gold AUC (fold 0 contra fold 0) | 0.812 | 0.8059 | −0.0059 |
+| Época del mejor checkpoint | 7 de 8 | 8 de 8 | |
+| GPU-h | 3.17 | 1.32 | |
 
-**Qué aprendimos (2-4 líneas):**
+Veto: gold 0.806 ≥ 0.792 y GPU-h 1.32 ≤ 5.25 → no hay `killed`. La `decision_auto` (Δ pseudo v1) es `neutral` (informativa).
 
-**Siguiente paso sugerido:**
+**Qué aprendimos (2-4 líneas):** promediar L2, L3 y L4 sube las tres pseudo (+0.005 a +0.008) y deja gold en −0.006,
+cambios pequeños y del orden del ruido con DINOv2-S; sin LB no se puede decir si mejora el envío. La línea Raptor
+(exp029–exp031, pseudo L2 ≈ 0.87–0.88) dejó obsoleta esta receta, y el consenso de etiquetas se probó allí (exp031).
+
+**Siguiente paso sugerido:** no enviar; la pregunta "¿consenso de fuentes ayuda?" se responde en la línea Raptor (exp031).
