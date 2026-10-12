@@ -98,7 +98,7 @@ matices de severidad; el mapeo de A a probabilidades es una elección fija (no a
 
 ## 3. VERDICT (números de `results/exp054_etiquetas_L5/metrics.json`)
 
-**Resultado:** `worked` · **Fase alcanzada:** screen fold 0 (un fold; 5 folds no corridos); all-data pendiente de pod
+**Resultado:** `worked` · **Fase alcanzada:** screen fold 0 (cerrado; sin all-data propio, ver abajo)
 
 ### Fase 1 — L5 (números de `L5_validacion.json`)
 
@@ -141,6 +141,8 @@ Lateral Meniscus +0.008, Medial OA +0.006, Lateral OA +0.005, ACL/PF OA/Effusion
 Synovitis −0.003 y Baker's −0.003. L5 es más estricta (media 0.182) y baja la media del objetivo de 0.301 a 0.278.
 La diversidad de prompts/modelo parece contar más que la calidad individual: L5 sola no es mejor que L2 en gold.
 
-**Siguiente paso sugerido:** all-data con `SWA_EPOCHS: [15, 14, 13]` (lanzador listo en el volumen: `wt_exp054_etiquetas_L5/run054_alldata.sh`, no versionado;
-de rsna-d2, que quedó ocupado por sub045_2) → pesos al ensamble; sumar L5 al combo exp056; probar L5 con más
-lecturas (k = 5, otro modelo barato) como sub054_k.
+**Siguiente paso (decisión del orquestador, 2026-10-12):** el all-data de exp054 **no se corre por separado**. El cambio
+de etiquetas (consenso de 5 fuentes con L5) entra en el combo **exp056** (exp045 aug espacial + consenso con L5),
+entrenado en 5 folds, que sustituye al all-data de cada experimento (saldo justo). La rama `exp054_etiquetas_L5` es la
+referencia del cambio de etiquetas (celdas 0 y 2 del notebook; CSV `/workspace/data/labels/ours/L5_20261011.csv`).
+El lanzador `run054_alldata.sh` del volumen queda sin usar. Ideas para después: L5 con k = 5 u otro modelo barato (sub054_k).

@@ -19,3 +19,5 @@
 - Fold 0 06:32–09:04 UTC: ~499 s train + ~62 s eval por época; mejor época 15, pseudo L2 0.8896, gold 0.9190, SWA
   0.8895 / 0.9177, 2.50 GPU-h → `worked`. Copia `metrics_f0_backup.json` en el pod.
 - All-data no lanzado: a las 09:04:54 otro agente lanzó sub045_2 en rsna-d2. Pendiente de pod.
+- 2026-10-12 · Decisión del orquestador: sin all-data propio; el consenso con L5 entra en el combo exp056 (5 folds), que
+  sustituye al all-data. exp054 cerrado.
