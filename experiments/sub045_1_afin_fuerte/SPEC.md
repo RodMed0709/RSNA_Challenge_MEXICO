@@ -6,7 +6,7 @@
 | Padre | exp045_raptor_aug_espacial |
 | Fecha | 2026-10-12 |
 | Rama | sub045_1_afin_fuerte |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: ronda 2 sobre exp045 (`worked`, pseudo L2 0.8899). La aug espacial ayudó y la curva seguía subiendo en la época 15:
 probar si un afín más fuerte regulariza más.
@@ -46,16 +46,22 @@ Si promete: avisar al orquestador antes de lanzar all-data (saldo justo).
 
 ## 3. VERDICT (números de `results/sub045_1_afin_fuerte/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** spec
+**Resultado:** `didnt` · **Fase alcanzada:** screen fold 0 (rsna-e2)
 
 | Métrica | exp045 | Este | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 (mejor época) | 0.8899 (ep 15) | | |
-| pseudo L2 fold 0 (SWA top-3) | 0.8895 | | |
-| v1 fold 0 | 0.8447 | | |
-| gold (veto) | 0.9202 | | |
-| GPU-h | 2.51 | | |
+| pseudo L2 fold 0 (mejor época) | 0.8899 (ep 15) | 0.8876 (ep 15) | −0.0023 |
+| pseudo L2 fold 0 (SWA top-3) | 0.8895 | 0.8875 (ep 15, 13, 14) | −0.0020 |
+| v1 fold 0 | 0.8447 | 0.8409 | −0.0038 |
+| gold (veto) | 0.9202 | 0.9180 | −0.0021 |
+| GPU-h | 2.51 | 2.48 | −1 % |
 
-**Qué aprendimos:**
+Criterio: pseudo 0.8876 < 0.8929 (no promete) y > 0.8849 (no killed); gold 0.9180 ≥ 0.9002 → `didnt`.
+Contra exp031 (0.8836) sigue +0.0040: el espejo + afín sigue ayudando, pero más afín no suma.
 
-**Siguiente paso sugerido:**
+**Qué aprendimos:** duplicar la magnitud del afín (rot ±20°, escala 0.8–1.2, traslación ±10 %) empeora un poco todo
+(pseudo −0.002, v1 −0.004, gold −0.002) y retrasa la curva (ep 5 0.8492 vs 0.8620 de exp045). El afín leve de exp045
+(±10°, 0.9–1.1, ±6 %) es el punto bueno; con 16 épocas la deformación fuerte cuesta más de lo que regulariza.
+
+**Siguiente paso sugerido:** mantener la aug espacial de exp045 tal cual en el combo exp056. Si sobra cómputo, el
+eje pendiente es la duración (sub045_2, 20 épocas, cancelado por prioridad).
