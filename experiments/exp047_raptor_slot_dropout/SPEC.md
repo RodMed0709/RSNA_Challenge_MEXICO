@@ -82,3 +82,34 @@ que este screen no mide.
 podar slots, evaluar (solo inferencia, ~0.2 GPU-h) `best_f0.pt` de exp047 contra el de exp031 en val fold 0 con
 3 slots / sin Cor no-fluid / sin sagital, como exp040/exp043; si exp047 pierde menos, usarlo como base del modelo
 podado.
+
+## 4. EXTRA (informativo, no cambia el verdict): robustez a slots ausentes en inferencia
+
+Pedido del orquestador (track eficiencia). Solo inferencia, 48 ventanas (linspace de centros sobre el subconjunto de
+cortes, igual que exp043), val fold 0 (pseudo L2, v1) y gold. Script y log en el volumen:
+`results/exp047_raptor_slot_dropout/eval_robustez_047.py`, `robustez_slots.csv`, `eval_robustez_047.log` (rsna-d2,
+~2 min por fila).
+
+| ckpt | slots en inferencia | cortes | pseudo L2 | v1 | gold |
+|---|---|---|---|---|---|
+| exp031 best (ep 15) | 5 | 96 | 0.8892 | 0.8407 | 0.9148 |
+| exp047 best (ep 14) | 5 | 96 | 0.8907 | 0.8450 | 0.9154 |
+| exp031 best | 3 (0, 1, 2) | 66 | 0.8868 | 0.8378 | 0.9130 |
+| exp047 best | 3 (0, 1, 2) | 66 | 0.8876 | 0.8422 | 0.9102 |
+| exp031 best | sin sagital (2, 3, 4) | 48 | 0.8600 | 0.8184 | 0.8700 |
+| exp047 best | sin sagital (2, 3, 4) | 48 | 0.8657 | 0.8253 | 0.8835 |
+| exp031 SWA (15, 13, 14) | 5 | 96 | 0.8892 | 0.8409 | 0.9166 |
+| exp047 SWA (14, 15, 11) | 5 | 96 | 0.8910 | 0.8449 | 0.9160 |
+| exp031 SWA | 3 (0, 1, 2) | 66 | 0.8868 | 0.8380 | 0.9142 |
+| exp047 SWA | 3 (0, 1, 2) | 66 | 0.8880 | 0.8426 | 0.9085 |
+| exp031 SWA | sin sagital | 48 | 0.8599 | 0.8187 | 0.8702 |
+| exp047 SWA | sin sagital | 48 | 0.8657 | 0.8246 | 0.8829 |
+
+Lectura:
+- 3 slots (−31 % cortes): exp047 pierde lo mismo que exp031 en pseudo (−0.003 contra −0.002) y algo más en gold
+  (−0.005/−0.008 contra −0.002); el dropout no hace falta para podar Cor no-fluid + Axial, el modelo base ya aguanta.
+- Sin sagital: exp047 cae menos (pseudo −0.025 contra −0.029; gold −0.032 contra −0.045). Robustez real pero
+  parcial: quitar el sagital sigue costando mucho.
+- A 48 ventanas y 5 slots exp047 queda +0.0015/+0.0018 en pseudo y +0.004 en v1 sobre exp031 (dentro de ruido).
+- Conclusión para eficiencia: con 3 slots (0, 1, 2) no hay razón para preferir exp047 sobre exp031.
+
