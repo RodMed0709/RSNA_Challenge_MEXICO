@@ -6,7 +6,7 @@
 | Padre | exp031_raptor_etiquetas_consenso |
 | Fecha | 2026-10-12 |
 | Rama | exp046_raptor_aug_intensidad |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: paso 7, track T2a. La receta Raptor (exp031) solo tiene ganancia ×U(0.9,1.1) como augmentation de intensidad.
 exp040 (robustez de exp029): ruido 5 % → −0.011; sitio croata 0.817 vs inglés 0.880. Augmentation de intensidad
@@ -67,16 +67,23 @@ validación (sin aug) no mide robustez de sitio directamente — eso lo mediría
 
 ## 3. VERDICT (números de `results/exp046_raptor_aug_intensidad/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** spec
+**Resultado:** `didnt` · **Fase alcanzada:** screen fold 0
 
 | Métrica | Padre (exp031) | Este | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | | |
-| pseudo L2 fold 0 (SWA top-3) | 0.8835 | | |
-| v1 fold 0 | 0.8368 | | |
-| gold (veto) | 0.9144 | | |
-| GPU-h | 2.49 | | |
+| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | 0.8854 (ep 11) | +0.0018 |
+| pseudo L2 fold 0 (SWA top-3) | 0.8835 | 0.8858 (ep 11, 15, 12) | +0.0023 |
+| v1 fold 0 | 0.8368 | 0.8365 | −0.0003 |
+| gold (veto) | 0.9144 | 0.9039 | −0.0105 |
+| GPU-h | 2.49 | 2.51 | +1 % |
 
-**Qué aprendimos:**
+Criterio: pseudo 0.8854 < 0.8866 (no promete) y > 0.8786 (no killed); gold 0.9039 ≥ 0.8944 (no veta) → `didnt`.
 
-**Siguiente paso sugerido:**
+**Qué aprendimos:** la augmentation de intensidad fuerte (gamma 0.7–1.5, contraste 0.8–1.2, sesgo ±15 %, blur, ruido
+σ ≤ 0.05) no mueve la pseudo L2 fuera del ruido (+0.0018 ≈ 1.4× ruido de semilla), v1 plano y gold −0.010 (ACL −0.038,
+MCL −0.036, menisco lateral −0.025 en gold; 58 estudios, ruidoso). La curva va por debajo del padre en las épocas medias
+(ep 8 0.8709 vs 0.8724, ep 10 0.8787 vs 0.8813) y se aplana desde la 11: frena el aprendizaje en 16 épocas. La
+validación interna no mide robustez de sitio/ruido; eso solo lo diría el harness de exp040.
+
+**Siguiente paso sugerido:** sub046_1 (misma aug a mitad de magnitud) lanzado en rsna-i. Si tampoco promete, medir
+exp046 con el harness de robustez de exp040 (ruido, sitio) antes de descartarlo para el ensamble.
