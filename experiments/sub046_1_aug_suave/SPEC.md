@@ -6,7 +6,7 @@
 | Padre | exp046_raptor_aug_intensidad (referencia de decisión: exp031_raptor_etiquetas_consenso) |
 | Fecha | 2026-10-12 |
 | Rama | sub046_1_aug_suave |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: exp046 (aug de intensidad) quedó en pseudo L2 0.8854 (Δ +0.0018 vs exp031, < +0.003) con gold 0.9039 (−0.0105):
 cerca pero por debajo del umbral. Su curva fue más baja que la del padre en las épocas medias (p. ej. ep8 0.8709 vs
@@ -48,16 +48,22 @@ La `decision_auto` del notebook compara contra exp046 (PADRE); el verdict se apl
 
 ## 3. VERDICT (números de `results/sub046_1_aug_suave/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** spec
+**Resultado:** `didnt` · **Fase alcanzada:** screen fold 0
 
 | Métrica | exp031 | exp046 | Este | Δ vs exp031 |
 |---|---|---|---|---|
-| pseudo L2 fold 0 (mejor época) | 0.8836 | 0.8854 | | |
-| pseudo L2 fold 0 (SWA top-3) | 0.8835 | 0.8858 | | |
-| v1 fold 0 | 0.8368 | 0.8365 | | |
-| gold (veto) | 0.9144 | 0.9039 | | |
-| GPU-h | 2.49 | 2.51 | | |
+| pseudo L2 fold 0 (mejor época) | 0.8836 | 0.8854 | 0.8850 (ep 15) | +0.0014 |
+| pseudo L2 fold 0 (SWA top-3) | 0.8835 | 0.8858 | 0.8849 (ep 15, 14, 13) | +0.0014 |
+| v1 fold 0 | 0.8368 | 0.8365 | 0.8395 | +0.0027 |
+| gold (veto) | 0.9144 | 0.9039 | 0.9131 | −0.0013 |
+| GPU-h | 2.49 | 2.51 | 2.51 | +1 % |
 
-**Qué aprendimos:**
+Criterio: pseudo 0.8850 < 0.8866 y > 0.8786; gold 0.9131 ≥ 0.8944 → `didnt`.
 
-**Siguiente paso sugerido:**
+**Qué aprendimos:** a mitad de magnitud la aug de intensidad recupera el gold (0.9131 vs 0.9039 de exp046) pero la
+pseudo L2 sigue en el ruido (+0.0014 ≈ 1.1× ruido de semilla), igual que la versión fuerte (+0.0018). Ni suave ni fuerte
+mueve la vara interna: en este corpus (percentiles 2–98 por serie, ya normalizado) la intensidad no es lo que limita.
+La curva sigue por debajo del padre en épocas medias (ep 10 0.8801 vs 0.8813) y se aplana desde la 12.
+
+**Siguiente paso sugerido:** no apilar intensidad en el combo exp056. Si interesa robustez de sitio/ruido para el
+paper, medir exp046/sub046_1 con el harness de robustez de exp040 (ruido 5 %, sitio croata) antes de descartarla.
