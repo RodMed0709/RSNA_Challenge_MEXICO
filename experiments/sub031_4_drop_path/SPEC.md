@@ -6,7 +6,7 @@
 | Padre | exp031_raptor_etiquetas_consenso |
 | Fecha | 2026-10-12 |
 | Rama | sub031_4_drop_path |
-| Estado | run (fold 0) |
+| Estado | didnt |
 
 Idea: sub-experimento de afinado de exp031 (pseudo L2 0.8836). exp033 (24 épocas) tocó techo en la época 14 y luego
 bajó: hay sobreajuste al final del entrenamiento. Regularizar el backbone con stochastic depth puede subir la pseudo L2.
@@ -52,16 +52,23 @@ y en este, así que no afecta a la comparación).
 
 ## 3. VERDICT (números de `results/sub031_4_drop_path/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** screen fold 0 en curso
+**Resultado:** `didnt` · **Fase alcanzada:** screen fold 0
 
 | Métrica | Padre (exp031) | Este | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | | |
-| pseudo L2 fold 0 (SWA top-3) | 0.8835 | | |
-| v1 fold 0 | 0.8368 | | |
-| gold (veto) | 0.9144 | | |
-| GPU-h | 2.49 | | |
+| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | 0.8849 (ep 15) | +0.0013 |
+| pseudo L2 fold 0 (SWA top-3) | 0.8835 (ep 15, 13, 14) | 0.8847 (ep 15, 14, 13) | +0.0012 |
+| v1 fold 0 | 0.8368 | 0.8389 | +0.0021 |
+| gold (veto) | 0.9144 | 0.9097 (SWA 0.9093) | −0.0046 |
+| GPU-h | 2.49 | 2.55 | +0.06 |
 
-**Qué aprendimos:**
+Criterio: Δ pseudo +0.0013 < +0.003 y > −0.005, gold no cae > 0.02 → **didnt** (`decision_auto` = `neutral`).
 
-**Siguiente paso sugerido:**
+**Qué aprendimos:** `drop_path_rate` 0.2 no cambia la pseudo L2 de forma medible (+0.0013 = el ruido de semilla, ~0.0013,
+medido por el equipo). Con 16 épocas la mejor época sigue siendo la última (15) y la curva no baja al final: en 16
+épocas no hay sobreajuste que la regularización pueda quitar (el de exp033 aparece después de la ep 14 de 24).
+Por hallazgo: meniscos/MCL/OA lateral-medial +0.005 a +0.008, Synovitis −0.011, PF OA −0.007, ACL −0.006: se compensa.
+Inferencia y coste idénticos (DropPath es identidad en eval), así que no hay motivo para adoptarlo ni para descartarlo
+por coste.
+
+**Siguiente paso sugerido:** ninguno en esta línea (solo tendría sentido junto con más épocas, que es otro experimento).
