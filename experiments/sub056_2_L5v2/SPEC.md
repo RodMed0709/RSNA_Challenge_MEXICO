@@ -65,6 +65,17 @@ tocó L5v2.
 - Fase 2: notebook `sub056_2_L5v2.ipynb` = copia del de exp056; cambios: celda 0 (título) y celda de parámetros
   (`EXP`, `PADRE`, `L5_CSV`, `NOTES`). Smoke `SMOKE=True` y luego `FOLDS=[0]`.
 
-## 3. VERDICT
+## 3. VERDICT (números de `results/sub056_2_L5v2/metrics.json`, fase screen, timestamp 2026-10-12T14:15:02Z)
 
-Pendiente.
+**Resultado: `didnt`** (escrito por el orquestador en la nube, 2026-10-12 ~17:10 UTC). **Fase alcanzada:** screen (fold 0).
+
+| | pseudo L2 f0 | v1 | gold (solo veto) |
+|---|---|---|---|
+| mejor época (ep 15) | **0.8874** | 0.8437 | 0.9201 |
+| SWA top-3 (ep 15, 14, 13) | 0.8869 | 0.8435 | 0.9203 |
+| exp056 (padre, mejor época) | 0.8857 | 0.8407 | 0.9198 |
+
+- Δ pseudo vs exp056 = +0.0017 (`delta.pseudo_f0`); Δ gold = +0.0002.
+- Criterios fijos: `worked` exige ≥ 0.8887 → no; `killed` si ≤ 0.8807 o gold < 0.8998 → no. Queda **`didnt`**.
+- Δ del orden del ruido de semilla (0.0013, sub031_2). Según la regla de la sección L5v3 del orquestador, L5v3 (sub056_3) no se corre.
+- Coste GPU: 2.51 GPU-h (`gpu_hours`); coste API de fase 1 no está en metrics.json.
