@@ -6,7 +6,7 @@
 | Padre | exp031_raptor_etiquetas_consenso |
 | Fecha | 2026-10-12 |
 | Rama | exp051_raptor_norm (desde exp031_raptor_etiquetas_consenso) |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: track T3 del paso 7. Los percentiles 2–98 por serie saturan el 2 % superior: el líquido/edema brillante (derrame, contusión, Baker) y la grasa quedan clipados a 255 en secuencias fluid-sensitive. Un rango 0.5–99.5 conserva esa cola alta a costa de algo de contraste medio.
 
@@ -43,6 +43,24 @@ semilla 42, `split_v1_seed42` fold 0, selección por pseudo L2 (L2 binarizada > 
 - Notebook = copia del de exp031; cambio: celda 0 (`EXP`, `PADRE`, `CORPUS`, `NOTES`).
 - Smoke `SMOKE=True` → run real `FOLDS=[0]` en el primer pod libre de T3 (rsna-e2 tras exp049).
 
-## 3. VERDICT (números de `results/<EXP>/metrics.json`)
+## 3. VERDICT (números de `results/exp051_raptor_norm/metrics.json`)
 
-Pendiente.
+**Resultado:** `didnt` · **Fase alcanzada:** screen fold 0 (rsna-e2, 2026-10-12 ~06:01–08:30 UTC)
+
+| Métrica | Padre (exp031, p2–98) | Este (p0.5–99.5) | Δ |
+|---|---|---|---|
+| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | 0.8842 (ep 14) | **+0.0005** |
+| pseudo L2 fold 0 (SWA top-3) | 0.8835 | 0.8839 (ep 14, 15, 13) | +0.0004 |
+| v1 fold 0 | 0.8368 | 0.8393 | +0.0025 |
+| gold (veto) | 0.9144 | 0.9146 (SWA 0.9137) | +0.0002 |
+| GPU-h | 2.49 | 2.47 | −0.02 |
+
+Criterio: Δ pseudo +0.0005 (dentro del ruido de semilla 0.0013) → **didnt**. No se lanza all-data.
+
+**Costo del corpus:** 1178 s de pared con 24 procesos (nice/ionice, rsna-e2), 0 errores; ~1 s/estudio en un proceso
+(≈ 1.2 h secuencial). Mismo costo de inferencia que el padre (solo cambian dos constantes).
+
+**Qué aprendimos:** la media global no se mueve, pero los hallazgos se reordenan: MCL +0.022, Effusion +0.010,
+Medial OA +0.005 frente a ACL −0.011, Lateral Meniscus −0.009, Synovitis −0.008. El rango de percentiles no es una
+palanca de AUC media. **Ensamble (informativo):** media de rangos OOF SWA con exp031 = 0.8874 (correlación 0.953),
+como una semilla más. z-score por volumen sigue sin probar (sería otro experimento).
