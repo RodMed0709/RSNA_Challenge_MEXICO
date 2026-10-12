@@ -21,3 +21,7 @@
 - All-data no lanzado: a las 09:04:54 otro agente lanzó sub045_2 en rsna-d2. Pendiente de pod.
 - 2026-10-12 · Decisión del orquestador: sin all-data propio; el consenso con L5 entra en el combo exp056 (5 folds), que
   sustituye al all-data. exp054 cerrado.
+- 2026-10-12 16:20 UTC · Fase confirm (Rodrigo, tras exp056 didnt): folds 1–4 con la misma receta y semilla (commit b846ed0),
+  un worktree por fold `wt_exp054_fK` en el volumen; cola paso 7b (`/workspace/users/rodrigo/p7b/`, pods rsna-l / rsna-m,
+  RTX PRO 4500, auto-stop). Al tener los 5: `oof5_exp054.py` (esta carpeta) → OOF pseudo L2 5 folds + gold ensamble 5 folds
+  en `metrics.json` (phase confirm). Ref. exp045: OOF 0.8844, gold ens 0.9244.
