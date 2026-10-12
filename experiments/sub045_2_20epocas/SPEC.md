@@ -6,7 +6,7 @@
 | Padre | exp045_raptor_aug_espacial |
 | Fecha | 2026-10-12 |
 | Rama | sub045_2_20epocas |
-| Estado | spec |
+| Estado | cancelado por prioridad (combo exp056) |
 
 Idea: ronda 2 sobre exp045 (`worked`, pseudo L2 0.8899). La curva de exp045 seguía subiendo en la época 15
 (0.8884 → 0.8896 → 0.8899): con augmentation el modelo sobreajusta menos y puede aprovechar más épocas. exp033 (24 épocas
@@ -38,7 +38,7 @@ Si promete: avisar al orquestador antes de lanzar all-data (saldo justo).
 
 ## 3. VERDICT (números de `results/sub045_2_20epocas/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** spec
+**Resultado:** cancelado por prioridad (combo exp056), sin verdict de resultado · **Fase alcanzada:** run fold 0 arrancado en rsna-d2 a las 09:04 UTC y detenido a las ~09:08 UTC (época 0 sin terminar; no hay métricas). Motivo: exp054 (etiquetas L5) worked (+0.0060) y el combo exp045 + L5 pasa delante.
 
 | Métrica | exp045 | Este | Δ |
 |---|---|---|---|
