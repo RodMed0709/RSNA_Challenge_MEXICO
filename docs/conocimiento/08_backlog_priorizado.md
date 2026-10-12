@@ -6,7 +6,7 @@ Sirve a: **LB** / **EF** (eficiencia) / **PA** (paper). ★ = top-10.
 
 | id | Idea | Cita (clave bib o fuente) | Tema | Ganancia esperada (razonada) | GPU-h | Riesgo | Sirve | Prio | Estado |
 |---|---|---|---|---|---|---|---|---|---|
-| ★ENS-3 | `update_bn` sobre SWA de exp045 + TTA espejo sí/no (ENS-8) | izmailov2018swa; shanmugam2021tta | ensamble | corrige BN de pesos enviados; dato de TTA decide exp057 | 0.4 | bajo | LB EF | P0 | idea |
+| ★ENS-3 | `update_bn` sobre SWA de exp045 + TTA espejo sí/no (ENS-8) | izmailov2018swa; shanmugam2021tta | ensamble | corrige BN de pesos enviados; dato de TTA decide exp057 | 0.4 | bajo | LB EF | P0 | **didnt** (sub045_3: pseudo f0 0.8907 vs 0.8895, Δ +0.0012 < +0.002; gold 0.9217); TTA sí/no pendiente |
 | ★ENS-2 | Ensamble de rangos exp045 5f × exp054 5f, 0.5/0.5 fijo | fort2019deepensembles; rame2022diwa | ensamble | "no suman en un modelo" → deberían como ensamble; teacher de EFF-1 | 0.5 | bajo | LB EF | P0 | idea |
 | ★ENS-1 | Fold soup de exp045 (uniforme → greedy) | wortsman2022soups; sanjeev2024fissionfusion | ensamble/eficiencia | AUC entre 1 modelo (gold 0.920) y ensamble (0.924) a 1/5 de coste | 0.5 | medio | EF PA | P0 | idea |
 | ★EFF-1 | Destilar ENS-2 → CoAtNet 224/3 slots/sin TTA/fp16 (padre exp057) | hinton2015distilling; beyer2022kd; noothout2022kd | eficiencia | +0.002 a +0.006 sobre exp057 al mismo runtime | 4–5 | medio | EF PA LB | P0 | idea |
