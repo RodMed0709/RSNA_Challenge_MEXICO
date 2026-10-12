@@ -6,7 +6,7 @@
 | Padre | exp031_raptor_etiquetas_consenso |
 | Fecha | 2026-10-12 |
 | Rama | exp045_raptor_aug_espacial |
-| Estado | spec |
+| Estado | worked (fold 0) · all-data en curso |
 
 Idea: paso 7, track T2a. La receta Raptor (exp031) casi no tiene augmentation (solo ganancia ×U(0.9,1.1) y muestreo
 aleatorio de ventanas). Añadir augmentation espacial por estudio: espejo L/R anatómico + afín leve.
@@ -65,16 +65,24 @@ TTA). El afín interpola (suaviza ligeramente) siempre; puede retrasar la conver
 
 ## 3. VERDICT (números de `results/exp045_raptor_aug_espacial/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** spec
+**Resultado:** `worked` (promete) · **Fase alcanzada:** screen fold 0 → all-data lanzado en rsna-h (SWA_EPOCHS [13, 14, 15])
 
 | Métrica | Padre (exp031) | Este | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | | |
-| pseudo L2 fold 0 (SWA top-3) | 0.8835 | | |
-| v1 fold 0 | 0.8368 | | |
-| gold (veto) | 0.9144 | | |
-| GPU-h | 2.49 | | |
+| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | 0.8899 (ep 15) | **+0.0063** |
+| pseudo L2 fold 0 (SWA top-3) | 0.8835 | 0.8895 (ep 15, 14, 13) | +0.0060 |
+| v1 fold 0 | 0.8368 | 0.8447 | +0.0079 |
+| gold (veto) | 0.9144 | 0.9202 | +0.0058 |
+| GPU-h | 2.49 | 2.51 | +1 % |
 
-**Qué aprendimos:**
+Criterio: pseudo ≥ 0.8866 y gold ≥ 0.8944 → se cumplen ambos. Δ ≈ 4.8× el ruido de semilla (0.0013).
 
-**Siguiente paso sugerido:**
+**Qué aprendimos:** la augmentation espacial (espejo L/R anatómico p 0.5 + afín leve por estudio) es la primera mejora
+de regularización sobre la receta Raptor: +0.0063 pseudo L2, y suben también v1 (+0.008) y gold (+0.006), así que no es
+sesgo de la vara L2. Por etiqueta (pseudo) sube sobre todo ACL +0.021, MCL +0.024, menisco lateral +0.015, menisco
+medial y contusión +0.007; bajan levemente PF OA −0.004 y fractura −0.005. La curva va por encima del padre desde la
+época 7 y sigue subiendo en la 15 (0.8896 → 0.8899): con más épocas podría dar algo más. Coste nulo: 501 s/época como
+el padre (aug en GPU ≈ 8 ms/batch).
+
+**Siguiente paso sugerido:** pesos all-data (`results/exp045_raptor_aug_espacial/swa_alldata.pt`) al ensamble;
+apilar en exp056 combo; probar sub045_1 con afín más fuerte (rot ±15°, escala 0.85–1.15) o 20 épocas, una variable.
