@@ -12,6 +12,8 @@ sesión); aquí solo los números. Kernels privados, sin internet, GPU T4.
 | 2026-10-11 | 57081259 | velci-exp023 v1 | exp023: copia tal cual de `bliverrigpdoge/velci-kcd25-20`; `rsna-knee-kcd25leg` privado → queda la base 0.954 (Raptor 0.7 + compact S6 0.3) | **0.954** | ~135–535 / 5760 (empate) | 194.1 s (score en ~3 h 25 min) |
 | 2026-10-11 | 57082625 | blendmine-exp023 v2 | exp023: copia tal cual de `heliosli/blend-mine-in-private-lb-luck-to-all-upvoters` (Raptor 0.5 + compact S6 0.5); `rsna-knee-compact-r6cnxfsss` v2 re-alojado privado | **0.954** | ~135–535 / 5760 (empate) | 184.3 s (score en ~4 h 10 min) |
 | 2026-10-11 | 57084774 | exp029-raptor-f0 v1 | exp029, solo fold 0 (receta Raptor/nartaa CoAtNet-2 MIL, etiquetas blandas Raptor, best_f0 ép. 15) + TTA espejo, inferencia nartaa 0949 | **0.933** | — | 63 s (script 25 s) |
+| 2026-10-12 | 57088360 | exp030-raptor-alldata v1 | exp030 all-data (receta exp029 con etiquetas L2, 4349 no-gold, SWA épocas 12/14/15) + TTA espejo, inferencia nartaa 0949 | 0.930 | — | 73.6 s (script 27 s; score en ~27 min) |
+| 2026-10-12 | 57089745 | exp041-sub-e1-94 v1 | exp027/041 Ch: pesos nartaa 224 (`0945-efficient-224crop`), `model.half()`, 94 ventanas en un lote, sin TTA (eficiencia) | **0.945** | — | 54.1 s (script 12 s; score en ~8 min) |
 
 ## Lectura
 
