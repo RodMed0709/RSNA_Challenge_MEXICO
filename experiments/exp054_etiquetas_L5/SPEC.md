@@ -6,7 +6,7 @@
 | Padre | exp031_raptor_etiquetas_consenso |
 | Fecha | 2026-10-11 |
 | Rama | exp054_etiquetas_L5 |
-| Estado | fase 1 hecha (L5 sana); fase 2 lista, esperando pod |
+| Estado | worked |
 
 Idea (paso 7, track T4 "augmentation de texto"): el modelo solo ve imágenes; el texto entra por las etiquetas. Fabricar
 una fuente propia de etiquetas blandas, **L5**, re-leyendo los 4407 informes de train con un LLM y **k = 3 prompts
@@ -98,7 +98,7 @@ matices de severidad; el mapeo de A a probabilidades es una elección fija (no a
 
 ## 3. VERDICT (números de `results/exp054_etiquetas_L5/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** fase 1 completa; fase 2 (screen fold 0) esperando pod
+**Resultado:** `worked` · **Fase alcanzada:** screen fold 0 (un fold; 5 folds no corridos); all-data pendiente de pod
 
 ### Fase 1 — L5 (números de `L5_validacion.json`)
 
@@ -121,16 +121,26 @@ L5 **sana** (pasa los 4 chequeos + costo). Costo real US$8.78 (A 2.71 · B 2.85 
 - Gold (58, solo reporte, no seleccionó nada): L5 macro AUC 0.889 · consenso de las 4 0.895 · L2 0.893 · L3 0.870 ·
   L4 0.835 (Raptor no cubre gold). Más floja en Synovitis 0.775, Contusion 0.805, Lateral OA 0.819.
 
-### Fase 2 — exp054 (pendiente)
+### Fase 2 — exp054 (fold 0, rsna-d2, 06:32–09:04 UTC)
 
 | Métrica | Padre (exp031) | Este | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | | |
-| pseudo L2 fold 0 (SWA top-3) | 0.8835 | | |
-| v1 fold 0 | 0.8368 | | |
-| gold (veto) | 0.9144 | | |
-| GPU-h | 2.49 | | |
+| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | **0.8896** (ep 15) | **+0.0060** |
+| pseudo L2 fold 0 (SWA top-3) | 0.8835 (ep 15, 13, 14) | 0.8895 (ep 15, 14, 13) | +0.0059 |
+| v1 fold 0 | 0.8368 | 0.8424 | +0.0056 |
+| gold (veto) | 0.9144 | 0.9190 (SWA 0.9177) | +0.0047 |
+| GPU-h | 2.49 | 2.50 | +0.01 |
 
-**Qué aprendimos:**
+Criterio: pseudo 0.8896 ≥ 0.8866 y gold 0.9190 ≥ 0.8944 → **worked** (`decision_auto` = `promising`).
+Δ +0.0060 = 4.6 × el ruido de semilla medido (0.0013).
 
-**Siguiente paso sugerido:**
+**Qué aprendimos:** una fuente propia y barata (US$8.78, gpt-4.1-mini, 3 prompts) sube el consenso +0.006 en pseudo
+L2 aunque **diluye** L2+L4 en el promedio (el sesgo de la vara jugaba en contra), y v1 (+0.006) y gold (+0.005)
+suben en la misma dirección. Por hallazgo (pseudo, mejor época): Contusion +0.019, MCL +0.017, Medial Meniscus +0.012,
+Lateral Meniscus +0.008, Medial OA +0.006, Lateral OA +0.005, ACL/PF OA/Effusion/Fracture +0.002–0.003;
+Synovitis −0.003 y Baker's −0.003. L5 es más estricta (media 0.182) y baja la media del objetivo de 0.301 a 0.278.
+La diversidad de prompts/modelo parece contar más que la calidad individual: L5 sola no es mejor que L2 en gold.
+
+**Siguiente paso sugerido:** all-data con `SWA_EPOCHS: [15, 14, 13]` (lanzador listo en `/root/run054_alldata.sh`
+de rsna-d2, que quedó ocupado por sub045_2) → pesos al ensamble; sumar L5 al combo exp056; probar L5 con más
+lecturas (k = 5, otro modelo barato) como sub054_k.
