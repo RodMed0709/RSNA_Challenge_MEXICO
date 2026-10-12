@@ -1,0 +1,86 @@
+{
+ "nota": "pseudo f0 leaky (el soup vio el val de fold 0 via folds 1-4): solo informativa; gold solo veta; decide el LB",
+ "n_bn": 800,
+ "soup_sin_bn": {
+  "pseudo_auc": 0.8948361810183093,
+  "v1_auc": 0.8418586973509012,
+  "gold_auc": 0.8827272006069483,
+  "pseudo_per_label": {
+   "ACL": 0.9021396763332247,
+   "MCL": 0.8597640477792732,
+   "Medial Meniscus": 0.9133480582844333,
+   "Lateral Meniscus": 0.8996782748576149,
+   "Medial OA": 0.9109782457118952,
+   "Lateral OA": 0.8746023506235941,
+   "PF OA": 0.8666041760941239,
+   "Effusion": 0.8756271355045198,
+   "Synovitis": 0.8899617708718708,
+   "Baker's": 0.9224785761371127,
+   "Contusion": 0.8874258839030817,
+   "Fracture": 0.9354259761189656
+  },
+  "gold_per_label": {
+   "ACL": 0.9227941176470589,
+   "MCL": 0.8662131519274376,
+   "Medial Meniscus": 0.9399038461538461,
+   "Lateral Meniscus": 0.8136645962732919,
+   "Medial OA": 0.945736434108527,
+   "Lateral OA": 0.8143133462282399,
+   "PF OA": 0.8005148005148006,
+   "Effusion": 0.9453416149068323,
+   "Synovitis": 0.8064516129032259,
+   "Baker's": 0.9384057971014492,
+   "Contusion": 0.9257759784075573,
+   "Fracture": 0.8736111111111111
+  },
+  "n_val": 871,
+  "minutes": 2.755596601963043
+ },
+ "soup_bn": {
+  "pseudo_auc": 0.8956404346154385,
+  "v1_auc": 0.8416541785362233,
+  "gold_auc": 0.8820606897928066,
+  "pseudo_per_label": {
+   "ACL": 0.9004794488665455,
+   "MCL": 0.8634547442799462,
+   "Medial Meniscus": 0.9136227775213732,
+   "Lateral Meniscus": 0.8956132342072083,
+   "Medial OA": 0.9120008831869103,
+   "Lateral OA": 0.8774840607488452,
+   "PF OA": 0.8692330898355852,
+   "Effusion": 0.8772976947363869,
+   "Synovitis": 0.8919718830928598,
+   "Baker's": 0.9229326887863474,
+   "Contusion": 0.8858612107459191,
+   "Fracture": 0.937733499377335
+  },
+  "gold_per_label": {
+   "ACL": 0.9166666666666666,
+   "MCL": 0.8639455782312925,
+   "Medial Meniscus": 0.9375,
+   "Lateral Meniscus": 0.8186335403726708,
+   "Medial OA": 0.9472868217054263,
+   "Lateral OA": 0.8220502901353967,
+   "PF OA": 0.8018018018018018,
+   "Effusion": 0.942857142857143,
+   "Synovitis": 0.8040621266427718,
+   "Baker's": 0.9347826086956522,
+   "Contusion": 0.9284750337381916,
+   "Fracture": 0.8666666666666666
+  },
+  "n_val": 871,
+  "minutes": 2.4196905215581257
+ },
+ "veto": "killed",
+ "soup_ckpt": "/workspace/users/rodrigo/wt_sub045_4_fold_soup/results/sub045_4_fold_soup/soup_exp045.pt",
+ "schema_version": 1,
+ "exp": "sub045_4_fold_soup",
+ "padre": "exp045_raptor_aug_espacial",
+ "author": "rodrigo",
+ "git": {
+  "commit": "619513e",
+  "branch": "sub045_4_fold_soup",
+  "src_dirty": false
+ },
+ "written_utc": "2026-10-12T19:14:48.797293+00:00"
+}
