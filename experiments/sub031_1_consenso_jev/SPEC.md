@@ -6,7 +6,7 @@
 | Padre | exp031_raptor_etiquetas_consenso |
 | Fecha | 2026-10-11 |
 | Rama | sub031_1_consenso_jev |
-| Estado | run (fold 0) |
+| Estado | didnt |
 
 Idea: sub-experimento de afinado de exp031 (consenso de 4 fuentes blandas, `worked`, pseudo L2 0.8836). Añadir una 5.ª
 fuente al promedio: las etiquetas JEV de riadmohamed42 (`riadmohamed42/jev-knee-labels`, CC0).
@@ -76,16 +76,23 @@ La `decision_auto` del notebook usa el umbral estándar ±0.005; el verdict se a
 
 ## 3. VERDICT (números de `results/sub031_1_consenso_jev/metrics.json`)
 
-**Resultado:** pendiente · **Fase alcanzada:** screen fold 0 en curso
+**Resultado:** `didnt` · **Fase alcanzada:** screen fold 0
 
 | Métrica | Padre (exp031) | Este | Δ |
 |---|---|---|---|
-| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | | |
-| pseudo L2 fold 0 (SWA top-3) | 0.8835 | | |
-| v1 fold 0 | 0.8368 | | |
-| gold (veto) | 0.9144 | | |
-| GPU-h | 2.49 | | |
+| pseudo L2 fold 0 (mejor época) | 0.8836 (ep 15) | 0.8846 (ep 11) | +0.0010 |
+| pseudo L2 fold 0 (SWA top-3) | 0.8835 (ep 15, 13, 14) | 0.8846 (ep 11, 14, 15) | +0.0011 |
+| v1 fold 0 | 0.8368 | 0.8391 | +0.0023 |
+| gold (veto) | 0.9144 | 0.9107 (SWA 0.9141) | −0.0037 |
+| GPU-h | 2.49 | 2.53 | +0.04 |
 
-**Qué aprendimos:**
+Criterio: Δ pseudo +0.0010 < +0.003 y > −0.005, gold no cae > 0.02 → **didnt** (`decision_auto` = `neutral`).
 
-**Siguiente paso sugerido:**
+**Qué aprendimos:** añadir JEV (ensemble de texto) como 5.ª fuente no mueve la pseudo L2: +0.001, dentro del ruido de
+semilla (~0.0013, medido por el equipo). Por hallazgo los cambios son todos ≤ 0.006 en valor absoluto. La curva toca
+techo antes (ep 11) y queda plana. JEV aporta poca información nueva sobre las 4 fuentes (acuerdo binarizado con Raptor
+0.909, con L4 0.883) y baja la media del objetivo (0.301 → 0.271). Recordatorio: la vara L2 juega en contra de esta
+variante (diluye L2+L4 de 2/4 a 2/5), así que "sin cambio" no es "peor"; pero tampoco hay señal para preferirla.
+Se queda el consenso de 4 fuentes de exp031.
+
+**Siguiente paso sugerido:** ninguno en esta línea; cerrar.
