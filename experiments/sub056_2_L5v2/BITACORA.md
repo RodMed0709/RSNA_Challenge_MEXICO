@@ -10,3 +10,6 @@
 - rsna-d2 (asignado por el orquestador): worktree `wt_sub056_2_L5v2`, symlink `results/exp056_raptor_combo` → worktree
   de exp056; lanzador `/root/run056_2_chain.sh` (PID 396290) espera a que no haya papermill y exista `L5v2_READY`,
   luego smoke → fold 0.
+- Smoke 11:41–11:43 OK (41 724/41 724 celdas con 5 fuentes; media del objetivo 0.276; L5v2–Raptor 0.926, –L2 0.873).
+- Fold 0 11:43–14:15 UTC: pseudo L2 0.8874 (ep 15), gold 0.9201, 2.51 GPU-h; padre exp056 fold 0 0.8857 / 0.9198 →
+  Δ +0.0017 → `didnt`. L5v3 no se lanza. rsna-d2 detenido (stop) al terminar.

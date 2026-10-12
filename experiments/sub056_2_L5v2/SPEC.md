@@ -6,7 +6,7 @@
 | Padre | exp056_raptor_combo (exp045 aug espacial + consenso de 5 fuentes con L5) |
 | Fecha | 2026-10-12 |
 | Rama | sub056_2_L5v2 (desde exp056_raptor_combo, 2083da0) |
-| Estado | fase 1 hecha (L5v2 sana) · fase 2 en cola en rsna-d2 (arranca al terminar el fold 0 de exp056) |
+| Estado | didnt |
 
 Idea (autorizada por Rodrigo vía orquestador): mejorar la 5.ª fuente del consenso con **más lecturas por informe**.
 L5 = 3 lecturas (gpt-4.1-mini). **L5v2 = las mismas 3 + 2 lecturas nuevas** con prompts distintos y un modelo más
@@ -67,7 +67,7 @@ tocó L5v2.
 
 ## 3. VERDICT
 
-**Resultado:** pendiente · **Fase alcanzada:** fase 1 completa; fase 2 en cola
+**Resultado:** `didnt` · **Fase alcanzada:** screen fold 0
 
 ### Fase 1 — L5v2 (números de `L5v2_validacion.json`)
 
@@ -91,3 +91,27 @@ tokens in / 0.85 M out) + E_checklist US$3.46 (gpt-5.4-nano, 6.38 M in / 1.75 M 
   0.182). Muy correlada con L5 (AUC 0.998): 3 de 5 lecturas son las mismas, así que el efecto en el entrenamiento puede
   ser pequeño.
 - Gold (solo reporte): L5v2 0.896 · L5 0.889 · consenso de las 4 0.895 · L2 0.893.
+
+### Fase 2 — sub056_2 (fold 0, rsna-d2, 11:43–14:15 UTC)
+
+Padre: `results/exp056_raptor_combo/metrics.json` (fold 0, 2026-10-12 11:41 UTC).
+
+| Métrica | Padre (exp056) | Este | Δ |
+|---|---|---|---|
+| pseudo L2 fold 0 (mejor época) | 0.8857 (ep 15) | 0.8874 (ep 15) | **+0.0017** |
+| pseudo L2 fold 0 (SWA top-3) | 0.8854 | 0.8869 | +0.0015 |
+| v1 fold 0 | 0.8407 | 0.8437 | +0.0030 |
+| gold (veto) | 0.9198 (SWA 0.9212) | 0.9201 (SWA 0.9203) | +0.0002 |
+| GPU-h | 2.51 | 2.51 | 0 |
+
+Criterio: +0.0017 < +0.003 y > −0.005; gold no cae → **didnt**. Δ ≈ 1.3 × el ruido de semilla (0.0013): no se
+distingue de ruido.
+
+**Qué aprendimos:** pasar de 3 a 5 lecturas por informe (L5 → L5v2, +US$11.9) mejora un poco el acuerdo de la fuente con
+las referencias (macro AUC +0.002–0.004) pero no mueve el modelo de forma medible: L5v2 y L5 se parecen demasiado
+(AUC 0.998, κ 0.889). Por hallazgo (pseudo): Contusion +0.014, Synovitis +0.013, ACL +0.010; MCL −0.011, Baker's −0.008,
+Medial Meniscus −0.006. La ganancia de exp054 venía de añadir una fuente distinta, no de afinarla.
+
+**Siguiente paso:** L5 (3 lecturas) sigue en el combo. **L5v3 / sub056_3 no se corre** (la regla de ESTADO.md exige
+sub056_2 = `worked`); queda preparado en `/workspace/users/rodrigo/l5v3/` por si se quiere probar otra fuente
+realmente distinta. Sin all-data.
