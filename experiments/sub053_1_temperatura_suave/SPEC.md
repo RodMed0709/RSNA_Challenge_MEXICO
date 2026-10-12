@@ -6,7 +6,7 @@
 | Padre | exp031_raptor_etiquetas_consenso (sub-experimento de intensidad de exp053) |
 | Fecha | 2026-10-12 |
 | Rama | sub053_1_temperatura_suave (desde exp053_raptor_etiqueta_temperatura) |
-| Estado | en curso |
+| Estado | abortado (sin verdict; queda como idea) |
 
 Sub-experimento previsto en la SPEC de exp053: se corre porque exp053 (T = 0.7) "quedó cerca" (|Δ pseudo L2| < 0.003).
 Prueba la dirección opuesta: suavizar el consenso en vez de afilarlo.
@@ -38,4 +38,9 @@ Padre (best): Raptor 0.8927 · L3 0.8742 · L4 0.8836 · v1 0.8368.
 
 ## 3. VERDICT
 
-Pendiente.
+**Abortado, sin conclusión.** La cola lo lanzó automáticamente a las 09:21 UTC (exp053 quedó en |Δ| < 0.003). El
+orquestador ordenó después no lanzar nada más y apagar rsna-g; se mató en la época 7 de 16 (~1.2 GPU-h). Sin
+`metrics.json`. Curva parcial (pseudo L2 por época, de `history_f0.csv`): 0.7199 · 0.7689 · 0.8230 · 0.8353 · 0.8520 ·
+0.8603 · 0.8660 · 0.8730 (exp031 en las mismas épocas: 0.6955 · 0.7935 · 0.8321 · 0.8357 · 0.8449 · 0.8630 · 0.8664 ·
+0.8773). No permite decidir nada. Queda como idea: T = 1.5 (media del objetivo 0.302 → 0.337, celdas en (0.2, 0.8)
+20 % → 42 %).
