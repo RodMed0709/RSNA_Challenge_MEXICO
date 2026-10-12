@@ -35,6 +35,17 @@ validación y gold, y obligaría a aplicarlo también en la inferencia de Kaggle
 - Smoke (1 época) y fold 0 encadenados en rsna-e2
   cuando termine sub045_1 (comprobar pgrep/nvidia-smi).
 
-## 3. VERDICT
+## 3. VERDICT (números de `results/sub056_1_clahe/metrics.json`, fase screen, timestamp 2026-10-12T13:39:59Z)
 
-Pendiente.
+**Resultado: `didnt`** (escrito por el orquestador en la nube, 2026-10-12 ~17:10 UTC). **Fase alcanzada:** screen (fold 0).
+
+| | pseudo L2 f0 | v1 | gold (solo veto) |
+|---|---|---|---|
+| mejor época (ep 15) | **0.8839** | 0.8425 | 0.9143 |
+| SWA top-3 (ep 15, 14, 13) | 0.8836 | 0.8425 | 0.9149 |
+| exp056 (padre, mejor época) | 0.8857 | 0.8407 | 0.9198 |
+
+- Δ pseudo vs exp056 = −0.0018 (`delta.pseudo_f0`); Δ gold = −0.0055.
+- Criterios fijos: `worked` exige ≥ 0.8887 → no; `killed` si ≤ 0.8807 o gold < 0.8998 → no. Queda **`didnt`**.
+- CLAHE tampoco suma encima del combo (ya quedó al borde sobre exp031 en exp049). No entra en el combo; no se corren folds 1–4.
+- Coste: 2.48 GPU-h (`gpu_hours_total`).
