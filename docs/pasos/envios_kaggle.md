@@ -16,7 +16,7 @@ sesión); aquí solo los números. Kernels privados, sin internet, GPU T4.
 | 2026-10-12 | 57089745 | exp041-sub-e1-94 v1 | exp027/041 Ch: pesos nartaa 224 (`0945-efficient-224crop`), `model.half()`, 94 ventanas en un lote, sin TTA (eficiencia) | **0.945** | — | 54.1 s (script 12 s; score en ~8 min) |
 | 2026-10-12 | 57089954 | ens-blendmine-exp030 v1 | exp038: blend-mine (Raptor nartaa + compact S6) + exp030 all-data, rank por hallazgo 0.35/0.30/0.35 (fijos) | 0.950 | — | 198.6 s (Raptor 42 s, exp030 28 s, compact 95 s; score en ~3 h 58 min) |
 | 2026-10-12 | 57091516 | exp031-raptor-alldata v1 | exp031 all-data (etiquetas consenso, SWA épocas 13/14/15) + TTA espejo, inferencia nartaa 0949 | 0.939 | — | 64.6 s (script 25 s; score en ~28 min) |
-| 2026-10-12 | 57092253 | ens-blendmine-exp031 v1 | exp038: blend-mine + exp031 all-data, rank por hallazgo 0.35/0.30/0.35 (fijos) | pendiente | — | 209.1 s (Raptor 49 s, exp031 27 s, compact 100 s) |
+| 2026-10-12 | 57092253 | ens-blendmine-exp031 v1 | exp038: blend-mine + exp031 all-data, rank por hallazgo 0.35/0.30/0.35 (fijos) | 0.952 | — | 209.1 s (Raptor 49 s, exp031 27 s, compact 100 s; score en ~3 h 50 min) |
 
 ## Lectura
 
