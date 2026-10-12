@@ -6,7 +6,7 @@
 | Padre | sub056_2_L5v2 (exp056 combo con L5v2 como 5.ª fuente) |
 | Fecha | 2026-10-12 |
 | Rama | sub056_3_L5v3 (desde sub056_2_L5v2, d5af1da) |
-| Estado | spec · preparado, **condicional**: solo corre si sub056_2 = `worked` y Rodrigo confirma la recarga de US$30 (marca `GO`) |
+| Estado | archivado sin correr: sub056_2 = `didnt` (Δ +0.0017 < +0.003), la condición no se cumplió |
 
 Idea: tercera ronda de etiquetas LLM. Si 5 lecturas (L5v2) mejoran a 3 (L5), probar 7 lecturas, poniendo un modelo
 más fuerte en los hallazgos más ruidosos.
@@ -64,4 +64,4 @@ cada una de L2, L3, L4 y Raptor; ≥ 0.93 contra el consenso de las 4; ningún h
 
 ## 3. VERDICT
 
-Pendiente (condicional a sub056_2 = `worked` y `GO`).
+No corrido: sub056_2 salió `didnt` (pseudo L2 0.8874 vs exp056 0.8857). El pipeline queda en `/workspace/users/rodrigo/l5v3/` por si se reactiva.
