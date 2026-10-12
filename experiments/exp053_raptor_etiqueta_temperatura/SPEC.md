@@ -66,7 +66,7 @@ L2 binarizada más que el padre; sí cambia la escala del objetivo y por tanto l
 | GPU-h | 2.49 | 2.53 | +0.04 | |
 
 Criterio: Δ pseudo L2 +0.0018 < +0.003 (y > −0.003; gold −0.002, sin veto) → **didnt** (`decision_auto` = `neutral`).
-Δ medio (Raptor, L3) = +0.0002. Queda "cerca" (|Δ| < 0.003) → se lanza sub053_1 (T = 1.5) según la SPEC; no all-data.
+Δ medio (Raptor, L3) = +0.0002. Queda "cerca" (|Δ| < 0.003); no all-data.
 
 **Qué aprendimos:** afilar a T = 0.7 (media del objetivo 0.302 → 0.282; celdas en (0.2, 0.8) 20 % → 14 %; binarización
 idéntica) deja el modelo dentro del ruido de semilla contra todas las varas de etiquetas (L2 +0.002, Raptor +0.001,
@@ -74,4 +74,5 @@ L3 0.000); solo v1 sube algo por encima del ruido (+0.004) y gold baja −0.002.
 sesgo hacia L2: simplemente el afilado no aporta señal. `pos_weight` sube por el cambio de prevalencia (Fracture
 5.7 → 8.9). Por hallazgo (pseudo L2): Contusion +0.013, MCL +0.008, Fracture +0.007; ACL −0.012, PF OA −0.007.
 
-**Siguiente paso:** sub053_1 (T = 1.5, dirección opuesta) en rsna-g.
+**Siguiente paso:** sub053_1 (T = 1.5, dirección opuesta) se lanzó automáticamente pero se abortó en la época 7 por
+orden del orquestador (apagar rsna-g); queda como idea, sin resultado (rama `sub053_1_temperatura_suave`).
