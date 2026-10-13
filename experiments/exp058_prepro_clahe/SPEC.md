@@ -6,7 +6,7 @@
 | Padre | exp045_raptor_aug_espacial |
 | Fecha | 2026-10-13 |
 | Rama | exp058_prepro_clahe (desde exp045_raptor_aug_espacial 607644c, como los sub045_*) |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: Fase 1 del estudio de preprocesado (aprobado por Rodrigo 2026-10-13): exp045 + CLAHE por corte (clip 2.0, tiles 8×8) sobre el corpus uint8 384. Origen: exp049 / sub056_1 (CLAHE sobre exp031 y sobre el combo); Zuiderveld 1994 (Graphics Gems IV).
 
@@ -77,4 +77,16 @@ mejor brazo `promising` de la Fase 2 (media de 2 semillas); si ninguno, el brazo
 
 ## 3. VERDICT (números de `results/exp058_prepro_clahe/metrics.json`)
 
-Pendiente.
+**didnt** (orquestador, 13-oct 09:00 UTC; números de `metrics.json`; decisión de la cadena p7c `state/phase1.json` coincide).
+
+| | referencia (media exp045 s42 + sub045_5 s7) | exp058_prepro_clahe s42 | Δ |
+|---|---|---|---|
+| pseudo L2 f0 (mejor época, ep 15) | 0.8880 | 0.8874 | -0.0006 |
+| gold | 0.9223 | 0.9142 | -0.0081 |
+| SWA f0 pseudo / gold | — | 0.8872 / 0.9136 | |
+
+- Δ pseudo -0.0006 < +0.003 (y < +0.002 → sin ronda 2, n = 1 semilla); gold 0.9142 ≥ veto 0.9023 → `didnt`.
+- Vs exp045 s42 solo (campo `delta` de metrics.json): pseudo -0.0024, gold -0.0060.
+- Coste de preprocesado: 197 ms/estudio (1 hilo). GPU-h 2.52.
+- Aprendizaje: CLAHE 2.0 8×8 no mejora a exp045 en fold 0; no entra como padre de la Fase 2 (padre = exp045).
+
