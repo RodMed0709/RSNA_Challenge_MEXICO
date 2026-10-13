@@ -65,6 +65,22 @@ a la vez que otro entrenamiento (solo afecta al tiempo); coste de inferencia en 
   Se reconstruye `/root/corpus_nyul`, se re-commitea `nyul_landmarks.json` (version 2), smoke en el corpus nuevo antes del fold 0;
   la ronda 2 (semilla 7) usa el mismo corpus v2.
 
+## Etapa 3 — confirmación 5 folds (criterio fijado el 2026-10-13 ~04:00 UTC, antes de ver resultados; aprobado por Rodrigo)
+
+Solo aplica si este experimento resulta el **ganador final** de la cadena p7c (regla en `orq/ESTADO.md`, sección "Fase 2 + Etapa 3"):
+mejor brazo `promising` de la Fase 2 (media de 2 semillas); si ninguno, el brazo `promising` de la Fase 1; si nada es
+`promising`, la Etapa 3 no corre.
+- Se entrenan los folds 1–4 con semilla 42 (el fold 0 s42 ya existe) → OOF pseudo de 5 folds concatenados y gold con el
+  ensamble (media de probabilidades) de los 5 modelos `best_f{k}.pt`.
+- Preprocesado reajustado por fold donde aprende algo: Nyúl → landmarks ajustados solo con el train de cada fold
+  (`nyul_landmarks_f{k}.json`, un corpus por fold); recorte de rodilla y CLAHE no ajustan nada (un solo corpus).
+- Referencia: exp045 5 folds — OOF pseudo **0.8844**, gold del ensamble de 5 **0.9244**.
+- **worked (confirmado)** si Δ OOF pseudo ≥ **+0.003** vs 0.8844 **y** gold del ensamble ≥ 0.9244 − 0.02; si gold cae más
+  de 0.02 → **killed**; si no → **didnt** (se queda en fold 0).
+- Si se confirma: dataset privado con los 5 pesos + kernel solo privado + kernel ensamble blend-mine w0.15, con el
+  preprocesado inyectado igual que en entrenamiento; se corren hasta COMPLETE y se valida `submission.csv`. No se envía a
+  Kaggle desde la cadena: los slugs quedan en ESTADO para las colas del 15/16-oct.
+
 ## 3. VERDICT (números de `results/exp059_prepro_nyul/metrics.json`)
 
 Pendiente.
