@@ -6,7 +6,7 @@
 | Padre | — (familia nueva). Registro: `exp002` solo por mecánica de `nuevo_experimento`. Referencia del blend: `exp045_raptor_aug_espacial` (SWA fold 0) |
 | Fecha | 2026-10-13 |
 | Rama | exp066_compact_f0 |
-| Estado | spec |
+| Estado | worked |
 
 Idea: reproducir la OTRA mitad del blend-mine 0.954 (la compact ConvNeXt-S de heliosli, brazo `E_lrprior`) entrenada
 limpia en nuestro split (folds 1–4; fold 0 fuera; gold fuera), para tener un blend interno limpio = Raptor exp045 f0 +
@@ -84,14 +84,21 @@ git ni se redistribuye**. El port vive en el disco local del pod; en git solo va
 
 ## 3. VERDICT (números de `results/exp066_compact_f0/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen
+**Resultado:** worked · **Fase alcanzada:** screen (fold 0) · escrito por el orquestador en la nube, 2026-10-13 21:05 UTC
 
 | Métrica | exp045 SWA f0 | compact f0 | blend 0.5/0.5 | Δ blend − exp045 |
 |---|---|---|---|---|
-| pseudo L2 fold 0 | 0.8895 | | | |
-| gold (veto) | 0.9201 | | | |
-| GPU-h | 2.51 | | — | — |
+| pseudo L2 fold 0 | 0.8895 | 0.8755 | 0.8955 | +0.0060 |
+| gold (veto) | 0.9201 | 0.8972 | 0.9256 | +0.0055 |
+| GPU-h | 2.51 | 13.99 | — | — |
 
-**Qué aprendimos (2-4 líneas):**
+Criterios: blend pseudo 0.8955 ≥ 0.8945 y blend gold 0.9256 ≥ 0.9001 → `worked` (= `decision_auto`); GPU-h 13.99 < 21 (sin kill).
+Control: `blend.exp045_swa_recomputed` = 0.8895 / 0.9201 (coincide con exp045); predicciones faltantes val 0, gold 0. v1: compact 0.8363, blend 0.8513.
 
-**Siguiente paso sugerido:**
+**Qué aprendimos (2-4 líneas):** la compact con nuestras etiquetas (sin cabeza de estados) queda sola 0.014 por debajo de exp045
+en pseudo, pero su error es complementario: el blend rank-mean 0.5/0.5 sube +0.0060 pseudo y +0.0055 gold, el primer bloque
+propio que mejora a exp045 en fold 0 por encima del umbral. Mayor ganancia en PF OA, MCL, ACL, Baker's; pierde en Synovitis.
+Coste alto: ~14 GPU-h por fold (×5.5 exp045).
+
+**Siguiente paso sugerido:** SPEC aparte para compact all-data (o folds 1–4) y kernel Kaggle privado del bloque exp045 + compact
+para medir en el LB (decisión de Rodrigo por coste: ~14 GPU-h ≈ $10 por modelo).
