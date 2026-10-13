@@ -87,6 +87,36 @@ mejor brazo `promising` de la Fase 2 (media de 2 semillas); si ninguno, el brazo
 
 ## 3. VERDICT (números de `results/exp063_aug_artefactos_strong/metrics.json` y `metrics_seed7.json`)
 
-Pendiente.
+**Estado: `didnt`** (decisión de la cadena p7c `orq/p7c_chain/state/phase2.json`, 2026-10-13T14:42Z; criterios de la sección 1 sin cambios).
+Verdict escrito por el orquestador en la nube (rsna-cron), 2026-10-13 ~17:15 UTC.
+
+| | pseudo L2 f0 (mejor época) | gold |
+|---|---|---|
+| Referencia padre exp045 (media s42 + sub045_5_seed7) | 0.8880 | 0.9223 |
+| exp063_aug_artefactos_strong s42 | 0.8860 | 0.9140 |
+| exp063_aug_artefactos_strong s7 | 0.8873 | 0.9220 |
+| **media 2 semillas** | **0.8866** (Δ -0.0014) | **0.9180** (Δ -0.0043) |
+
+- Δ pseudo -0.0014 < +0.003 → no promising; gold medio 0.9180 ≥ 0.9023 (sin veto) → **didnt**.
+  La decisión automática de la celda 5 (1 semilla) fue `neutral` (informativa).
+- GPU-h: 5.03 (s42 2.51 + s7 2.51) + harness.
+- **Secundaria (harness exp040, best_f0 s42, pseudo L2; Δ vs su propia condición limpia, AUC absoluta entre paréntesis):**
+
+| condición | padre exp045 s42 | exp063_aug_artefactos_strong s42 |
+|---|---|---|
+| gauss5 | -0.0091 (0.8808) | -0.0042 (0.8818) |
+| rician5 | -0.0097 (0.8802) | -0.0043 (0.8817) |
+| rician10 | -0.0301 (0.8598) | -0.0121 (0.8739) |
+| gamma140 | -0.0034 (0.8865) | -0.0020 (0.8840) |
+| bias | -0.0008 (0.8891) | -0.0010 (0.8850) |
+| cortes50 | -0.0055 (0.8844) | -0.0043 (0.8817) |
+| drop_s0 | -0.0102 (0.8797) | -0.0094 (0.8766) |
+| res192 | -0.0026 (0.8873) | -0.0002 (0.8858) |
+
+  Lectura: la aug de artefactos (strong) reduce la caída con ruido (sobre todo Rician σ=10 %), como pretendía, pero la AUC limpia no sube
+  y gold medio baja -0.0043 (dentro del veto). Sin cambio útil in-distribution → no pasa a la Etapa 3 (no corre: nada promising en Fase 1 ni Fase 2).
+- **Aprendizaje:** las augs de artefactos de RM compran robustez a ruido pero no AUC en el split interno ni en gold; si el test de Kaggle no tiene
+  más ruido que el train, no hay motivo para usarlas. Idea (otro experimento, no ahora): medir en el LB si la robustez se traduce en algo.
+
 
 **Padre elegido por la regla (cadena p7c, 2026-10-13T07:47:32Z):** `exp045_raptor_aug_espacial` — referencia 2 semillas pseudo 0.88803 / gold 0.922301 (`orq/p7c_chain/state/phase1.json`).
