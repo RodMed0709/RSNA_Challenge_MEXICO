@@ -6,7 +6,7 @@
 | Padre | exp045_raptor_aug_espacial |
 | Fecha | 2026-10-13 |
 | Rama | sub045_5_seed7 (desde exp045_raptor_aug_espacial 607644c) |
-| Estado | spec |
+| Estado | worked |
 
 Idea: Fase 1 del estudio de preprocesado, P0: segunda semilla del padre (exp045 con semilla 7) para tener una referencia
 de 2 semillas y medir el ruido de semilla antes de juzgar los brazos P1–P3 (exp058–exp060 aprox.).
@@ -43,4 +43,15 @@ Todo lo demás igual a exp045 (corpus `/root/corpus96_384`, split, épocas, etiq
 
 ## 3. VERDICT (números de `results/sub045_5_seed7/metrics.json`)
 
-Pendiente.
+**worked** (réplica válida de exp045 con semilla 7; orquestador, 13-oct 09:00 UTC; números de `metrics.json`).
+
+| | exp045 s42 | sub045_5 s7 | Δ |
+|---|---|---|---|
+| pseudo L2 f0 (mejor época, ep 15) | 0.8899 | 0.8862 | -0.0037 |
+| gold | 0.9202 | 0.9244 | +0.0042 |
+| SWA f0 pseudo / gold | — | 0.8859 / 0.9248 | |
+
+- |Δ pseudo| = 0.0037 ≤ 0.01 y gold 0.9244 ≥ 0.9002 → `worked`. GPU-h 2.49.
+- **Referencia de la Fase 1** = media(s42, s7): pseudo **0.888030**, gold **0.922301** (veto gold de los brazos: < 0.9023).
+- Aprendizaje: la varianza por semilla en fold 0 (~0.004 en pseudo, ~0.004 en gold) es del orden del umbral +0.003; confirma usar 2 semillas.
+
