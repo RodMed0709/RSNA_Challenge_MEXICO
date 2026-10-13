@@ -56,6 +56,16 @@ a la vez que otro entrenamiento (solo afecta al tiempo); coste de inferencia en 
 - Ronda 2 (si Δ ≥ +0.002): mismo notebook con `-p SEED 7` en el worktree `wt_exp060_prepro_n4_seed7`; su metrics.json se copia como
   `results/exp060_prepro_n4/metrics_seed7.json`.
 
+- **Declaración (2026-10-13, antes de ver resultados):** P3 tiene en realidad dos pasos sobre el uint8 ya recortado: N4 **y** una
+  re-normalización 2–98 % por pila de slot (el padre normalizó 2–98 % por serie antes del recorte; aquí se vuelve a estirar sobre
+  el recorte 140 mm ya recortado a [0, 255]). Si P3 sale promising, hay que separar ambos efectos (brazo "solo re-normalización").
+- El `ms_per_study_1thread` del build está inflado por contención (10 procesos compartiendo CPU con el entrenamiento de P1 en una
+  cuota de 23.8 CPU): el coste de inferencia se re-mide aislado (1 hilo, 50 estudios, rsna-cron) y se anota aquí y en
+  `build_meta.prepro.ms_per_study_isolated`. Se registran también versión de SimpleITK, iteraciones, puntos de control,
+  umbral de convergencia y bins de Otsu.
+- No se entrena si `slot_errors` > 0.5 % de los slots no vacíos. **P3 en espera:** Rodrigo decide si se sustituye por un brazo
+  de recorte centrado en la rodilla; el entrenamiento solo arranca con confirmación (`orq/p7c_prepro/go_p3`).
+
 ## 3. VERDICT (números de `results/exp060_prepro_n4/metrics.json`)
 
 Pendiente.
