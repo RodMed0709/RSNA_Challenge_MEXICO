@@ -56,6 +56,15 @@ a la vez que otro entrenamiento (solo afecta al tiempo); coste de inferencia en 
 - Ronda 2 (si Δ ≥ +0.002): mismo notebook con `-p SEED 7` en el worktree `wt_exp059_prepro_nyul_seed7`; su metrics.json se copia como
   `results/exp059_prepro_nyul/metrics_seed7.json`.
 
+- **Corrección de implementación (2026-10-13 ~03:05 UTC, antes de ver ningún resultado; criterios sin cambios):** la v1 del
+  constructor usaba la máscara por defecto de TorchIO (vóxel > media de la pila) y mapeaba p1 → 0; todo lo que estaba por debajo
+  de la media se extrapolaba a negativo y se recortaba a 0 (auditoría: 42 % de los vóxeles > 0 a cero, rango 29–61 %; borra
+  meniscos/ligamentos). v2: landmarks sobre los vóxeles > 0 de los cortes válidos y ancla 0 → 0 (escala estándar = p/p99·255,
+  LUT por tramos [0, landmarks propios] → [0, landmarks estándar]); el 0 (aire/relleno) sigue en 0. Aceptación: < 2 % de vóxeles
+  > 0 mandados a 0 (prueba en 25 estudios: 0.006 %); el build completo lo registra en `build_meta.prepro.pos_to_zero_frac`.
+  Se reconstruye `/root/corpus_nyul`, se re-commitea `nyul_landmarks.json` (version 2), smoke en el corpus nuevo antes del fold 0;
+  la ronda 2 (semilla 7) usa el mismo corpus v2.
+
 ## 3. VERDICT (números de `results/exp059_prepro_nyul/metrics.json`)
 
 Pendiente.
