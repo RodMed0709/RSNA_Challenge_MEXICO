@@ -56,6 +56,9 @@ a la vez que otro entrenamiento (solo afecta al tiempo); coste de inferencia en 
 - Ronda 2 (si Δ ≥ +0.002): mismo notebook con `-p SEED 7` en el worktree `wt_exp058_prepro_clahe_seed7`; su metrics.json se copia como
   `results/exp058_prepro_clahe/metrics_seed7.json`.
 
+- **Nota (2026-10-13):** el fold 0 corre en el mismo pod mientras se construye el corpus N4 (CPU compartida): `gpu_hours` y el
+  tiempo por paso de este experimento están inflados y no son comparables con los del padre (no afecta a las AUC).
+
 ## 3. VERDICT (números de `results/exp058_prepro_clahe/metrics.json`)
 
 Pendiente.
