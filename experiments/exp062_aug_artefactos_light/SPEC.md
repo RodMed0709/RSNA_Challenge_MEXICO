@@ -88,3 +88,5 @@ mejor brazo `promising` de la Fase 2 (media de 2 semillas); si ninguno, el brazo
 ## 3. VERDICT (números de `results/exp062_aug_artefactos_light/metrics.json` y `metrics_seed7.json`)
 
 Pendiente.
+
+**Padre elegido por la regla (cadena p7c, 2026-10-13T07:47:25Z):** `exp045_raptor_aug_espacial` — referencia 2 semillas pseudo 0.88803 / gold 0.922301 (`orq/p7c_chain/state/phase1.json`).
