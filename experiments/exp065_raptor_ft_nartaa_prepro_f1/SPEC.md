@@ -6,7 +6,7 @@
 | Padre | exp044_raptor_ft_nartaa (all-data: SWA [3,4,5] gold 0.91924; init nartaa gold 0.91907; 1.05 GPU-h; corpus crudo d96/384) |
 | Fecha | 2026-10-13 |
 | Rama | exp065_raptor_ft_nartaa_prepro_f1 |
-| Estado | spec (armado: corre solo si la Fase 1 de preprocesado deja un brazo `promising`) |
+| Estado | didnt (no corrido) |
 
 Idea: Track B (desde 0.954): exp044 + preprocesado ganador de la Fase 1 (all-data); se omite si no hay ganador.
 
@@ -81,7 +81,9 @@ añade tiempo de inferencia en Kaggle (segunda reconstrucción del volumen); rui
 
 ## 3. VERDICT (números de `results/exp065_raptor_ft_nartaa_prepro_f1/alldata/metrics.json` y LB)
 
-**Resultado:** pendiente · **Fase alcanzada:** spec (armado)
+**Resultado:** didnt (no corrido) · **Fase alcanzada:** spec (armado)
+
+Orquestador, 13-oct 09:00 UTC: la regla de la SPEC (corre solo si la Fase 1 deja un brazo `promising`) no se cumplió. Decisión de la cadena p7c (07:47 UTC): padre = exp045 (CLAHE Δ −0.0006, Nyúl Δ −0.0012, recorte Δ −0.0041 vs ref 0.8880; todos `didnt`). daemon_b: `B2 SKIP ... not run (verdict: didnt, no corrido)`. Sin GPU-h, sin kernel, sin LB.
 
 | Métrica | Padre (exp044 / ens-exp042b) | Este (exp065 / ens-exp065) | Δ |
 |---|---|---|---|
@@ -90,6 +92,6 @@ añade tiempo de inferencia en Kaggle (segunda reconstrucción del volumen); rui
 | gold SWA all-data (sanidad, contaminada) | 0.91924 | | |
 | GPU-h | 1.05 | | |
 
-**Qué aprendimos (2-4 líneas):**
+**Qué aprendimos (2-4 líneas):** ningún preprocesado de la Fase 1 superó al corpus crudo; no hay variante de corpus que probar sobre nartaa.
 
-**Siguiente paso sugerido:**
+**Siguiente paso sugerido:** ninguno con esta variable; Track B se juzga con el LB de ens-exp064 (B1).
