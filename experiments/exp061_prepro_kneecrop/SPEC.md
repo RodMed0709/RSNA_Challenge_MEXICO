@@ -6,7 +6,7 @@
 | Padre | exp045_raptor_aug_espacial |
 | Fecha | 2026-10-13 |
 | Rama | exp061_prepro_kneecrop (desde exp045_raptor_aug_espacial 607644c, como los sub045_* y exp058–060) |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: brazo extra de la Fase 1 del estudio de preprocesado (aprobado por Rodrigo 2026-10-13): exp045 con el recorte de 140 mm
 centrado en la rodilla de cada serie en vez de en el centro de la matriz. Ficha P-1 de `docs/conocimiento/09_preprocesado.md`;
@@ -92,4 +92,16 @@ mejor brazo `promising` de la Fase 2 (media de 2 semillas); si ninguno, el brazo
 
 ## 3. VERDICT (números de `results/exp061_prepro_kneecrop/metrics.json`)
 
-Pendiente.
+**didnt** (orquestador, 13-oct 09:00 UTC; números de `metrics.json`; decisión de la cadena p7c `state/phase1.json` coincide).
+
+| | referencia (media exp045 s42 + sub045_5 s7) | exp061_prepro_kneecrop s42 | Δ |
+|---|---|---|---|
+| pseudo L2 f0 (mejor época, ep 15) | 0.8880 | 0.8840 | -0.0041 |
+| gold | 0.9223 | 0.9110 | -0.0113 |
+| SWA f0 pseudo / gold | — | 0.8836 / 0.9107 | |
+
+- Δ pseudo -0.0041 < +0.003 (y < +0.002 → sin ronda 2, n = 1 semilla); gold 0.9110 ≥ veto 0.9023 → `didnt`.
+- Vs exp045 s42 solo (campo `delta` de metrics.json): pseudo -0.0059, gold -0.0092.
+- Coste de preprocesado: 78 ms/estudio (1 hilo). GPU-h 2.51.
+- Aprendizaje: recorte centrado en la rodilla no mejora a exp045 en fold 0; no entra como padre de la Fase 2 (padre = exp045).
+
