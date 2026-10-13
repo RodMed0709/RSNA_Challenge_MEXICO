@@ -6,7 +6,7 @@
 | Padre | exp045_raptor_aug_espacial |
 | Fecha | 2026-10-13 |
 | Rama | exp059_prepro_nyul (desde exp045_raptor_aug_espacial 607644c, como los sub045_*) |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: Fase 1 del estudio de preprocesado (aprobado por Rodrigo 2026-10-13): exp045 + estandarización de histograma Nyúl–Udupa por tipo de slot. Origen: Nyúl, Udupa & Zhang 2000, IEEE TMI 19(2) (TorchIO HistogramStandardization).
 
@@ -83,4 +83,16 @@ mejor brazo `promising` de la Fase 2 (media de 2 semillas); si ninguno, el brazo
 
 ## 3. VERDICT (números de `results/exp059_prepro_nyul/metrics.json`)
 
-Pendiente.
+**didnt** (orquestador, 13-oct 09:00 UTC; números de `metrics.json`; decisión de la cadena p7c `state/phase1.json` coincide).
+
+| | referencia (media exp045 s42 + sub045_5 s7) | exp059_prepro_nyul s42 | Δ |
+|---|---|---|---|
+| pseudo L2 f0 (mejor época, ep 15) | 0.8880 | 0.8868 | -0.0012 |
+| gold | 0.9223 | 0.9167 | -0.0056 |
+| SWA f0 pseudo / gold | — | 0.8868 / 0.9170 | |
+
+- Δ pseudo -0.0012 < +0.003 (y < +0.002 → sin ronda 2, n = 1 semilla); gold 0.9167 ≥ veto 0.9023 → `didnt`.
+- Vs exp045 s42 solo (campo `delta` de metrics.json): pseudo -0.0031, gold -0.0034.
+- Coste de preprocesado: 375 ms/estudio (1 hilo). GPU-h 2.49.
+- Aprendizaje: Nyúl–Udupa v2 no mejora a exp045 en fold 0; no entra como padre de la Fase 2 (padre = exp045).
+
