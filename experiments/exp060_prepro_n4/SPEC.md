@@ -6,7 +6,7 @@
 | Padre | exp045_raptor_aug_espacial |
 | Fecha | 2026-10-13 |
 | Rama | exp060_prepro_n4 (desde exp045_raptor_aug_espacial 607644c, como los sub045_*) |
-| Estado | spec |
+| Estado | didnt (no corrido) |
 
 Idea: Fase 1 del estudio de preprocesado (aprobado por Rodrigo 2026-10-13): exp045 + corrección de campo de sesgo N4 por pila de slot. Origen: Tustison et al. 2010, IEEE TMI 29(6) (N4ITK).
 
@@ -68,4 +68,9 @@ a la vez que otro entrenamiento (solo afecta al tiempo); coste de inferencia en 
 
 ## 3. VERDICT (números de `results/exp060_prepro_n4/metrics.json`)
 
-Pendiente.
+**didnt (no corrido)** (orquestador, 13-oct 09:00 UTC). No hay `metrics.json`.
+
+- Decisión previa de Rodrigo (13-oct 04:20 UTC): N4 no se entrena; `orq/p7c_prepro/go_p3` = `cancel`. El worker de rsna-pre-b
+  registró `P3 not run (gate: cancel ; build_done=no)` a las 05:18 UTC y paró el pod. El corpus N4 no llegó a terminarse.
+- Coste de preprocesado medido en rsna-cron antes de cancelar: ≈ 27 s/estudio (1 hilo), ~140× CLAHE: inviable para la inferencia en Kaggle.
+- Ningún otro brazo de la Fase 1 fue `promising`, así que no hay razón para retomarlo.
