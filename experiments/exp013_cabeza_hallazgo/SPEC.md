@@ -6,7 +6,7 @@
 | Padre | exp002_dinov2s_ref |
 | Fecha | 2026-10-08 |
 | Rama | exp013_cabeza_hallazgo |
-| Estado | spec |
+| Estado | worked |
 
 Idea: cabeza con una query por hallazgo (12 queries) que atiende sobre las series, en lugar de un pooling único + MLP.
 
@@ -54,15 +54,19 @@ atención medio de cada hallazgo sobre cada serie, con plano y secuencia, para e
 
 ## 3. VERDICT (números de `results/exp013_cabeza_hallazgo/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen / 5 folds
+**Resultado:** worked · **Fase alcanzada:** 5 folds
 
 | Métrica | Padre | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | 0.827 | | |
-| gold AUC (fold 0 contra fold 0 del padre) | 0.777 | | |
-| OOF pseudo 5 folds | 0.802 | | |
-| GPU-h | | | |
+| pseudo AUC fold 0 | 0.827 | 0.838 | +0.011 |
+| gold AUC (fold 0 contra fold 0 del padre) | 0.777 | 0.789 (folds 1–4: 0.787; padre 5 folds 0.788) | +0.012 |
+| OOF pseudo 5 folds | 0.802 | 0.813 | +0.011 |
+| GPU-h | | 11.0 (1.73 fold 0 + 9.31 folds 1–4; reloj, GPU compartida) | |
 
-**Qué aprendimos (2-4 líneas):**
+**Qué aprendimos (2-4 líneas):** la cabeza con una query por hallazgo se confirma en 5 folds: OOF pseudo 0.813 (+0.011 sobre
+exp002), gold sin caída. Por fold: 0.838 / 0.823 / 0.807 / 0.777 / 0.817 (fold 3 es el más difícil, igual que en exp002). La
+atención por hallazgo es casi uniforme (entropía ~0.97): la ganancia viene de cabezas separadas por hallazgo, no de seleccionar
+series. Sobre la entrada v2 no suma (exp018); con 16 épocas sí (exp020, +0.012).
 
-**Siguiente paso sugerido:**
+**Siguiente paso sugerido:** válida como cabeza para v1; en la referencia v2 se mantiene la cabeza de exp012 salvo que un
+experimento v2 + 12 épocas muestre lo contrario. Para poda por hallazgo: atención que concentre sin colapsar (exp017/exp022).

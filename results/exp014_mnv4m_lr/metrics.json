@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "exp": "exp014_mnv4m_lr",
+  "author": "rodrigo",
+  "parent": "exp003",
+  "split": "split_v1_seed42",
+  "split_sha256": "9fac0679909efda4e52da6c92816442bcf79bffade391e567dc393c8a13e6a87",
+  "git": {
+    "commit": "890646c",
+    "branch": "exp014_mnv4m_lr",
+    "src_dirty": false
+  },
+  "timestamp_utc": "2026-10-08T16:55:34.465133+00:00",
+  "phase": "screen",
+  "select_on": "pseudo",
+  "params": {
+    "EXP": "exp014_mnv4m_lr",
+    "PADRE": "exp003",
+    "FOLDS": [
+      0
+    ],
+    "SEED": 42,
+    "SPLIT": "split_v1_seed42",
+    "SELECT_ON": "pseudo",
+    "SMOKE": false,
+    "LABELS_CSV": "/workspace/data/labels/report_labels_v1.csv",
+    "CACHE_INDEX": "/workspace/data/cache/v1_256/index.csv",
+    "TIMM_NAME": "mobilenetv4_conv_medium.e250_r384_in12k_ft_in1k",
+    "IMAGE_SIZE": 224,
+    "MAX_SERIES": 5,
+    "N_SLICES": 16,
+    "BATCH_SIZE": 2,
+    "GRAD_ACCUM": 4,
+    "EPOCHS": 8,
+    "FREEZE_EPOCHS": 1,
+    "LR": 0.0001,
+    "BACKBONE_LR": 0.0001,
+    "WEIGHT_DECAY": 0.01,
+    "WARMUP_RATIO": 0.1,
+    "GRAD_CLIP": 1.0,
+    "N_WORKERS": 8,
+    "NOTES": "referencia del equipo sobre split_v1",
+    "LABELS": [
+      "ACL",
+      "MCL",
+      "Medial Meniscus",
+      "Lateral Meniscus",
+      "Medial OA",
+      "Lateral OA",
+      "PF OA",
+      "Effusion",
+      "Synovitis",
+      "Baker's",
+      "Contusion",
+      "Fracture"
+    ],
+    "AUTHOR": "rodrigo"
+  },
+  "per_fold": {
+    "0": {
+      "pseudo_auc": 0.7373206337592725,
+      "gold_auc": 0.6334528198167626,
+      "best_epoch": 8,
+      "pseudo_per_label": {
+        "ACL": 0.7634062634062635,
+        "MCL": 0.7145498099255324,
+        "Medial Meniscus": 0.6816545316478313,
+        "Lateral Meniscus": 0.6712797134483881,
+        "Medial OA": 0.8134830890928453,
+        "Lateral OA": 0.7251969935749787,
+        "PF OA": 0.7464713748019017,
+        "Effusion": 0.8173638767382647,
+        "Synovitis": 0.8647163817383899,
+        "Baker's": 0.7209240054403264,
+        "Contusion": 0.6726120520797325,
+        "Fracture": 0.6561895132168135
+      },
+      "gold_per_label": {
+        "ACL": 0.5631127450980392,
+        "MCL": 0.48072562358276644,
+        "Medial Meniscus": 0.640625,
+        "Lateral Meniscus": 0.6055900621118013,
+        "Medial OA": 0.7255813953488373,
+        "Lateral OA": 0.827852998065764,
+        "PF OA": 0.5842985842985843,
+        "Effusion": 0.7975155279503104,
+        "Synovitis": 0.5824372759856631,
+        "Baker's": 0.6422101449275361,
+        "Contusion": 0.5681511470985156,
+        "Fracture": 0.5833333333333333
+      },
+      "gpu_hours": 1.0521666867865456,
+      "ckpt_path": "/workspace/users/rodrigo/wt_exp014/results/exp014_mnv4m_lr/best_f0.pt"
+    }
+  },
+  "gold_auc": 0.6334528198167626,
+  "gold_per_label": {
+    "ACL": 0.5631127450980392,
+    "MCL": 0.48072562358276644,
+    "Medial Meniscus": 0.640625,
+    "Lateral Meniscus": 0.6055900621118013,
+    "Medial OA": 0.7255813953488373,
+    "Lateral OA": 0.827852998065764,
+    "PF OA": 0.5842985842985843,
+    "Effusion": 0.7975155279503104,
+    "Synovitis": 0.5824372759856631,
+    "Baker's": 0.6422101449275361,
+    "Contusion": 0.5681511470985156,
+    "Fracture": 0.5833333333333333
+  },
+  "oof_pseudo_auc": null,
+  "delta": {
+    "pseudo_f0": -0.006020901239705112,
+    "gold": -0.0671272971644199
+  },
+  "decision_auto": "killed",
+  "cost": {
+    "params_m": 23.221084,
+    "gmacs_per_study": 66.40965888,
+    "ms_per_study": 23.282172717154026,
+    "device": "NVIDIA RTX PRO 4500 Blackwell"
+  },
+  "gpu_hours_total": 1.0521666867865456
+}
