@@ -6,7 +6,7 @@
 | Padre | exp045_raptor_aug_espacial (all-data: SWA [13,14,15], gold 0.9186, 2.81 GPU-h; LB 5 folds 0.941) |
 | Fecha | 2026-10-14 |
 | Rama | exp071_raptor_nartaa_init_aug |
-| Estado | spec |
+| Estado | run · all-data hecho, LB pendiente |
 
 Idea: V1 del plan de preentreno externo (`docs/pasos/plan_preentreno_externo.md` §3.2): receta exp045 (aug espacial)
 entrenada desde los pesos de nartaa (supervisión externa OAI/MOAKS) en vez de ImageNet, all-data.
@@ -76,17 +76,21 @@ el LB público tiene ruido ±0.004 y un solo envío; datos externos: vigilar reg
 - Smoke `SMOKE = True` (all-data, pocos estudios, 1 época) en `rsna-ext1`; luego `SMOKE = False` con `run_notebook.sh`, auto-stop.
 - Después (si la sanidad pasa): dataset privado con `swa_alldata.pt` + kernel solo (como los de exp045/exp056) → cola de envíos.
 
-## 3. VERDICT (números de `results/exp071_raptor_nartaa_init_aug/metrics.json`)
+## 3. VERDICT (números de `results/exp071_raptor_nartaa_init_aug/alldata/metrics.json` y LB)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen / 5 folds
+**Resultado:** pendiente del LB · **Fase alcanzada:** all-data entrenado (14-oct 14:43–16:13 UTC, pod rsna-ext1 RTX 5090), sanidad OK
 
-| Métrica | Padre | Este | Δ |
+Pesos: `/workspace/users/rodrigo/wt_exp071_raptor_nartaa_init_aug/results/exp071_raptor_nartaa_init_aug/swa_alldata.pt` (SWA épocas 13–15).
+
+| Métrica | Padre (exp045 all-data) | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | | | |
-| gold AUC (screen: fold 0 contra fold 0 del padre) | | | |
-| OOF pseudo 5 folds | | | |
-| GPU-h | | | |
+| LB público solo (decide) | 0.941 (5 folds) | pendiente | |
+| gold SWA all-data (sanidad, contaminada) | 0.9186 | 0.9173 | −0.0013 |
+| gold del init nartaa (sanidad) | — | 0.9191 | |
+| GPU-h | 2.81 (RTX PRO 4500) | 1.49 (RTX 5090) | |
 
-**Qué aprendimos (2-4 líneas):**
+Sanidad: gold 0.9173 ≥ 0.90 y ≥ 0.9191 − 0.02 → pasa; se puede construir el kernel solo (TTA espejo, K_EVAL 24) y enviarlo.
 
-**Siguiente paso sugerido:**
+**Qué aprendimos (2-4 líneas):** pendiente del LB.
+
+**Siguiente paso sugerido:** dataset privado con `swa_alldata.pt` + kernel solo como los de exp045/exp056 → cola de envíos; aplicar criterio.
