@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "exp": "exp010_dev_informes",
+  "parent": "exp001",
+  "author": "rodrigo",
+  "split": "split_v1_seed42",
+  "split_sha256": "9fac0679909efda4e52da6c92816442bcf79bffade391e567dc393c8a13e6a87",
+  "git": {
+    "commit": "e111fb9",
+    "branch": "exp010_dev_informes",
+    "src_dirty": false
+  },
+  "timestamp_utc": "2026-10-08T15:57:04.104926+00:00",
+  "phase": "annotation",
+  "status": "pending",
+  "n_sampled": 200,
+  "n_studies": 0,
+  "languages": {
+    "bg_ru": 10,
+    "de": 13,
+    "el": 12,
+    "en": 75,
+    "es": 31,
+    "fr": 10,
+    "hr": 15,
+    "nl": 10,
+    "pl": 1,
+    "tr": 23
+  },
+  "positives_per_label": {
+    "ACL": null,
+    "MCL": null,
+    "Medial Meniscus": null,
+    "Lateral Meniscus": null,
+    "Medial OA": null,
+    "Lateral OA": null,
+    "PF OA": null,
+    "Effusion": null,
+    "Synovitis": null,
+    "Baker's": null,
+    "Contusion": null,
+    "Fracture": null
+  },
+  "kappa": {
+    "four_categories": {},
+    "present_vs_rest": {},
+    "macro_four_categories": null,
+    "macro_present_vs_rest": null
+  },
+  "translation": {
+    "model": "gpt-5.4-mini",
+    "n_cached": 200,
+    "input_tokens": 73808,
+    "output_tokens": 50034,
+    "estimated_cost_usd": 0.280509,
+    "pricing_source": "https://developers.openai.com/api/docs/models/gpt-5.4-mini"
+  },
+  "model": "gpt-5.4-mini"
+}

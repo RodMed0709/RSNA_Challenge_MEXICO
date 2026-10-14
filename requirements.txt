@@ -17,3 +17,5 @@ matplotlib
 iterative-stratification
 nbstripout
 pyyaml
+openai>=2.52,<3
+openpyxl>=3.1
