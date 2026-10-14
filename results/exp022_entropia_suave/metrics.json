@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "exp": "exp022_entropia_suave",
+  "author": "rodrigo",
+  "parent": "exp013",
+  "split": "split_v1_seed42",
+  "split_sha256": "9fac0679909efda4e52da6c92816442bcf79bffade391e567dc393c8a13e6a87",
+  "git": {
+    "commit": "2eda670",
+    "branch": "exp022_entropia_suave",
+    "src_dirty": false
+  },
+  "timestamp_utc": "2026-10-09T01:42:02.346308+00:00",
+  "phase": "screen",
+  "select_on": "pseudo",
+  "params": {
+    "EXP": "exp022_entropia_suave",
+    "PADRE": "exp013",
+    "FOLDS": [
+      0
+    ],
+    "SEED": 42,
+    "SPLIT": "split_v1_seed42",
+    "SELECT_ON": "pseudo",
+    "SMOKE": false,
+    "LABELS_CSV": "/workspace/data/labels/report_labels_v1.csv",
+    "CACHE_INDEX": "/workspace/data/cache/v1_256/index.csv",
+    "BACKBONE_PATH": "/workspace/models/dinov2-small",
+    "IMAGE_SIZE": 224,
+    "MAX_SERIES": 5,
+    "N_SLICES": 16,
+    "BATCH_SIZE": 2,
+    "GRAD_ACCUM": 4,
+    "EPOCHS": 8,
+    "FREEZE_EPOCHS": 1,
+    "LR": 0.0001,
+    "BACKBONE_LR": 1e-05,
+    "WEIGHT_DECAY": 0.01,
+    "WARMUP_RATIO": 0.1,
+    "GRAD_CLIP": 1.0,
+    "ENT_LAMBDA": 0.005,
+    "N_WORKERS": 8,
+    "NOTES": "exp013 + entropia lambda 0.005",
+    "LABELS": [
+      "ACL",
+      "MCL",
+      "Medial Meniscus",
+      "Lateral Meniscus",
+      "Medial OA",
+      "Lateral OA",
+      "PF OA",
+      "Effusion",
+      "Synovitis",
+      "Baker's",
+      "Contusion",
+      "Fracture"
+    ],
+    "AUTHOR": "rodrigo"
+  },
+  "per_fold": {
+    "0": {
+      "pseudo_auc": 0.8353712128491159,
+      "gold_auc": 0.7998616289077476,
+      "best_epoch": 8,
+      "pseudo_per_label": {
+        "ACL": 0.8283640783640783,
+        "MCL": 0.7984169140238504,
+        "Medial Meniscus": 0.7808370929557332,
+        "Lateral Meniscus": 0.7171977485230497,
+        "Medial OA": 0.8909791592718421,
+        "Lateral OA": 0.8012850042429385,
+        "PF OA": 0.8036722464342314,
+        "Effusion": 0.8868087745642097,
+        "Synovitis": 0.9105095958603524,
+        "Baker's": 0.8341975518531112,
+        "Contusion": 0.8947344164074202,
+        "Fracture": 0.8774519716885743
+      },
+      "gold_per_label": {
+        "ACL": 0.7279411764705883,
+        "MCL": 0.6757369614512472,
+        "Medial Meniscus": 0.7235576923076923,
+        "Lateral Meniscus": 0.7714285714285714,
+        "Medial OA": 0.9348837209302325,
+        "Lateral OA": 0.816247582205029,
+        "PF OA": 0.7696267696267697,
+        "Effusion": 0.8757763975155279,
+        "Synovitis": 0.6427718040621266,
+        "Baker's": 0.9166666666666666,
+        "Contusion": 0.8825910931174089,
+        "Fracture": 0.8611111111111112
+      },
+      "gpu_hours": 2.910320551527871,
+      "ckpt_path": "/workspace/users/rodrigo/wt_exp022/results/exp022_entropia_suave/best_f0.pt",
+      "attention": {
+        "val": {
+          "n_studies": 871,
+          "plane_mass": {
+            "ACL": {
+              "sagittal": 0.26142361760139465,
+              "coronal": 0.4552847743034363,
+              "axial": 0.2832915782928467
+            },
+            "MCL": {
+              "sagittal": 0.19233886897563934,
+              "coronal": 0.5065650939941406,
+              "axial": 0.30109620094299316
+            },
+            "Medial Meniscus": {
+              "sagittal": 0.40414488315582275,
+              "coronal": 0.3590034246444702,
+              "axial": 0.23685167729854584
+            },
+            "Lateral Meniscus": {
+              "sagittal": 0.2467406839132309,
+              "coronal": 0.448212206363678,
+              "axial": 0.30504706501960754
+            },
+            "Medial OA": {
+              "sagittal": 0.44562286138534546,
+              "coronal": 0.33801475167274475,
+              "axial": 0.2163631170988083
+            },
+            "Lateral OA": {
+              "sagittal": 0.34621578454971313,
+              "coronal": 0.37724828720092773,
+              "axial": 0.27653566002845764
+            },
+            "PF OA": {
+              "sagittal": 0.44223329424858093,
+              "coronal": 0.31244730949401855,
+              "axial": 0.24531912803649902
+            },
+            "Effusion": {
+              "sagittal": 0.3068203628063202,
+              "coronal": 0.3730488121509552,
+              "axial": 0.32013067603111267
+            },
+            "Synovitis": {
+              "sagittal": 0.1763329803943634,
+              "coronal": 0.5602484345436096,
+              "axial": 0.2634187936782837
+            },
+            "Baker's": {
+              "sagittal": 0.2289750725030899,
+              "coronal": 0.496695876121521,
+              "axial": 0.2743287980556488
+            },
+            "Contusion": {
+              "sagittal": 0.29613834619522095,
+              "coronal": 0.4379408061504364,
+              "axial": 0.2659207284450531
+            },
+            "Fracture": {
+              "sagittal": 0.27714747190475464,
+              "coronal": 0.46316733956336975,
+              "axial": 0.2596854865550995
+            }
+          },
+          "entropy": {
+            "ACL": 1.4872865676879883,
+            "MCL": 1.4097161293029785,
+            "Medial Meniscus": 1.5574877262115479,
+            "Lateral Meniscus": 1.4888994693756104,
+            "Medial OA": 1.5746402740478516,
+            "Lateral OA": 1.5489907264709473,
+            "PF OA": 1.5751858949661255,
+            "Effusion": 1.5269525051116943,
+            "Synovitis": 1.3831875324249268,
+            "Baker's": 1.4286845922470093,
+            "Contusion": 1.5040003061294556,
+            "Fracture": 1.4694609642028809
+          },
+          "entropy_norm": {
+            "ACL": 0.9433791577742925,
+            "MCL": 0.8941743723589721,
+            "Medial Meniscus": 0.9878943123415536,
+            "Lateral Meniscus": 0.9442515604285903,
+            "Medial OA": 0.998773092557098,
+            "Lateral OA": 0.982482301566683,
+            "PF OA": 0.9991196960519165,
+            "Effusion": 0.968402949530938,
+            "Synovitis": 0.8769833748418265,
+            "Baker's": 0.9059762777582872,
+            "Contusion": 0.9538778795305146,
+            "Fracture": 0.931984262806557
+          },
+          "mean_pairwise_cosine": 0.9347243309020996
+        },
+        "gold": {
+          "n_studies": 58,
+          "plane_mass": {
+            "ACL": {
+              "sagittal": 0.258905291557312,
+              "coronal": 0.4496860206127167,
+              "axial": 0.2914086580276489
+            },
+            "MCL": {
+              "sagittal": 0.18710649013519287,
+              "coronal": 0.496410608291626,
+              "axial": 0.31648287177085876
+            },
+            "Medial Meniscus": {
+              "sagittal": 0.4043053388595581,
+              "coronal": 0.3550291955471039,
+              "axial": 0.24066543579101562
+            },
+            "Lateral Meniscus": {
+              "sagittal": 0.24290166795253754,
+              "coronal": 0.44264328479766846,
+              "axial": 0.31445494294166565
+            },
+            "Medial OA": {
+              "sagittal": 0.45264485478401184,
+              "coronal": 0.33681368827819824,
+              "axial": 0.2105415314435959
+            },
+            "Lateral OA": {
+              "sagittal": 0.343686044216156,
+              "coronal": 0.37477830052375793,
+              "axial": 0.2815357446670532
+            },
+            "PF OA": {
+              "sagittal": 0.44386258721351624,
+              "coronal": 0.31112417578697205,
+              "axial": 0.24501323699951172
+            },
+            "Effusion": {
+              "sagittal": 0.3006911873817444,
+              "coronal": 0.36521968245506287,
+              "axial": 0.33408910036087036
+            },
+            "Synovitis": {
+              "sagittal": 0.17923198640346527,
+              "coronal": 0.5555643439292908,
+              "axial": 0.26520368456840515
+            },
+            "Baker's": {
+              "sagittal": 0.23470446467399597,
+              "coronal": 0.493976354598999,
+              "axial": 0.271319180727005
+            },
+            "Contusion": {
+              "sagittal": 0.29934197664260864,
+              "coronal": 0.4338090121746063,
+              "axial": 0.26684892177581787
+            },
+            "Fracture": {
+              "sagittal": 0.28133198618888855,
+              "coronal": 0.4584159255027771,
+              "axial": 0.2602521479129791
+            }
+          },
+          "entropy": {
+            "ACL": 1.4849779605865479,
+            "MCL": 1.4002896547317505,
+            "Medial Meniscus": 1.560580849647522,
+            "Lateral Meniscus": 1.4822056293487549,
+            "Medial OA": 1.5758154392242432,
+            "Lateral OA": 1.5488442182540894,
+            "PF OA": 1.5772489309310913,
+            "Effusion": 1.518041729927063,
+            "Synovitis": 1.386462688446045,
+            "Baker's": 1.4369852542877197,
+            "Contusion": 1.5078059434890747,
+            "Fracture": 1.4759303331375122
+          },
+          "entropy_norm": {
+            "ACL": 0.9406407661757371,
+            "MCL": 0.8869089452694807,
+            "Medial Meniscus": 0.9885624242248585,
+            "Lateral Meniscus": 0.938744104324966,
+            "Medial OA": 0.9981811461627323,
+            "Lateral OA": 0.9810747558035094,
+            "PF OA": 0.9991005852362392,
+            "Effusion": 0.9613741983502738,
+            "Synovitis": 0.8780438603282341,
+            "Baker's": 0.9101431903630143,
+            "Contusion": 0.9550596229627563,
+            "Fracture": 0.9348628093969629
+          },
+          "mean_pairwise_cosine": 0.9351726770401001
+        }
+      }
+    }
+  },
+  "gold_auc": 0.7998616289077476,
+  "gold_per_label": {
+    "ACL": 0.7279411764705883,
+    "MCL": 0.6757369614512472,
+    "Medial Meniscus": 0.7235576923076923,
+    "Lateral Meniscus": 0.7714285714285714,
+    "Medial OA": 0.9348837209302325,
+    "Lateral OA": 0.816247582205029,
+    "PF OA": 0.7696267696267697,
+    "Effusion": 0.8757763975155279,
+    "Synovitis": 0.6427718040621266,
+    "Baker's": 0.9166666666666666,
+    "Contusion": 0.8825910931174089,
+    "Fracture": 0.8611111111111112
+  },
+  "oof_pseudo_auc": null,
+  "delta": {
+    "pseudo_f0": -0.0028983156645723263,
+    "gold": 0.01116962478919803
+  },
+  "decision_auto": "neutral",
+  "gpu_hours_total": 2.910320551527871
+}
