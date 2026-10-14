@@ -50,6 +50,8 @@ volteo arriba-abajo (convención de fastMRI+, `ExampleScripts/example.ipynb`), p
 a partir del volumen ~800; quedaron **799 volúmenes** (664 con cajas, 135 revisados sin hallazgos; faltan 321 de
 `fastmri-train-knee-2` y 51 de `fastmri-knee-val`). Se corre con lo que haya a las 16:00 UTC (reintentos lentos hasta entonces);
 los criterios no cambian. Si funciona, completar la tienda antes de 5 folds.
+A las 16:00 UTC los reintentos dejaron **995 volúmenes** (train 784 con cajas + 162 negativos, holdout 49; 13,783 cajas): con eso corre exp072.
+El primer smoke murió por OOM al compartir GPU con exp071 (no es error del código); se repite cuando exp071 termina.
 
 **Efecto esperado:** Δ pseudo fold 0 +0.000 a +0.006 (prior baja-media: con 4.4k estudios la supervisión externa suele aportar
 poco; R7 lo usa pero su ganancia aislada no está medida). Coste ≈ ×1.4–1.5 por época.
