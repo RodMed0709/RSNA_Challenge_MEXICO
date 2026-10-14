@@ -1,0 +1,155 @@
+{
+ "exp": "exp025_perfil_raptor",
+ "notebook": "nartaa/rsna-knee-0949-anatomical-mirror",
+ "weights": "raptor_ft_alldata_t16_blendjev_oai_d96_r384_swa.pt (sha256 7e5315da...)",
+ "pod": "rsna-d RTX PRO 4500 Blackwell, 112 vCPU, MooseFS volume",
+ "n_studies": 50,
+ "n_gold": 25,
+ "split": "split_v1_seed42",
+ "serial_ms_mean": {
+  "lut_112thr": {
+   "list": 8.8,
+   "hdr_read": 56.9,
+   "select": 1.0,
+   "px_read": 181.3,
+   "decode": 63.2,
+   "pct_norm": 40.3,
+   "crop_resize": 61.5,
+   "windows": 20.3,
+   "fwd_plain": 195.9,
+   "fwd_mirror": 200.6,
+   "total": 829.7,
+   "read_decode_norm_share": 0.4236
+  },
+  "v2_112thr": {
+   "list": 12.7,
+   "hdr_read": 267.6,
+   "select": 1.2,
+   "px_read": 173.5,
+   "decode": 149.3,
+   "pct_norm": 332.8,
+   "crop_resize": 56.2,
+   "windows": 20.3,
+   "fwd_plain": 195.9,
+   "fwd_mirror": 200.6,
+   "total": 1410.1,
+   "read_decode_norm_share": 0.6646
+  },
+  "lut_4thr": {
+   "list": 7.2,
+   "hdr_read": 54.2,
+   "select": 0.5,
+   "px_read": 179.4,
+   "decode": 53.9,
+   "pct_norm": 31.8,
+   "crop_resize": 49.0,
+   "windows": 19.2,
+   "fwd_plain": 196.2,
+   "fwd_mirror": 200.9,
+   "total": 792.1,
+   "read_decode_norm_share": 0.4127
+  },
+  "v2_4thr": {
+   "list": 11.5,
+   "hdr_read": 169.6,
+   "select": 0.7,
+   "px_read": 168.4,
+   "decode": 102.4,
+   "pct_norm": 328.6,
+   "crop_resize": 43.9,
+   "windows": 19.2,
+   "fwd_plain": 196.2,
+   "fwd_mirror": 200.9,
+   "total": 1241.3,
+   "read_decode_norm_share": 0.6293
+  }
+ },
+ "identical_112thr": {
+  "lut": [
+   true,
+   true,
+   true
+  ],
+  "v2": [
+   true,
+   true,
+   true
+  ]
+ },
+ "io_per_study": {
+  "files_hdr": 150.86,
+  "picks_unique": 89.16,
+  "MB_read": 58.8
+ },
+ "identical_4thr": {
+  "lut": [
+   true,
+   true,
+   true
+  ],
+  "v2": [
+   true,
+   true,
+   true
+  ]
+ },
+ "sanity": {
+  "gold_n": 25,
+  "gold_macro_auc": 0.9289436543848307,
+  "gold_per_label": {
+   "ACL": 0.9533333333333334,
+   "MCL": 0.9600000000000001,
+   "Medial Meniscus": 1.0,
+   "Lateral Meniscus": 0.8472222222222222,
+   "Medial OA": 0.98,
+   "Lateral OA": 0.9285714285714286,
+   "PF OA": 0.72,
+   "Effusion": 0.9705882352941176,
+   "Synovitis": 0.8974358974358975,
+   "Baker's": 0.9841269841269841,
+   "Contusion": 0.9722222222222222,
+   "Fracture": 0.9338235294117647
+  },
+  "l2_n": 50,
+  "l2_macro_auc": 0.9309503591608105
+ },
+ "pool_112": {
+  "mode": "pool",
+  "procs": 96,
+  "n": 50,
+  "affinity": 112,
+  "wall": 31.481715534813702,
+  "s_per_study": 0.6296343106962741,
+  "affinity_cpus": 112,
+  "elapsed": 40.242199182510376
+ },
+ "pool_4": {
+  "mode": "pool",
+  "procs": 4,
+  "n": 50,
+  "affinity": 4,
+  "wall": 15.13272025808692,
+  "s_per_study": 0.3026544051617384,
+  "affinity_cpus": 4,
+  "elapsed": 23.149660348892212
+ },
+ "gpubench": {
+  "mode": "gpubench",
+  "n": 5,
+  "gpu": "NVIDIA RTX PRO 4500 Blackwell",
+  "gflop_per_pass_94win": 5978.971951104,
+  "s_per_study": {
+   "tta2_chunk16": 0.4022495798456172,
+   "tta2_chunk32": 0.416654153354466,
+   "tta2_chunk47": 0.4315446644400557,
+   "tta2_chunk94": 0.4490670325855414,
+   "tta_batched_chunk16": 0.4045105434022844,
+   "tta_batched_chunk47": 0.4318998879442612,
+   "notta_chunk16": 0.20350152427951496,
+   "tta2_chunk16_channels_last": 0.3535655034705997,
+   "tta2_chunk47_channels_last": 0.37559086553131543
+  },
+  "affinity_cpus": 112,
+  "elapsed": 150.5212802886963
+ }
+}
