@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "exp": "exp016_entrada_25d",
+  "author": "rodrigo",
+  "parent": "exp002",
+  "split": "split_v1_seed42",
+  "split_sha256": "9fac0679909efda4e52da6c92816442bcf79bffade391e567dc393c8a13e6a87",
+  "git": {
+    "commit": "bd205fd",
+    "branch": "exp016_entrada_25d",
+    "src_dirty": false
+  },
+  "timestamp_utc": "2026-10-08T18:43:52.096367+00:00",
+  "phase": "screen",
+  "select_on": "pseudo",
+  "params": {
+    "EXP": "exp016_entrada_25d",
+    "PADRE": "exp002",
+    "FOLDS": [
+      0
+    ],
+    "SEED": 42,
+    "SPLIT": "split_v1_seed42",
+    "SELECT_ON": "pseudo",
+    "SMOKE": false,
+    "LABELS_CSV": "/workspace/data/labels/report_labels_v1.csv",
+    "CACHE_INDEX": "/workspace/data/cache/v1_256/index.csv",
+    "BACKBONE_PATH": "/workspace/models/dinov2-small",
+    "IMAGE_SIZE": 224,
+    "MAX_SERIES": 5,
+    "N_SLICES": 16,
+    "BATCH_SIZE": 2,
+    "GRAD_ACCUM": 4,
+    "EPOCHS": 8,
+    "FREEZE_EPOCHS": 1,
+    "LR": 0.0001,
+    "BACKBONE_LR": 1e-05,
+    "WEIGHT_DECAY": 0.01,
+    "WARMUP_RATIO": 0.1,
+    "GRAD_CLIP": 1.0,
+    "N_WORKERS": 8,
+    "NOTES": "referencia del equipo sobre split_v1",
+    "LABELS": [
+      "ACL",
+      "MCL",
+      "Medial Meniscus",
+      "Lateral Meniscus",
+      "Medial OA",
+      "Lateral OA",
+      "PF OA",
+      "Effusion",
+      "Synovitis",
+      "Baker's",
+      "Contusion",
+      "Fracture"
+    ],
+    "AUTHOR": "rodrigo"
+  },
+  "per_fold": {
+    "0": {
+      "pseudo_auc": 0.8237962346443108,
+      "gold_auc": 0.7775996787318985,
+      "best_epoch": 8,
+      "pseudo_per_label": {
+        "ACL": 0.8097978931312264,
+        "MCL": 0.7894599802114253,
+        "Medial Meniscus": 0.7648769375083754,
+        "Lateral Meniscus": 0.7094152672465925,
+        "Medial OA": 0.8755489072562244,
+        "Lateral OA": 0.7982361498363437,
+        "PF OA": 0.8028489005546752,
+        "Effusion": 0.890917771104002,
+        "Synovitis": 0.9022974389205476,
+        "Baker's": 0.8470248214892894,
+        "Contusion": 0.8608825901601568,
+        "Fracture": 0.8342481583128701
+      },
+      "gold_per_label": {
+        "ACL": 0.678921568627451,
+        "MCL": 0.68140589569161,
+        "Medial Meniscus": 0.7127403846153846,
+        "Lateral Meniscus": 0.7416149068322981,
+        "Medial OA": 0.9147286821705426,
+        "Lateral OA": 0.7872340425531915,
+        "PF OA": 0.7387387387387387,
+        "Effusion": 0.9012422360248447,
+        "Synovitis": 0.6475507765830346,
+        "Baker's": 0.8858695652173912,
+        "Contusion": 0.8272604588394062,
+        "Fracture": 0.8138888888888889
+      },
+      "gpu_hours": 1.6936889090802933,
+      "ckpt_path": "/workspace/users/rodrigo/wt_exp016/results/exp016_entrada_25d/best_f0.pt"
+    }
+  },
+  "gold_auc": 0.7775996787318985,
+  "gold_per_label": {
+    "ACL": 0.678921568627451,
+    "MCL": 0.68140589569161,
+    "Medial Meniscus": 0.7127403846153846,
+    "Lateral Meniscus": 0.7416149068322981,
+    "Medial OA": 0.9147286821705426,
+    "Lateral OA": 0.7872340425531915,
+    "PF OA": 0.7387387387387387,
+    "Effusion": 0.9012422360248447,
+    "Synovitis": 0.6475507765830346,
+    "Baker's": 0.8858695652173912,
+    "Contusion": 0.8272604588394062,
+    "Fracture": 0.8138888888888889
+  },
+  "oof_pseudo_auc": null,
+  "delta": {
+    "pseudo_f0": -0.0027989611825719463,
+    "gold": 0.0011140424299560525
+  },
+  "decision_auto": "neutral",
+  "gpu_hours_total": 1.6936889090802933
+}
