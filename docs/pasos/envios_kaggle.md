@@ -17,6 +17,8 @@ sesión); aquí solo los números. Kernels privados, sin internet, GPU T4.
 | 2026-10-12 | 57089954 | ens-blendmine-exp030 v1 | exp038: blend-mine (Raptor nartaa + compact S6) + exp030 all-data, rank por hallazgo 0.35/0.30/0.35 (fijos) | 0.950 | — | 198.6 s (Raptor 42 s, exp030 28 s, compact 95 s; score en ~3 h 58 min) |
 | 2026-10-12 | 57091516 | exp031-raptor-alldata v1 | exp031 all-data (etiquetas consenso, SWA épocas 13/14/15) + TTA espejo, inferencia nartaa 0949 | 0.939 | — | 64.6 s (script 25 s; score en ~28 min) |
 | 2026-10-12 | 57092253 | ens-blendmine-exp031 v1 | exp038: blend-mine + exp031 all-data, rank por hallazgo 0.35/0.30/0.35 (fijos) | 0.952 | — | 209.1 s (Raptor 49 s, exp031 27 s, compact 100 s; score en ~3 h 50 min) |
+| 2026-10-15 (cola) | pendiente | r7-raptor-repro v1 | Paso 8 a): copia privada tal cual de `heliosli/0-957-latest-dataset-score-in-one-click` (compact R7 `heliosli/rsna-knee-compact-r7cnxfsss` + Raptor nartaa 384, rank 0.5/0.5). Evidencia: LB público 0.957 del notebook. Nueva base | pendiente | — | 432 s (Raptor 54 s); salida = pública en los 3 estudios visibles |
+| 2026-10-15 (cola) | pendiente | r7-raptor-r224flip v1 | Paso 8 b): copia privada tal cual de `varshithakolupuri/rsna-0-956-one-free-flip-68-ranks-up` (R7 0.5 + Raptor = 0.65 nartaa 384 + 0.35 nartaa 224 crop plano+espejo). Evidencia: LB público 0.956 del notebook. Pregunta: ¿el 224 espejado suma sobre a)? | pendiente | — | 492 s (Raptor 55 s, 224 28 s); salida = pública en los 3 estudios visibles |
 
 ## Lectura
 

@@ -11,7 +11,7 @@ contra nuestro código y nuestros resultados, con **implementaciones concretas**
    en GPU por estudio/slot, parámetros de los papers y criterio sugerido.
 3. Antes de diseñar, lee **`07_errores_y_lecciones.md`** (SWA sin BN, exp052 nulo por construcción, mixup entre planos,
    afín p=1, padre s42 bajo, registro roto, interno vs LB).
-4. Citas: claves de **`referencias.bib`** (59 entradas de A1 + 20 nuevas = 79). La sección 1 de cada SPEC nueva debería citar una clave o decir "inferencia".
+4. Citas: claves de **`referencias.bib`** (59 entradas de A1 + 20 nuevas = 79; +19 de `09_preprocesado.md` = 98). La sección 1 de cada SPEC nueva debería citar una clave o decir "inferencia".
 5. Las reglas del repo siguen mandando (`CLAUDE.md`, `docs/06_SDD.md`): esta carpeta propone, no decide. Los números de
    experimentos se copian de `metrics.json`/verdicts, no de aquí si difieren.
 
@@ -27,6 +27,7 @@ contra nuestro código y nuestros resultados, con **implementaciones concretas**
 | `06_paper_y_novedad.md` | Venue (JIIM), título, C1–C3, huecos, R1–R10, figuras |
 | `07_errores_y_lecciones.md` | 14 errores con su regla |
 | `08_backlog_priorizado.md` | **Tabla única de 60 ideas** con id, cita, tema, ganancia razonada, GPU-h, riesgo, a qué sirve, prioridad, estado |
+| `09_preprocesado.md` | **Preprocesado de RM más allá de CLAHE**: pipeline actual verificado, 10 candidatos rankeados (recorte centrado en rodilla, escala física sin ampliar, Nyúl por slot, z-score foreground, muestreo en mm, orientación), veredicto CLAHE/Nyúl/N4 con tiempos de CPU medidos, diagnósticos D-1..D-5 |
 | `referencias.bib` | BibTeX |
 
 ## De dónde sale cada cosa
