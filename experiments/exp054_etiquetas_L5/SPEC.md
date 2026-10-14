@@ -146,3 +146,25 @@ de etiquetas (consenso de 5 fuentes con L5) entra en el combo **exp056** (exp045
 entrenado en 5 folds, que sustituye al all-data de cada experimento (saldo justo). La rama `exp054_etiquetas_L5` es la
 referencia del cambio de etiquetas (celdas 0 y 2 del notebook; CSV `/workspace/data/labels/ours/L5_20261011.csv`).
 El lanzador `run054_alldata.sh` del volumen queda sin usar. Ideas para después: L5 con k = 5 u otro modelo barato (sub054_k).
+
+### Confirm 5 folds (paso 7b, 2026-10-12 16:19–23:55 UTC, rsna-l/rsna-m; números de `metrics.json` bloque `confirm`)
+
+Misma receta y semilla que fold 0 (b846ed0), un worktree por fold (`wt_exp054_fK`). Criterio fijado antes de correr:
+**informativo** (exp054 sigue `worked` por el screen de fold 0); referencia exp045 OOF 5 folds 0.8844, gold ens 0.9244.
+
+| Fold | pseudo L2 SWA | pseudo L2 mejor época (ép) | gold SWA (solo reporte) | GPU-h |
+|---|---|---|---|---|
+| 0 | 0.8895 | 0.8896 (15) | 0.9177 | 2.50 |
+| 1 | 0.8843 | 0.8840 (12) | 0.9109 | 2.50 |
+| 2 | 0.8827 | 0.8827 (12) | 0.9164 | 2.51 |
+| 3 | 0.8856 | 0.8850 (12) | 0.9111 | 2.50 |
+| 4 | 0.8834 | 0.8836 (13) | 0.9149 | 2.49 |
+
+- **OOF pseudo L2 5 folds 0.8843** (rank por fold 0.8848; v1 0.8311; n 4348). exp045: 0.8844 → empate (Δ −0.0001).
+- Gold ensamble 5 folds 0.9237 (rank 0.9236; media de 1 fold 0.9142). exp045: 0.9244. Sin veto.
+- GPU-h total 12.51.
+
+**Qué aprendimos (confirm):** la ganancia de fold 0 (+0.006 vs exp031) no se separa de exp045 en OOF: las dos
+palancas que funcionaron en fold 0 (aug espacial, etiquetas L5) quedan iguales a 5 folds (0.8844 vs 0.8843), igual que
+el combo exp056 no sumó en fold 0. Para el LB, exp054 5f aporta sobre todo diversidad de etiquetas frente a exp045 5f
+(ensamble `ens-exp045-5f-054-5f-w15`).

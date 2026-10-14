@@ -11,7 +11,7 @@
     "src_dirty": false
   },
   "timestamp_utc": "2026-10-12T09:04:10.745307+00:00",
-  "phase": "screen",
+  "phase": "confirm",
   "select_on": "pseudo_L2_bin>0.5",
   "params": {
     "EXP": "exp054_etiquetas_L5",
@@ -50,7 +50,7 @@
     "GRAD_CKPT": true,
     "N_WORKERS": 12,
     "LOG_EVERY": 50,
-    "NOTES": "exp031 + L5 (gpt-4.1-mini, 3 prompts promediados, informes de train) como 5.ª fuente del promedio por celda; selección pseudo L2",
+    "NOTES": "exp031 + L5 (gpt-4.1-mini, 3 prompts promediados, informes de train) como 5.\u00aa fuente del promedio por celda; selecci\u00f3n pseudo L2",
     "LABELS": [
       "ACL",
       "MCL",
@@ -325,7 +325,7 @@
     "Contusion": 0.932523616734143,
     "Fracture": 0.9069444444444444
   },
-  "oof_pseudo_auc": null,
+  "oof_pseudo_auc": 0.8843329146631612,
   "swa_f0": {
     "epochs": [
       15,
@@ -377,5 +377,109 @@
     "build_seconds": 1316.7135531902313,
     "n_errors": 0
   },
-  "gpu_hours_total": 2.499710799455643
+  "gpu_hours_total": 2.499710799455643,
+  "confirm": {
+    "oof_pseudo_L2": 0.8843329146631612,
+    "oof_v1": 0.8311111458276864,
+    "oof_n": 4348,
+    "oof_pseudo_L2_rank_per_fold": 0.8847659746859016,
+    "gold_ens5_mean_prob": 0.9236867794011051,
+    "gold_ens5_mean_rank": 0.9235724746908388,
+    "gold_mean_single": 0.9141955806992363,
+    "per_fold": {
+      "0": {
+        "pseudo_swa": 0.8894521552666924,
+        "n_val": 871,
+        "gold_swa": 0.9176923963259701,
+        "pseudo_best": 0.8895983012563851,
+        "best_epoch": 15,
+        "swa_epochs": [
+          15,
+          14,
+          13
+        ],
+        "gpu_hours": 2.499710799455643
+      },
+      "1": {
+        "pseudo_swa": 0.8843174371999701,
+        "n_val": 869,
+        "gold_swa": 0.910942247480521,
+        "pseudo_best": 0.8840034334217927,
+        "best_epoch": 12,
+        "swa_epochs": [
+          12,
+          15,
+          14
+        ],
+        "gpu_hours": 2.504184664885203
+      },
+      "2": {
+        "pseudo_swa": 0.882719085732317,
+        "n_val": 865,
+        "gold_swa": 0.9164078684283483,
+        "pseudo_best": 0.8826909038844941,
+        "best_epoch": 12,
+        "swa_epochs": [
+          12,
+          14,
+          13
+        ],
+        "gpu_hours": 2.5085582400692834
+      },
+      "3": {
+        "pseudo_swa": 0.8855926421326495,
+        "n_val": 877,
+        "gold_swa": 0.9110800837224526,
+        "pseudo_best": 0.8850458810871028,
+        "best_epoch": 12,
+        "swa_epochs": [
+          12,
+          13,
+          14
+        ],
+        "gpu_hours": 2.5024520548184714
+      },
+      "4": {
+        "pseudo_swa": 0.8833770956379093,
+        "n_val": 866,
+        "gold_swa": 0.9148553075388904,
+        "pseudo_best": 0.8835861109846089,
+        "best_epoch": 13,
+        "swa_epochs": [
+          13,
+          15,
+          14
+        ],
+        "gpu_hours": 2.4941677784257466
+      }
+    },
+    "paths": {
+      "0": {
+        "swa": "/workspace/users/rodrigo/wt_exp054_etiquetas_L5/results/exp054_etiquetas_L5/swa_f0.pt",
+        "oof": "/workspace/users/rodrigo/wt_exp054_etiquetas_L5/results/exp054_etiquetas_L5/oof_swa_f0.csv",
+        "gold": "/workspace/users/rodrigo/wt_exp054_etiquetas_L5/results/exp054_etiquetas_L5/gold_swa_f0.csv"
+      },
+      "1": {
+        "swa": "/workspace/users/rodrigo/wt_exp054_f1/results/exp054_etiquetas_L5/swa_f1.pt",
+        "oof": "/workspace/users/rodrigo/wt_exp054_f1/results/exp054_etiquetas_L5/oof_swa_f1.csv",
+        "gold": "/workspace/users/rodrigo/wt_exp054_f1/results/exp054_etiquetas_L5/gold_swa_f1.csv"
+      },
+      "2": {
+        "swa": "/workspace/users/rodrigo/wt_exp054_f2/results/exp054_etiquetas_L5/swa_f2.pt",
+        "oof": "/workspace/users/rodrigo/wt_exp054_f2/results/exp054_etiquetas_L5/oof_swa_f2.csv",
+        "gold": "/workspace/users/rodrigo/wt_exp054_f2/results/exp054_etiquetas_L5/gold_swa_f2.csv"
+      },
+      "3": {
+        "swa": "/workspace/users/rodrigo/wt_exp054_f3/results/exp054_etiquetas_L5/swa_f3.pt",
+        "oof": "/workspace/users/rodrigo/wt_exp054_f3/results/exp054_etiquetas_L5/oof_swa_f3.csv",
+        "gold": "/workspace/users/rodrigo/wt_exp054_f3/results/exp054_etiquetas_L5/gold_swa_f3.csv"
+      },
+      "4": {
+        "swa": "/workspace/users/rodrigo/wt_exp054_f4/results/exp054_etiquetas_L5/swa_f4.pt",
+        "oof": "/workspace/users/rodrigo/wt_exp054_f4/results/exp054_etiquetas_L5/oof_swa_f4.csv",
+        "gold": "/workspace/users/rodrigo/wt_exp054_f4/results/exp054_etiquetas_L5/gold_swa_f4.csv"
+      }
+    },
+    "gpu_hours_total": 12.509073537654347
+  }
 }
