@@ -6,7 +6,7 @@
 | Padre | exp045_raptor_aug_espacial (checkpoint all-data swa_alldata.pt, SWA 13-15) |
 | Fecha | 2026-10-14 |
 | Rama | exp073_mrnet_val_externa |
-| Estado | spec |
+| Estado | worked · validación externa hecha |
 
 Idea: V3a del plan de preentreno externo: validación externa (para el paper) del modelo de la receta exp045 en MRNet
 (Stanford), sin entrenar nada. V3b (MRNet como tarea auxiliar/preentreno) sería otro experimento y solo si este muestra que el
@@ -73,15 +73,32 @@ orientación/campo de visión asumidos; población distinta (Stanford, 2001–20
 
 ## 3. VERDICT (números de `results/exp073_mrnet_val_externa/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen / 5 folds
+**Resultado:** `worked` (el dominio encaja) · **Fase alcanzada:** validación externa completa (1250 exámenes MRNet, 0.05 GPU-h, pod rsna-ext1, 14-oct)
 
-| Métrica | Padre | Este | Δ |
-|---|---|---|---|
-| pseudo AUC fold 0 | | | |
-| gold AUC (screen: fold 0 contra fold 0 del padre) | | | |
-| OOF pseudo 5 folds | | | |
-| GPU-h | | | |
+Checkpoint: `swa_alldata.pt` de exp045 (SWA 13–15), cero-shot, sin ajuste. Orientación revisada en `orientation_check.png`
+(sin corrección: `FLIP_FIX` todo `None`). Nota: el campo de MRNet es más amplio que nuestro recorte de 140 mm (la rodilla sale más pequeña).
 
-**Qué aprendimos (2-4 líneas):**
+| MRNet valid (n 120) | AUC (TTA) | IC 95 % | sin TTA | Criterio |
+|---|---|---|---|---|
+| LCA ← p(ACL) (54 pos) | **0.9747** | 0.951–0.992 | 0.9739 | ≥ 0.85 ✔ |
+| Menisco ← max(MM, LM) (52 pos) | **0.8815** | 0.818–0.937 | 0.8792 | ≥ 0.75 ✔ |
+| Anormal ← max de 12 (95 pos) | **0.9225** | 0.848–0.978 | 0.9208 | ≥ 0.85 ✔ |
+| Anormal ← noisy-OR (informativo) | 0.9360 | 0.859–0.988 | 0.9347 | — |
 
-**Siguiente paso sugerido:**
+| MRNet todo (train + valid, n 1250) | AUC (TTA) | IC 95 % |
+|---|---|---|
+| LCA (262 pos) | 0.9084 | 0.884–0.931 |
+| Menisco (449 pos) | 0.8789 | 0.859–0.897 |
+| Anormal max (1008 pos) | 0.8867 | 0.865–0.907 |
+| Anormal noisy-OR | 0.9106 | 0.892–0.929 |
+
+Contexto (no comparable 1:1): MRNet (Bien et al. 2018), modelo entrenado en MRNet, test privado: anormal 0.937, LCA 0.965, menisco 0.847.
+
+**Qué aprendimos:** el modelo de la receta exp045, entrenado solo con etiquetas LLM de informes RSNA, generaliza cero-shot a
+otro hospital/protocolo (Stanford, sin slots sag no fluido ni cor fluido): en MRNet valid iguala o supera al modelo
+supervisado de MRNet en LCA y menisco. Es evidencia fuerte para el paper (validación externa). En train de MRNet (1130) la
+LCA baja a ~0.90: el valid de MRNet está enriquecido (45 % LCA) y es más fácil.
+
+**Siguiente paso sugerido:** repetir con exp071/exp056 (añadir a `MODELS`, coste ~3 min) para la tabla del paper; V3b (MRNet
+como tarea auxiliar) queda habilitado por el criterio, pero MRNet debe seguir limpio como validación externa: si se hace V3b,
+evaluar solo en un split de MRNet no usado para entrenar, en un experimento aparte.

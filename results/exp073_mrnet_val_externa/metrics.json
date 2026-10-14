@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "exp": "exp073_mrnet_val_externa",
+  "author": "rodrigo",
+  "parent": "exp045",
+  "git": {
+    "commit": "5b401f2",
+    "branch": "HEAD",
+    "src_dirty": false
+  },
+  "timestamp_utc": "2026-10-14T15:13:30.067101+00:00",
+  "phase": "external_val",
+  "params": {
+    "SMOKE": false,
+    "SEED": 42,
+    "MRNET_DIR": "/workspace/data/external/mrnet/MRNet-v1.0",
+    "MRNET_LOCAL": "/root/mrnet96_384",
+    "MODELS": {
+      "exp045_alldata": "/workspace/users/rodrigo/wt_exp045_raptor_aug_espacial/results/exp045_raptor_aug_espacial/swa_alldata.pt"
+    },
+    "ARCH": "coatnet_rmlp_2_rw_384.sw_in12k_ft_in1k",
+    "IMG": 384,
+    "RES": 320,
+    "NORM": "imagenet",
+    "K_EVAL": 24,
+    "TTA_MIRROR": true,
+    "N_BOOT": 2000,
+    "BATCH": 4,
+    "N_WORKERS": 8,
+    "BUILD_PROCS": 8,
+    "FLIP_FIX": {
+      "sagittal": null,
+      "coronal": null,
+      "axial": null
+    },
+    "NOTES": "Validación externa zero-shot de exp045 all-data en MRNet; sin entrenamiento, split RSNA ni gold"
+  },
+  "mrnet": {
+    "exp045_alldata": {
+      "valid": {
+        "acl_no_tta": {
+          "auc": 0.9739057239057239,
+          "ci_lo": 0.9485426670755204,
+          "ci_hi": 0.9916298722065581,
+          "n": 120,
+          "n_pos": 54
+        },
+        "meniscus_no_tta": {
+          "auc": 0.8792420814479638,
+          "ci_lo": 0.8166110782056457,
+          "ci_hi": 0.9354883470117845,
+          "n": 120,
+          "n_pos": 52
+        },
+        "abnormal_max_no_tta": {
+          "auc": 0.9208421052631579,
+          "ci_lo": 0.8469351862683583,
+          "ci_hi": 0.9763502135659322,
+          "n": 120,
+          "n_pos": 95
+        },
+        "abnormal_noisy_or_no_tta": {
+          "auc": 0.9347368421052631,
+          "ci_lo": 0.8572601503759398,
+          "ci_hi": 0.9873684210526316,
+          "n": 120,
+          "n_pos": 95
+        },
+        "acl_tta": {
+          "auc": 0.9747474747474748,
+          "ci_lo": 0.9506161375661376,
+          "ci_hi": 0.9922137328963891,
+          "n": 120,
+          "n_pos": 54
+        },
+        "meniscus_tta": {
+          "auc": 0.8815045248868778,
+          "ci_lo": 0.8178719889475703,
+          "ci_hi": 0.9374815102960699,
+          "n": 120,
+          "n_pos": 52
+        },
+        "abnormal_max_tta": {
+          "auc": 0.9225263157894737,
+          "ci_lo": 0.8478565369886416,
+          "ci_hi": 0.9784060846560846,
+          "n": 120,
+          "n_pos": 95
+        },
+        "abnormal_noisy_or_tta": {
+          "auc": 0.9359999999999999,
+          "ci_lo": 0.8585069444444445,
+          "ci_hi": 0.9884581730326413,
+          "n": 120,
+          "n_pos": 95
+        }
+      },
+      "train": {
+        "acl_no_tta": {
+          "auc": 0.8906276072084098,
+          "ci_lo": 0.8611187859952188,
+          "ci_hi": 0.9169981649139317,
+          "n": 1130,
+          "n_pos": 208
+        },
+        "meniscus_no_tta": {
+          "auc": 0.8772615901663567,
+          "ci_lo": 0.8559324084710286,
+          "ci_hi": 0.8976382426717333,
+          "n": 1130,
+          "n_pos": 397
+        },
+        "abnormal_max_no_tta": {
+          "auc": 0.8856708778978503,
+          "ci_lo": 0.8625907356308518,
+          "ci_hi": 0.9072672490015057,
+          "n": 1130,
+          "n_pos": 913
+        },
+        "abnormal_noisy_or_no_tta": {
+          "auc": 0.9102114364454046,
+          "ci_lo": 0.8912445043774209,
+          "ci_hi": 0.9280077927775706,
+          "n": 1130,
+          "n_pos": 913
+        },
+        "acl_tta": {
+          "auc": 0.892353579175705,
+          "ci_lo": 0.863403791620331,
+          "ci_hi": 0.918281862532799,
+          "n": 1130,
+          "n_pos": 208
+        },
+        "meniscus_tta": {
+          "auc": 0.8780072920711612,
+          "ci_lo": 0.856594796791589,
+          "ci_hi": 0.8981692018970061,
+          "n": 1130,
+          "n_pos": 397
+        },
+        "abnormal_max_tta": {
+          "auc": 0.8851308039026655,
+          "ci_lo": 0.862133280829397,
+          "ci_hi": 0.907036696839971,
+          "n": 1130,
+          "n_pos": 913
+        },
+        "abnormal_noisy_or_tta": {
+          "auc": 0.9095855563014522,
+          "ci_lo": 0.8908075219867451,
+          "ci_hi": 0.9277550629832939,
+          "n": 1130,
+          "n_pos": 913
+        }
+      },
+      "all": {
+        "acl_no_tta": {
+          "auc": 0.9068787279414038,
+          "ci_lo": 0.882320507158414,
+          "ci_hi": 0.9298605215985197,
+          "n": 1250,
+          "n_pos": 262
+        },
+        "meniscus_no_tta": {
+          "auc": 0.8781450803422225,
+          "ci_lo": 0.8585133455743507,
+          "ci_hi": 0.8972332336173854,
+          "n": 1250,
+          "n_pos": 449
+        },
+        "abnormal_max_no_tta": {
+          "auc": 0.8868432703659975,
+          "ci_lo": 0.8639966056678821,
+          "ci_hi": 0.9076490379565183,
+          "n": 1250,
+          "n_pos": 1008
+        },
+        "abnormal_noisy_or_no_tta": {
+          "auc": 0.9110791355109538,
+          "ci_lo": 0.891787224618059,
+          "ci_hi": 0.9288550540003092,
+          "n": 1250,
+          "n_pos": 1008
+        },
+        "acl_tta": {
+          "auc": 0.9084317149303087,
+          "ci_lo": 0.8835967940281552,
+          "ci_hi": 0.931073356217338,
+          "n": 1250,
+          "n_pos": 262
+        },
+        "meniscus_tta": {
+          "auc": 0.8788791293733611,
+          "ci_lo": 0.8588561818695194,
+          "ci_hi": 0.897262576502738,
+          "n": 1250,
+          "n_pos": 449
+        },
+        "abnormal_max_tta": {
+          "auc": 0.886699790108881,
+          "ci_lo": 0.8646457309202877,
+          "ci_hi": 0.9070161857059817,
+          "n": 1250,
+          "n_pos": 1008
+        },
+        "abnormal_noisy_or_tta": {
+          "auc": 0.9106486947396039,
+          "ci_lo": 0.891720839330684,
+          "ci_hi": 0.9287162731859462,
+          "n": 1250,
+          "n_pos": 1008
+        }
+      }
+    }
+  },
+  "corpus": {
+    "path": "/root/mrnet96_384",
+    "n_exams": 1250,
+    "seconds": 144.67835783958435,
+    "shape": [
+      1250,
+      96,
+      384,
+      384
+    ],
+    "empty_slots": [
+      1,
+      2
+    ],
+    "empty_slot_names": [
+      "Sagittal non-fluid",
+      "Coronal fluid"
+    ],
+    "flip_fix": {
+      "sagittal": null,
+      "coronal": null,
+      "axial": null
+    },
+    "n_errors": 0,
+    "orientation_check": "/workspace/users/rodrigo/wt_exp073_mrnet_val_externa/results/exp073_mrnet_val_externa/orientation_check.png"
+  },
+  "inference": {
+    "exp045_alldata": {
+      "checkpoint": "/workspace/users/rodrigo/wt_exp045_raptor_aug_espacial/results/exp045_raptor_aug_espacial/swa_alldata.pt",
+      "predictions": "/workspace/users/rodrigo/wt_exp073_mrnet_val_externa/results/exp073_mrnet_val_externa/preds_exp045_alldata.csv",
+      "seconds": 181.86439442634583,
+      "n_exams": 1250,
+      "tta_mirror": true
+    }
+  },
+  "gpu_hours_total": 0.050517887340651615,
+  "decision_auto": {
+    "exp045_alldata": "worked"
+  }
+}
