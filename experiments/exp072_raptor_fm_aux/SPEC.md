@@ -46,6 +46,10 @@ con BN porque el lote fastMRI movería las estadísticas). Mitigación: durante 
 volteo arriba-abajo (convención de fastMRI+, `ExampleScripts/example.ipynb`), p2/p98 por volumen → uint8, 320 → 384 bilineal
 (FOV fastMRI ≈ 140 mm, igual que nuestro recorte físico); cajas de `knee.csv` × 1.2. Se bajaron los h5 uno a uno y se borraron
 (huella ≈ 6 GB). Script: `fm_build.py` en esta carpeta.
+**Nota de ejecución (14-oct 15:45 UTC, antes de correr nada de exp072):** la API de Kaggle devolvió 429 (Too Many Requests)
+a partir del volumen ~800; quedaron **799 volúmenes** (664 con cajas, 135 revisados sin hallazgos; faltan 321 de
+`fastmri-train-knee-2` y 51 de `fastmri-knee-val`). Se corre con lo que haya a las 16:00 UTC (reintentos lentos hasta entonces);
+los criterios no cambian. Si funciona, completar la tienda antes de 5 folds.
 
 **Efecto esperado:** Δ pseudo fold 0 +0.000 a +0.006 (prior baja-media: con 4.4k estudios la supervisión externa suele aportar
 poco; R7 lo usa pero su ganancia aislada no está medida). Coste ≈ ×1.4–1.5 por época.
