@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "exp": "exp064_raptor_ft_nartaa_aug_light",
+  "author": "rodrigo",
+  "parent": "exp044",
+  "split": "split_v1_seed42",
+  "split_sha256": "9fac0679909efda4e52da6c92816442bcf79bffade391e567dc393c8a13e6a87",
+  "git": {
+    "commit": "e4c8085",
+    "branch": "exp064_raptor_ft_nartaa_aug_light",
+    "src_dirty": false
+  },
+  "timestamp_utc": "2026-10-13T05:07:25.293472+00:00",
+  "phase": "alldata",
+  "select_on": "pseudo_L2_bin>0.5",
+  "params": {
+    "EXP": "exp064_raptor_ft_nartaa_aug_light",
+    "PADRE": "exp044",
+    "FOLDS": [
+      0
+    ],
+    "SEED": 42,
+    "SPLIT": "split_v1_seed42",
+    "SELECT_ON": "pseudo",
+    "SMOKE": false,
+    "ALL_DATA": true,
+    "SWA_EPOCHS": [
+      3,
+      4,
+      5
+    ],
+    "CORPUS": "/root/corpus96_384",
+    "LABELS_SOFT": "/workspace/data/labels/public/dreaddevelopment/rsna-knee-labels/labels_llm_soft.parquet",
+    "L3_CSV": "/workspace/data/labels/public/pilkwang/rsna-knee-llm-labels/report_labels_v2.csv",
+    "L4_CSV": "/workspace/data/labels/public/lixin73/rsna-knee-llm-report-labels-sol56/labels_llm_gpt56sol.csv",
+    "L2_CSV": "/workspace/data/labels/public/stevenleehans/rsna-knee-llm-report-labels/llm_labels_v4_blend.csv",
+    "V1_CSV": "/workspace/data/labels/report_labels_v1.csv",
+    "ARCH": "coatnet_rmlp_2_rw_384.sw_in12k_ft_in1k",
+    "INIT_CKPT": "/workspace/data/public_assets/nartaa__rsna-knee-publication-swa-weights-20261007/raptor_ft_alldata_t16_blendjev_oai_d96_r384_swa.pt",
+    "INIT_SHA256": "7e5315dad125b99fc65b340b3de41de628e9be51ff5835355dd61c86472244ef",
+    "IMG": 384,
+    "RES": 320,
+    "NORM": "imagenet",
+    "K": 12,
+    "K_EVAL": 24,
+    "EPOCHS": 6,
+    "BATCH_SIZE": 8,
+    "BB_LR": 1e-05,
+    "HEAD_LR": 0.0001,
+    "WEIGHT_DECAY": 0.02,
+    "PCT_START": 0.15,
+    "GRAD_CLIP": 3.0,
+    "TOPK": 3,
+    "L2_THRESHOLD": 0.5,
+    "GRAD_CKPT": true,
+    "N_WORKERS": 12,
+    "LOG_EVERY": 50,
+    "AUG_STRENGTH": "light",
+    "NOTES": "Track B: exp044 (fine-tune nartaa all-data) + mri_artifact_aug light; decide el LB del blend-mine (raptor = rank mean nartaa + este)",
+    "LABELS": [
+      "ACL",
+      "MCL",
+      "Medial Meniscus",
+      "Lateral Meniscus",
+      "Medial OA",
+      "Lateral OA",
+      "PF OA",
+      "Effusion",
+      "Synovitis",
+      "Baker's",
+      "Contusion",
+      "Fracture"
+    ],
+    "AUTHOR": "rodrigo",
+    "TAG": "alldata",
+    "D": 96,
+    "SLOT_SIZES": [
+      26,
+      22,
+      18,
+      12,
+      18
+    ],
+    "N_SLOTS": 5,
+    "MAX_EVENTS": 3,
+    "BIAS_GRID": 4,
+    "_AUG_T": [
+      206.1450481414795,
+      17.65584945678711,
+      4.456520080566406,
+      4.499673843383789,
+      5.690336227416992,
+      4.785299301147461,
+      5.279064178466797,
+      5.013942718505859,
+      5.048036575317383,
+      4.12297248840332,
+      3.89862060546875,
+      5.333662033081055,
+      4.223823547363281,
+      4.171609878540039,
+      5.026102066040039,
+      4.474401473999023,
+      3.5583972930908203,
+      4.3544769287109375,
+      4.61268424987793,
+      3.6144256591796875
+    ],
+    "INIT_GOLD": 0.9190658824845807
+  },
+  "per_fold": {
+    "alldata": {
+      "n_train": 4349,
+      "n_val": 0,
+      "history": [
+        {
+          "epoch": 0,
+          "train_loss": 0.7692060164325145,
+          "pseudo_auc": null,
+          "v1_auc": null,
+          "gold_auc": 0.9183515444440831,
+          "train_s": 635.9927201271057,
+          "eval_s": 4.73696494102478,
+          "minutes": 10.678854695955913
+        },
+        {
+          "epoch": 1,
+          "train_loss": 0.7683233844860702,
+          "pseudo_auc": null,
+          "v1_auc": null,
+          "gold_auc": 0.9138812615327172,
+          "train_s": 627.7010369300842,
+          "eval_s": 4.89915657043457,
+          "minutes": 21.23958146572113
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.7615649879088499,
+          "pseudo_auc": null,
+          "v1_auc": null,
+          "gold_auc": 0.9148035128434996,
+          "train_s": 628.4501843452454,
+          "eval_s": 4.891923666000366,
+          "minutes": 31.807244348526
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.7535985179149424,
+          "pseudo_auc": null,
+          "v1_auc": null,
+          "gold_auc": 0.9166714476898795,
+          "train_s": 628.4502305984497,
+          "eval_s": 4.889019012451172,
+          "minutes": 42.37582442363103
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.7447347278753038,
+          "pseudo_auc": null,
+          "v1_auc": null,
+          "gold_auc": 0.9146636248777057,
+          "train_s": 628.6929454803467,
+          "eval_s": 4.887392997741699,
+          "minutes": 52.95116397539775
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.7429272580761497,
+          "pseudo_auc": null,
+          "v1_auc": null,
+          "gold_auc": 0.9153325863699476,
+          "train_s": 628.2546322345734,
+          "eval_s": 4.938997268676758,
+          "minutes": 63.5166557987531
+        }
+      ],
+      "swa": {
+        "epochs": [
+          3,
+          4,
+          5
+        ],
+        "pseudo_auc": null,
+        "v1_auc": null,
+        "gold_auc": 0.9154502312349999,
+        "pseudo_per_label": null,
+        "gold_per_label": {
+          "ACL": 0.9620098039215685,
+          "MCL": 0.9523809523809523,
+          "Medial Meniscus": 0.9639423076923077,
+          "Lateral Meniscus": 0.8559006211180124,
+          "Medial OA": 0.9705426356589146,
+          "Lateral OA": 0.7911025145067698,
+          "PF OA": 0.8494208494208494,
+          "Effusion": 0.9515527950310558,
+          "Synovitis": 0.8076463560334528,
+          "Baker's": 0.9891304347826088,
+          "Contusion": 0.9487179487179488,
+          "Fracture": 0.9430555555555555
+        }
+      },
+      "gpu_hours": 1.0588708165619107,
+      "swa_ckpt_path": "/workspace/users/rodrigo/wt_exp064_raptor_ft_nartaa_aug_light/results/exp064_raptor_ft_nartaa_aug_light/swa_alldata.pt"
+    }
+  },
+  "gold_auc": null,
+  "gold_per_label": null,
+  "oof_pseudo_auc": null,
+  "swa_f0": null,
+  "delta": {
+    "pseudo_f0": null,
+    "gold": null
+  },
+  "decision_auto": "sin_padre",
+  "aug_strength": "light",
+  "mri_aug_preset": {
+    "bias": {
+      "p": 0.1,
+      "coef": [
+        0.05,
+        0.15
+      ],
+      "grid": 4
+    },
+    "aniso": {
+      "p": 0.1,
+      "factor": [
+        1.25,
+        2.0
+      ]
+    },
+    "motion": {
+      "p": 0.05,
+      "events": [
+        1,
+        2
+      ],
+      "shift_px": 1.5
+    },
+    "ghost": {
+      "p": 0.05,
+      "n_ghosts": [
+        4,
+        10
+      ],
+      "intensity": [
+        0.1,
+        0.3
+      ],
+      "restore": 0.02
+    },
+    "rician": {
+      "p": 0.1,
+      "sigma": [
+        0.005,
+        0.02
+      ]
+    },
+    "gamma": {
+      "p": 0.1,
+      "log_gamma": 0.15
+    }
+  },
+  "mri_aug_ms_per_step": 4.5646693971421985,
+  "init_ckpt": "/workspace/data/public_assets/nartaa__rsna-knee-publication-swa-weights-20261007/raptor_ft_alldata_t16_blendjev_oai_d96_r384_swa.pt",
+  "init_gold_auc": 0.9190658824845807,
+  "corpus": {
+    "path": "/root/corpus96_384",
+    "n": 4407,
+    "D": 96,
+    "img": 384,
+    "build_seconds": 1316.7135531902313,
+    "n_errors": 0
+  },
+  "gpu_hours_total": 1.0588708165619107
+}
