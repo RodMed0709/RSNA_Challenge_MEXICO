@@ -6,7 +6,7 @@
 | Padre | exp002_dinov2s_ref |
 | Fecha | 2026-10-08 |
 | Rama | exp012_entrada_v2 |
-| Estado | spec |
+| Estado | running |
 
 Idea: misma receta de exp002, pero leyendo el cache v2 de exp009 en lugar de v1_256.
 
@@ -52,15 +52,18 @@ Todo lo demás igual: split `split_v1_seed42`, semilla, épocas, lr, cortes por 
 
 ## 3. VERDICT (números de `results/exp012_entrada_v2/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen / 5 folds
+**Resultado:** promising en screen (5 folds pendientes) · **Fase alcanzada:** screen
 
 | Métrica | Padre | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | 0.827 | | |
-| gold AUC (fold 0 contra fold 0 del padre) | 0.777 | | |
-| OOF pseudo 5 folds | 0.802 | | |
-| GPU-h | | | |
+| pseudo AUC fold 0 | 0.827 | 0.850 | +0.023 |
+| gold AUC (fold 0 contra fold 0 del padre) | 0.777 | 0.784 | +0.007 |
+| OOF pseudo 5 folds | 0.802 | pendiente | |
+| GPU-h | | 3.65 (219 min de reloj, GPU compartida con exp015) | 0.91× presupuesto |
 
-**Qué aprendimos (2-4 líneas):**
+**Qué aprendimos (2-4 líneas):** la entrada v2 (recorte físico, 0.5 mm, 6 slots alineados) es la mayor ganancia hasta ahora:
++0.023 pseudo con la misma receta de 8 épocas, y gold no cae (+0.007). El mejor checkpoint es la última época (8/8) y la curva
+aún sube (0.843 → 0.849 → 0.850): con v2 la receta también está corta (ver exp015). Costo de entrenamiento ~2× v1 por época.
 
-**Siguiente paso sugerido:**
+**Siguiente paso sugerido:** v2 es la entrada de la próxima referencia. Cabeza por hallazgo sobre v2 = exp018 (en curso);
+poda de slots en inferencia = exp019. 5 folds se corren con la referencia combinada (v2 + cabeza + más épocas).
