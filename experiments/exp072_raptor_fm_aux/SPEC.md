@@ -101,15 +101,25 @@ NYU, 2 secuencias coronales, solo slot coronal): la tarea puede tirar del encode
 
 ## 3. VERDICT (números de `results/exp072_raptor_fm_aux/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen / 5 folds
+**Resultado:** didnt · **Fase alcanzada:** screen (fold 0)
 
 | Métrica | Padre | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | | | |
-| gold AUC (screen: fold 0 contra fold 0 del padre) | | | |
-| OOF pseudo 5 folds | | | |
-| GPU-h | | | |
+| pseudo AUC fold 0 (L2, mejor época) | 0.8880 (media s42+s7) | 0.8922 | +0.0042 |
+| pseudo AUC fold 0 (SWA) | — | 0.8924 | — |
+| gold AUC (screen: fold 0 contra fold 0 del padre) | 0.9202 | 0.9236 (SWA 0.9230) | +0.0034 |
+| v1 AUC fold 0 | — | 0.8430 | — |
+| OOF pseudo 5 folds | — | no corrido | — |
+| GPU-h | 2.51 | 1.87 (RTX 5090) | — |
 
-**Qué aprendimos (2-4 líneas):**
+Diagnóstico de la cabeza auxiliar (holdout fastMRI+ 49 volúmenes, AUC de presencia): menisco 0.959, cartílago parcial 0.923,
+edema 0.957, derrame 0.952, LCA alto/bajo 0.982/0.969, colateral 0.965, otro 0.804. La cabeza sí aprendió. Tienda incompleta:
+995 de 1172 volúmenes (límite de descargas de Kaggle).
 
-**Siguiente paso sugerido:**
+**Qué aprendimos (2-4 líneas):** la supervisión por cajas de fastMRI+ (λ 0.3, solo coronal) sube la pseudo +0.004 y el gold
++0.003. Ambas van en la dirección correcta, pero la pseudo no llega al umbral fijado de +0.005, así que no se promueve.
+Con una semilla, Δ +0.004 está dentro del ruido entre semillas de exp045 (0.8899 frente a 0.8880). La tarea auxiliar
+de R7 no explica por sí sola su ventaja.
+
+**Siguiente paso sugerido:** no hacer 5 folds. Si sobra GPU, una segunda semilla (s7) daría una lectura más firme
+(sería otro experimento). La prioridad sigue en las piezas R7 (exp068/exp069) y en el ensamble.
