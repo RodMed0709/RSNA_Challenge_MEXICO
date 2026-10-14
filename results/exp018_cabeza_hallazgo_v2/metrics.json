@@ -1,0 +1,726 @@
+{
+  "schema_version": 1,
+  "exp": "exp018_cabeza_hallazgo_v2",
+  "author": "rodrigo",
+  "parent": "exp012",
+  "split": "split_v1_seed42",
+  "split_sha256": "9fac0679909efda4e52da6c92816442bcf79bffade391e567dc393c8a13e6a87",
+  "git": {
+    "commit": "8f0a89f",
+    "branch": "exp018_cabeza_hallazgo_v2",
+    "src_dirty": false
+  },
+  "timestamp_utc": "2026-10-09T00:08:09.695071+00:00",
+  "phase": "screen",
+  "select_on": "pseudo",
+  "params": {
+    "EXP": "exp018_cabeza_hallazgo_v2",
+    "PADRE": "exp012",
+    "FOLDS": [
+      0
+    ],
+    "SEED": 42,
+    "SPLIT": "split_v1_seed42",
+    "SELECT_ON": "pseudo",
+    "SMOKE": false,
+    "LABELS_CSV": "/workspace/data/labels/report_labels_v1.csv",
+    "CACHE": "v2_05mm",
+    "CACHE_ROOT": "/workspace/data/cache/v2_05mm",
+    "STUDY_META_CSV": "/workspace/data/cache/meta_v2/study_meta_v2.csv",
+    "BACKBONE_PATH": "/workspace/models/dinov2-small",
+    "IMG_SIZE": 336,
+    "N_SLOTS": 6,
+    "N_SLICES": 16,
+    "BATCH_SIZE": 1,
+    "GRAD_ACCUM": 8,
+    "EPOCHS": 8,
+    "FREEZE_EPOCHS": 1,
+    "LR": 0.0001,
+    "BACKBONE_LR": 1e-05,
+    "WEIGHT_DECAY": 0.01,
+    "WARMUP_RATIO": 0.1,
+    "GRAD_CLIP": 1.0,
+    "N_WORKERS": 8,
+    "NOTES": "cabeza por hallazgo (12 queries) sobre entrada v2",
+    "LABELS": [
+      "ACL",
+      "MCL",
+      "Medial Meniscus",
+      "Lateral Meniscus",
+      "Medial OA",
+      "Lateral OA",
+      "PF OA",
+      "Effusion",
+      "Synovitis",
+      "Baker's",
+      "Contusion",
+      "Fracture"
+    ],
+    "AUTHOR": "rodrigo",
+    "SLOT_COLUMNS": [
+      "slot1_sag_fluid_fs",
+      "slot2_cor_fluid_fs",
+      "slot3_ax_fluid_fs",
+      "slot4_sag_pdt2",
+      "slot5_cor_t1",
+      "slot6_sag_t1"
+    ]
+  },
+  "per_fold": {
+    "0": {
+      "pseudo_auc": 0.8460476139965237,
+      "gold_auc": 0.7768505208751146,
+      "best_epoch": 8,
+      "pseudo_per_label": {
+        "ACL": 0.8492420992420991,
+        "MCL": 0.8136541165442899,
+        "Medial Meniscus": 0.8174922946352794,
+        "Lateral Meniscus": 0.7232451039679955,
+        "Medial OA": 0.8902793975964707,
+        "Lateral OA": 0.810328524669657,
+        "PF OA": 0.826342115689382,
+        "Effusion": 0.8944228634850167,
+        "Synovitis": 0.911754110172267,
+        "Baker's": 0.8575399523971438,
+        "Contusion": 0.8956100933287245,
+        "Fracture": 0.8626606962299581
+      },
+      "gold_per_label": {
+        "ACL": 0.7279411764705882,
+        "MCL": 0.5532879818594104,
+        "Medial Meniscus": 0.7692307692307693,
+        "Lateral Meniscus": 0.6409937888198758,
+        "Medial OA": 0.9565891472868217,
+        "Lateral OA": 0.781431334622824,
+        "PF OA": 0.7824967824967825,
+        "Effusion": 0.8658385093167702,
+        "Synovitis": 0.6367980884109916,
+        "Baker's": 0.8786231884057971,
+        "Contusion": 0.8636977058029689,
+        "Fracture": 0.8652777777777778
+      },
+      "gpu_hours": 4.420529169705179,
+      "ckpt_path": "/workspace/users/rodrigo/wt_exp018/results/exp018_cabeza_hallazgo_v2/best_f0.pt",
+      "attention": {
+        "val": {
+          "n_studies": 871,
+          "slot_coverage": {
+            "slot1_sag_fluid_fs": 0.9345579793340988,
+            "slot2_cor_fluid_fs": 0.9644087256027555,
+            "slot3_ax_fluid_fs": 1.0,
+            "slot4_sag_pdt2": 0.5809414466130884,
+            "slot5_cor_t1": 0.756601607347876,
+            "slot6_sag_t1": 0.46039035591274396
+          },
+          "slot_mass": {
+            "ACL": {
+              "slot1_sag_fluid_fs": 0.17380978167057037,
+              "slot2_cor_fluid_fs": 0.1925014853477478,
+              "slot3_ax_fluid_fs": 0.27942323684692383,
+              "slot4_sag_pdt2": 0.10802099853754044,
+              "slot5_cor_t1": 0.14129400253295898,
+              "slot6_sag_t1": 0.10495061427354813
+            },
+            "MCL": {
+              "slot1_sag_fluid_fs": 0.19223979115486145,
+              "slot2_cor_fluid_fs": 0.1912381798028946,
+              "slot3_ax_fluid_fs": 0.18752336502075195,
+              "slot4_sag_pdt2": 0.14235255122184753,
+              "slot5_cor_t1": 0.15533792972564697,
+              "slot6_sag_t1": 0.1313081830739975
+            },
+            "Medial Meniscus": {
+              "slot1_sag_fluid_fs": 0.19014577567577362,
+              "slot2_cor_fluid_fs": 0.226368710398674,
+              "slot3_ax_fluid_fs": 0.15115895867347717,
+              "slot4_sag_pdt2": 0.14578714966773987,
+              "slot5_cor_t1": 0.16680008172988892,
+              "slot6_sag_t1": 0.11973907053470612
+            },
+            "Lateral Meniscus": {
+              "slot1_sag_fluid_fs": 0.2060743272304535,
+              "slot2_cor_fluid_fs": 0.2126123160123825,
+              "slot3_ax_fluid_fs": 0.1897537112236023,
+              "slot4_sag_pdt2": 0.13576960563659668,
+              "slot5_cor_t1": 0.1564365029335022,
+              "slot6_sag_t1": 0.09935356676578522
+            },
+            "Medial OA": {
+              "slot1_sag_fluid_fs": 0.20434457063674927,
+              "slot2_cor_fluid_fs": 0.22742266952991486,
+              "slot3_ax_fluid_fs": 0.1878020465373993,
+              "slot4_sag_pdt2": 0.1275048702955246,
+              "slot5_cor_t1": 0.16277839243412018,
+              "slot6_sag_t1": 0.09014773368835449
+            },
+            "Lateral OA": {
+              "slot1_sag_fluid_fs": 0.21084654331207275,
+              "slot2_cor_fluid_fs": 0.20211243629455566,
+              "slot3_ax_fluid_fs": 0.2027609497308731,
+              "slot4_sag_pdt2": 0.13255247473716736,
+              "slot5_cor_t1": 0.15804238617420197,
+              "slot6_sag_t1": 0.093685083091259
+            },
+            "PF OA": {
+              "slot1_sag_fluid_fs": 0.17435652017593384,
+              "slot2_cor_fluid_fs": 0.20914609730243683,
+              "slot3_ax_fluid_fs": 0.21119441092014313,
+              "slot4_sag_pdt2": 0.14396604895591736,
+              "slot5_cor_t1": 0.150498628616333,
+              "slot6_sag_t1": 0.11083850264549255
+            },
+            "Effusion": {
+              "slot1_sag_fluid_fs": 0.24537555873394012,
+              "slot2_cor_fluid_fs": 0.17556333541870117,
+              "slot3_ax_fluid_fs": 0.25468915700912476,
+              "slot4_sag_pdt2": 0.09064743667840958,
+              "slot5_cor_t1": 0.15389293432235718,
+              "slot6_sag_t1": 0.07983177155256271
+            },
+            "Synovitis": {
+              "slot1_sag_fluid_fs": 0.2015349119901657,
+              "slot2_cor_fluid_fs": 0.20294731855392456,
+              "slot3_ax_fluid_fs": 0.2567015588283539,
+              "slot4_sag_pdt2": 0.1076241135597229,
+              "slot5_cor_t1": 0.1527884602546692,
+              "slot6_sag_t1": 0.07840313762426376
+            },
+            "Baker's": {
+              "slot1_sag_fluid_fs": 0.17894142866134644,
+              "slot2_cor_fluid_fs": 0.2229042798280716,
+              "slot3_ax_fluid_fs": 0.29944148659706116,
+              "slot4_sag_pdt2": 0.09989998489618301,
+              "slot5_cor_t1": 0.1223101019859314,
+              "slot6_sag_t1": 0.07650259137153625
+            },
+            "Contusion": {
+              "slot1_sag_fluid_fs": 0.19624604284763336,
+              "slot2_cor_fluid_fs": 0.18240010738372803,
+              "slot3_ax_fluid_fs": 0.30983003973960876,
+              "slot4_sag_pdt2": 0.09325749427080154,
+              "slot5_cor_t1": 0.1417095810174942,
+              "slot6_sag_t1": 0.07655622810125351
+            },
+            "Fracture": {
+              "slot1_sag_fluid_fs": 0.21127431094646454,
+              "slot2_cor_fluid_fs": 0.20590665936470032,
+              "slot3_ax_fluid_fs": 0.2651822566986084,
+              "slot4_sag_pdt2": 0.1007503867149353,
+              "slot5_cor_t1": 0.14065682888031006,
+              "slot6_sag_t1": 0.07622955739498138
+            }
+          },
+          "slot_mass_present": {
+            "ACL": {
+              "slot1_sag_fluid_fs": 0.18598073823446137,
+              "slot2_cor_fluid_fs": 0.19960570562453497,
+              "slot3_ax_fluid_fs": 0.27942323739438324,
+              "slot4_sag_pdt2": 0.18594128152598505,
+              "slot5_cor_t1": 0.18674822099653832,
+              "slot6_sag_t1": 0.22796006809149003
+            },
+            "MCL": {
+              "slot1_sag_fluid_fs": 0.20570129844421836,
+              "slot2_cor_fluid_fs": 0.1982957749139695,
+              "slot3_ax_fluid_fs": 0.18752336994788676,
+              "slot4_sag_pdt2": 0.24503768197161407,
+              "slot5_cor_t1": 0.205310063224642,
+              "slot6_sag_t1": 0.28521054998003037
+            },
+            "Medial Meniscus": {
+              "slot1_sag_fluid_fs": 0.2034606558684928,
+              "slot2_cor_fluid_fs": 0.23472279139927454,
+              "slot3_ax_fluid_fs": 0.1511589602132068,
+              "slot4_sag_pdt2": 0.25094982946343103,
+              "slot5_cor_t1": 0.22045958639095695,
+              "slot6_sag_t1": 0.26008162653059735
+            },
+            "Lateral Meniscus": {
+              "slot1_sag_fluid_fs": 0.2205045920332175,
+              "slot2_cor_fluid_fs": 0.22045873006184896,
+              "slot3_ax_fluid_fs": 0.18975371088144016,
+              "slot4_sag_pdt2": 0.23370617651656683,
+              "slot5_cor_t1": 0.20676205624940724,
+              "slot6_sag_t1": 0.21580288475588372
+            },
+            "Medial OA": {
+              "slot1_sag_fluid_fs": 0.2186537046690245,
+              "slot2_cor_fluid_fs": 0.23581564767020088,
+              "slot3_ax_fluid_fs": 0.18780203993366998,
+              "slot4_sag_pdt2": 0.21947972293898993,
+              "slot5_cor_t1": 0.21514413280805433,
+              "slot6_sag_t1": 0.19580717395963218
+            },
+            "Lateral OA": {
+              "slot1_sag_fluid_fs": 0.22561098140932126,
+              "slot2_cor_fluid_fs": 0.20957134791782925,
+              "slot3_ax_fluid_fs": 0.20276094386279242,
+              "slot4_sag_pdt2": 0.2281683970816993,
+              "slot5_cor_t1": 0.20888455612344697,
+              "slot6_sag_t1": 0.20349054503024666
+            },
+            "PF OA": {
+              "slot1_sag_fluid_fs": 0.18656576470602348,
+              "slot2_cor_fluid_fs": 0.2168645767938523,
+              "slot3_ax_fluid_fs": 0.21119441175844036,
+              "slot4_sag_pdt2": 0.24781508313808517,
+              "slot5_cor_t1": 0.198913967844568,
+              "slot6_sag_t1": 0.24074896909946814
+            },
+            "Effusion": {
+              "slot1_sag_fluid_fs": 0.26255787092579086,
+              "slot2_cor_fluid_fs": 0.18204245794387092,
+              "slot3_ax_fluid_fs": 0.2546891432542067,
+              "slot4_sag_pdt2": 0.15603541197041748,
+              "slot5_cor_t1": 0.20340021391016216,
+              "slot6_sag_t1": 0.1734001749471536
+            },
+            "Synovitis": {
+              "slot1_sag_fluid_fs": 0.2156473108240076,
+              "slot2_cor_fluid_fs": 0.21043704804920016,
+              "slot3_ax_fluid_fs": 0.2567015690590019,
+              "slot4_sag_pdt2": 0.18525810392477768,
+              "slot5_cor_t1": 0.2019404409868764,
+              "slot6_sag_t1": 0.170297085198381
+            },
+            "Baker's": {
+              "slot1_sag_fluid_fs": 0.19147172782579278,
+              "slot2_cor_fluid_fs": 0.23113050914946057,
+              "slot3_ax_fluid_fs": 0.29944148977916907,
+              "slot4_sag_pdt2": 0.17196222539004602,
+              "slot5_cor_t1": 0.1616572031301866,
+              "slot6_sag_t1": 0.16616897392748597
+            },
+            "Contusion": {
+              "slot1_sag_fluid_fs": 0.20998808089872542,
+              "slot2_cor_fluid_fs": 0.1891315460205078,
+              "slot3_ax_fluid_fs": 0.30983004476939224,
+              "slot4_sag_pdt2": 0.16052822067803546,
+              "slot5_cor_t1": 0.18729749109386856,
+              "slot6_sag_t1": 0.16628546964497934
+            },
+            "Fracture": {
+              "slot1_sag_fluid_fs": 0.22606870759031403,
+              "slot2_cor_fluid_fs": 0.2135055905296689,
+              "slot3_ax_fluid_fs": 0.26518226737406714,
+              "slot4_sag_pdt2": 0.17342605892377408,
+              "slot5_cor_t1": 0.1859060585589257,
+              "slot6_sag_t1": 0.16557591692765158
+            }
+          },
+          "plane_mass": {
+            "ACL": {
+              "sagittal": 0.38678157329559326,
+              "coronal": 0.3337954878807068,
+              "axial": 0.27942323684692383
+            },
+            "MCL": {
+              "sagittal": 0.46590086817741394,
+              "coronal": 0.34657612442970276,
+              "axial": 0.18752336502075195
+            },
+            "Medial Meniscus": {
+              "sagittal": 0.45567190647125244,
+              "coronal": 0.3931688070297241,
+              "axial": 0.15115895867347717
+            },
+            "Lateral Meniscus": {
+              "sagittal": 0.44119739532470703,
+              "coronal": 0.3690488040447235,
+              "axial": 0.1897537112236023
+            },
+            "Medial OA": {
+              "sagittal": 0.42199739813804626,
+              "coronal": 0.39020076394081116,
+              "axial": 0.1878020465373993
+            },
+            "Lateral OA": {
+              "sagittal": 0.4370841979980469,
+              "coronal": 0.3601548373699188,
+              "axial": 0.2027609497308731
+            },
+            "PF OA": {
+              "sagittal": 0.4291609227657318,
+              "coronal": 0.35964468121528625,
+              "axial": 0.21119441092014313
+            },
+            "Effusion": {
+              "sagittal": 0.4158545434474945,
+              "coronal": 0.3294558823108673,
+              "axial": 0.25468915700912476
+            },
+            "Synovitis": {
+              "sagittal": 0.38756242394447327,
+              "coronal": 0.35573604702949524,
+              "axial": 0.2567015588283539
+            },
+            "Baker's": {
+              "sagittal": 0.35534441471099854,
+              "coronal": 0.3452140688896179,
+              "axial": 0.29944148659706116
+            },
+            "Contusion": {
+              "sagittal": 0.36605972051620483,
+              "coronal": 0.32410967350006104,
+              "axial": 0.30983003973960876
+            },
+            "Fracture": {
+              "sagittal": 0.38825416564941406,
+              "coronal": 0.34656333923339844,
+              "axial": 0.2651822566986084
+            }
+          },
+          "entropy": {
+            "ACL": 1.521730899810791,
+            "MCL": 1.5234596729278564,
+            "Medial Meniscus": 1.5167620182037354,
+            "Lateral Meniscus": 1.5316834449768066,
+            "Medial OA": 1.5305849313735962,
+            "Lateral OA": 1.532808780670166,
+            "PF OA": 1.5303796529769897,
+            "Effusion": 1.5153244733810425,
+            "Synovitis": 1.5275816917419434,
+            "Baker's": 1.5106343030929565,
+            "Contusion": 1.5079535245895386,
+            "Fracture": 1.5234092473983765
+          },
+          "entropy_norm": {
+            "ACL": 0.9913376649563057,
+            "MCL": 0.9927613563213633,
+            "Medial Meniscus": 0.988185919181816,
+            "Lateral Meniscus": 0.9981484597187972,
+            "Medial OA": 0.9973889139318666,
+            "Lateral OA": 0.9989108237609718,
+            "PF OA": 0.997334570775501,
+            "Effusion": 0.9874102238103099,
+            "Synovitis": 0.9954496931932444,
+            "Baker's": 0.9842602781607033,
+            "Contusion": 0.9822336488147169,
+            "Fracture": 0.9926697590009452
+          },
+          "mean_pairwise_cosine": 0.9764323234558105
+        },
+        "gold": {
+          "n_studies": 58,
+          "slot_coverage": {
+            "slot1_sag_fluid_fs": 0.9655172413793104,
+            "slot2_cor_fluid_fs": 0.9655172413793104,
+            "slot3_ax_fluid_fs": 1.0,
+            "slot4_sag_pdt2": 0.603448275862069,
+            "slot5_cor_t1": 0.7758620689655172,
+            "slot6_sag_t1": 0.4827586206896552
+          },
+          "slot_mass": {
+            "ACL": {
+              "slot1_sag_fluid_fs": 0.17925165593624115,
+              "slot2_cor_fluid_fs": 0.189195916056633,
+              "slot3_ax_fluid_fs": 0.27205920219421387,
+              "slot4_sag_pdt2": 0.1074148640036583,
+              "slot5_cor_t1": 0.14368344843387604,
+              "slot6_sag_t1": 0.10839493572711945
+            },
+            "MCL": {
+              "slot1_sag_fluid_fs": 0.1980818510055542,
+              "slot2_cor_fluid_fs": 0.18669290840625763,
+              "slot3_ax_fluid_fs": 0.18474577367305756,
+              "slot4_sag_pdt2": 0.13931545615196228,
+              "slot5_cor_t1": 0.15559212863445282,
+              "slot6_sag_t1": 0.13557186722755432
+            },
+            "Medial Meniscus": {
+              "slot1_sag_fluid_fs": 0.19488027691841125,
+              "slot2_cor_fluid_fs": 0.22078464925289154,
+              "slot3_ax_fluid_fs": 0.15124931931495667,
+              "slot4_sag_pdt2": 0.14244474470615387,
+              "slot5_cor_t1": 0.167062908411026,
+              "slot6_sag_t1": 0.12357804924249649
+            },
+            "Lateral Meniscus": {
+              "slot1_sag_fluid_fs": 0.2107410430908203,
+              "slot2_cor_fluid_fs": 0.2069733589887619,
+              "slot3_ax_fluid_fs": 0.18534405529499054,
+              "slot4_sag_pdt2": 0.13461042940616608,
+              "slot5_cor_t1": 0.15864725410938263,
+              "slot6_sag_t1": 0.10368378460407257
+            },
+            "Medial OA": {
+              "slot1_sag_fluid_fs": 0.20918111503124237,
+              "slot2_cor_fluid_fs": 0.22214382886886597,
+              "slot3_ax_fluid_fs": 0.1838001310825348,
+              "slot4_sag_pdt2": 0.12603949010372162,
+              "slot5_cor_t1": 0.16514074802398682,
+              "slot6_sag_t1": 0.09369473159313202
+            },
+            "Lateral OA": {
+              "slot1_sag_fluid_fs": 0.21647587418556213,
+              "slot2_cor_fluid_fs": 0.19734300673007965,
+              "slot3_ax_fluid_fs": 0.1971907913684845,
+              "slot4_sag_pdt2": 0.13118906319141388,
+              "slot5_cor_t1": 0.1604253649711609,
+              "slot6_sag_t1": 0.09737589955329895
+            },
+            "PF OA": {
+              "slot1_sag_fluid_fs": 0.1788438856601715,
+              "slot2_cor_fluid_fs": 0.20403407514095306,
+              "slot3_ax_fluid_fs": 0.20740267634391785,
+              "slot4_sag_pdt2": 0.1428127884864807,
+              "slot5_cor_t1": 0.1514083445072174,
+              "slot6_sag_t1": 0.11549822986125946
+            },
+            "Effusion": {
+              "slot1_sag_fluid_fs": 0.25515225529670715,
+              "slot2_cor_fluid_fs": 0.1719619333744049,
+              "slot3_ax_fluid_fs": 0.24640417098999023,
+              "slot4_sag_pdt2": 0.08863949775695801,
+              "slot5_cor_t1": 0.15579964220523834,
+              "slot6_sag_t1": 0.08204244077205658
+            },
+            "Synovitis": {
+              "slot1_sag_fluid_fs": 0.2069503217935562,
+              "slot2_cor_fluid_fs": 0.19877766072750092,
+              "slot3_ax_fluid_fs": 0.2452428787946701,
+              "slot4_sag_pdt2": 0.1084052175283432,
+              "slot5_cor_t1": 0.1578836590051651,
+              "slot6_sag_t1": 0.08274029940366745
+            },
+            "Baker's": {
+              "slot1_sag_fluid_fs": 0.18310344219207764,
+              "slot2_cor_fluid_fs": 0.21917903423309326,
+              "slot3_ax_fluid_fs": 0.2897469103336334,
+              "slot4_sag_pdt2": 0.10150320082902908,
+              "slot5_cor_t1": 0.1261729598045349,
+              "slot6_sag_t1": 0.0802944153547287
+            },
+            "Contusion": {
+              "slot1_sag_fluid_fs": 0.203297957777977,
+              "slot2_cor_fluid_fs": 0.18027685582637787,
+              "slot3_ax_fluid_fs": 0.29722335934638977,
+              "slot4_sag_pdt2": 0.09341463446617126,
+              "slot5_cor_t1": 0.14626836776733398,
+              "slot6_sag_t1": 0.07951884716749191
+            },
+            "Fracture": {
+              "slot1_sag_fluid_fs": 0.2171025425195694,
+              "slot2_cor_fluid_fs": 0.20223279297351837,
+              "slot3_ax_fluid_fs": 0.2563266158103943,
+              "slot4_sag_pdt2": 0.10068751126527786,
+              "slot5_cor_t1": 0.14443890750408173,
+              "slot6_sag_t1": 0.07921154052019119
+            }
+          },
+          "slot_mass_present": {
+            "ACL": {
+              "slot1_sag_fluid_fs": 0.18565349919455393,
+              "slot2_cor_fluid_fs": 0.19595290933336532,
+              "slot3_ax_fluid_fs": 0.27205919397288353,
+              "slot4_sag_pdt2": 0.1780017716544015,
+              "slot5_cor_t1": 0.18519200219048393,
+              "slot6_sag_t1": 0.2245323657989502
+            },
+            "MCL": {
+              "slot1_sag_fluid_fs": 0.20515620708465576,
+              "slot2_cor_fluid_fs": 0.19336051600319998,
+              "slot3_ax_fluid_fs": 0.18474577213155813,
+              "slot4_sag_pdt2": 0.23086561475481307,
+              "slot5_cor_t1": 0.2005409664577908,
+              "slot6_sag_t1": 0.280827454158238
+            },
+            "Medial Meniscus": {
+              "slot1_sag_fluid_fs": 0.20184028148651123,
+              "slot2_cor_fluid_fs": 0.2286698137010847,
+              "slot3_ax_fluid_fs": 0.1512493265086207,
+              "slot4_sag_pdt2": 0.23605128696986608,
+              "slot5_cor_t1": 0.21532552507188585,
+              "slot6_sag_t1": 0.2559830972126552
+            },
+            "Lateral Meniscus": {
+              "slot1_sag_fluid_fs": 0.21826750891549246,
+              "slot2_cor_fluid_fs": 0.21436526094164168,
+              "slot3_ax_fluid_fs": 0.1853440547811574,
+              "slot4_sag_pdt2": 0.2230687005179269,
+              "slot5_cor_t1": 0.2044786877102322,
+              "slot6_sag_t1": 0.2147735527583531
+            },
+            "Medial OA": {
+              "slot1_sag_fluid_fs": 0.21665186541421072,
+              "slot2_cor_fluid_fs": 0.23007753917149135,
+              "slot3_ax_fluid_fs": 0.18380013827619882,
+              "slot4_sag_pdt2": 0.20886543818882533,
+              "slot5_cor_t1": 0.2128480699327257,
+              "slot6_sag_t1": 0.1940819365637643
+            },
+            "Lateral OA": {
+              "slot1_sag_fluid_fs": 0.22420716285705566,
+              "slot2_cor_fluid_fs": 0.2043909685952323,
+              "slot3_ax_fluid_fs": 0.19719079445148335,
+              "slot4_sag_pdt2": 0.2173990249633789,
+              "slot5_cor_t1": 0.20677047305636936,
+              "slot6_sag_t1": 0.20170722688947404
+            },
+            "PF OA": {
+              "slot1_sag_fluid_fs": 0.18523117474147252,
+              "slot2_cor_fluid_fs": 0.21132101331438338,
+              "slot3_ax_fluid_fs": 0.207402673260919,
+              "slot4_sag_pdt2": 0.2366612025669643,
+              "slot5_cor_t1": 0.1951485315958659,
+              "slot6_sag_t1": 0.23924633434840611
+            },
+            "Effusion": {
+              "slot1_sag_fluid_fs": 0.2642648390361241,
+              "slot2_cor_fluid_fs": 0.1781034299305507,
+              "slot3_ax_fluid_fs": 0.24640417098999023,
+              "slot4_sag_pdt2": 0.14688831056867327,
+              "slot5_cor_t1": 0.20080841912163627,
+              "slot6_sag_t1": 0.16994505269186838
+            },
+            "Synovitis": {
+              "slot1_sag_fluid_fs": 0.214341402053833,
+              "slot2_cor_fluid_fs": 0.20587686129978724,
+              "slot3_ax_fluid_fs": 0.2452428751978381,
+              "slot4_sag_pdt2": 0.17964293616158622,
+              "slot5_cor_t1": 0.20349449581570095,
+              "slot6_sag_t1": 0.17139061859675817
+            },
+            "Baker's": {
+              "slot1_sag_fluid_fs": 0.18964285509926931,
+              "slot2_cor_fluid_fs": 0.22700686114174978,
+              "slot3_ax_fluid_fs": 0.28974690930596714,
+              "slot4_sag_pdt2": 0.16820530210222517,
+              "slot5_cor_t1": 0.16262291802300347,
+              "slot6_sag_t1": 0.16632413864135742
+            },
+            "Contusion": {
+              "slot1_sag_fluid_fs": 0.2105586017881121,
+              "slot2_cor_fluid_fs": 0.18671531336648123,
+              "slot3_ax_fluid_fs": 0.29722335420805834,
+              "slot4_sag_pdt2": 0.15480139596121653,
+              "slot5_cor_t1": 0.18852367401123046,
+              "slot6_sag_t1": 0.16471760613577707
+            },
+            "Fracture": {
+              "slot1_sag_fluid_fs": 0.22485620634896414,
+              "slot2_cor_fluid_fs": 0.20945538793291366,
+              "slot3_ax_fluid_fs": 0.2563266260870572,
+              "slot4_sag_pdt2": 0.16685359137398856,
+              "slot5_cor_t1": 0.1861657036675347,
+              "slot6_sag_t1": 0.1640810455594744
+            }
+          },
+          "plane_mass": {
+            "ACL": {
+              "sagittal": 0.3950614631175995,
+              "coronal": 0.33287936449050903,
+              "axial": 0.27205920219421387
+            },
+            "MCL": {
+              "sagittal": 0.4729691743850708,
+              "coronal": 0.34228503704071045,
+              "axial": 0.18474577367305756
+            },
+            "Medial Meniscus": {
+              "sagittal": 0.4609030485153198,
+              "coronal": 0.3878476619720459,
+              "axial": 0.15124931931495667
+            },
+            "Lateral Meniscus": {
+              "sagittal": 0.4490352272987366,
+              "coronal": 0.3656206727027893,
+              "axial": 0.18534405529499054
+            },
+            "Medial OA": {
+              "sagittal": 0.4289153516292572,
+              "coronal": 0.3872845470905304,
+              "axial": 0.1838001310825348
+            },
+            "Lateral OA": {
+              "sagittal": 0.4450409412384033,
+              "coronal": 0.35776832699775696,
+              "axial": 0.1971907913684845
+            },
+            "PF OA": {
+              "sagittal": 0.4371548295021057,
+              "coronal": 0.3554424047470093,
+              "axial": 0.20740267634391785
+            },
+            "Effusion": {
+              "sagittal": 0.42583420872688293,
+              "coronal": 0.32776159048080444,
+              "axial": 0.24640417098999023
+            },
+            "Synovitis": {
+              "sagittal": 0.39809584617614746,
+              "coronal": 0.35666128993034363,
+              "axial": 0.2452428787946701
+            },
+            "Baker's": {
+              "sagittal": 0.3649010956287384,
+              "coronal": 0.34535205364227295,
+              "axial": 0.2897469103336334
+            },
+            "Contusion": {
+              "sagittal": 0.37623143196105957,
+              "coronal": 0.32654520869255066,
+              "axial": 0.29722335934638977
+            },
+            "Fracture": {
+              "sagittal": 0.39700159430503845,
+              "coronal": 0.3466717302799225,
+              "axial": 0.2563266158103943
+            }
+          },
+          "entropy": {
+            "ACL": 1.5442402362823486,
+            "MCL": 1.5458331108093262,
+            "Medial Meniscus": 1.5405943393707275,
+            "Lateral Meniscus": 1.553424596786499,
+            "Medial OA": 1.5523920059204102,
+            "Lateral OA": 1.5544055700302124,
+            "PF OA": 1.5520117282867432,
+            "Effusion": 1.5361407995224,
+            "Synovitis": 1.5505642890930176,
+            "Baker's": 1.5343948602676392,
+            "Contusion": 1.5325279235839844,
+            "Fracture": 1.54587721824646
+          },
+          "entropy_norm": {
+            "ACL": 0.9921533042260645,
+            "MCL": 0.9933080879899542,
+            "Medial Meniscus": 0.989794173173423,
+            "Lateral Meniscus": 0.9982302635250881,
+            "Medial OA": 0.9975409115661297,
+            "Lateral OA": 0.9988824264299008,
+            "PF OA": 0.9973394298021688,
+            "Effusion": 0.9870746672420512,
+            "Synovitis": 0.9963703212347986,
+            "Baker's": 0.985875299355511,
+            "Contusion": 0.9845164194104972,
+            "Fracture": 0.9933213421807148
+          },
+          "mean_pairwise_cosine": 0.978003978729248
+        }
+      }
+    }
+  },
+  "gold_auc": 0.7768505208751146,
+  "gold_per_label": {
+    "ACL": 0.7279411764705882,
+    "MCL": 0.5532879818594104,
+    "Medial Meniscus": 0.7692307692307693,
+    "Lateral Meniscus": 0.6409937888198758,
+    "Medial OA": 0.9565891472868217,
+    "Lateral OA": 0.781431334622824,
+    "PF OA": 0.7824967824967825,
+    "Effusion": 0.8658385093167702,
+    "Synovitis": 0.6367980884109916,
+    "Baker's": 0.8786231884057971,
+    "Contusion": 0.8636977058029689,
+    "Fracture": 0.8652777777777778
+  },
+  "oof_pseudo_auc": null,
+  "delta": {
+    "pseudo_f0": -0.003938594432937426,
+    "gold": -0.007008453543226545
+  },
+  "decision_auto": "neutral",
+  "gpu_hours_total": 4.420529169705179
+}
