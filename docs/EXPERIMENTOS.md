@@ -1,6 +1,6 @@
 # Registro de experimentos
 
-**Referencia actual: exp002_dinov2s_ref** (5 folds: OOF pseudo 0.802, gold 0.788; fold 0: pseudo 0.827, gold 0.777).
+**Referencia actual: exp045_raptor_aug_espacial** (fold 0: pseudo L2 0.890, gold 0.920; all-data SWA 13–15: gold 0.919).
 
 Una fila por experimento. `nuevo_experimento()` agrega la fila con estado `spec`; su autor la completa en el verdict.
 Estados: `spec`, `running`, `worked`, `didnt`, `killed`. Los números salen de `results/expNNN_tag/metrics.json`.
