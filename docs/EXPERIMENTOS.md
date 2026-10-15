@@ -1,6 +1,6 @@
 # Registro de experimentos
 
-**Referencia actual: exp002_dinov2s_ref** (5 folds: OOF pseudo 0.802, gold 0.788; fold 0: pseudo 0.827, gold 0.777).
+**Referencia actual: exp045_raptor_aug_espacial** (fold 0: pseudo L2 0.890, gold 0.920; all-data SWA 13–15: gold 0.919).
 
 Una fila por experimento. `nuevo_experimento()` agrega la fila con estado `spec`; su autor la completa en el verdict.
 Estados: `spec`, `running`, `worked`, `didnt`, `killed`. Los números salen de `results/expNNN_tag/metrics.json`.
@@ -81,3 +81,7 @@ Estados: `spec`, `running`, `worked`, `didnt`, `killed`. Los números salen de `
 | exp064 | raptor_ft_nartaa_aug_light | rodrigo | exp044 | Track B (desde 0.954): exp044 + mri_artifact_aug light (all-data) | spec | | | | |
 | exp065 | raptor_ft_nartaa_prepro_f1 | rodrigo | exp044 | Track B (desde 0.954): exp044 + preprocesado ganador de la Fase 1 (all-data); se omite si no hay ganador | didnt | — | — | — | no corrido: la Fase 1 no dejó brazo promising (padre = exp045) |
 | exp066 | compact_f0 | rodrigo | — (ref. exp045) | heliosli compact ConvNeXt-S (E_lrprior) entrenada limpia en split_v1 fold 0; blend con exp045 f0 | worked | 0.8755 (blend 0.8955) | 0.8972 (blend 0.9256) | — | compact sola < exp045 (−0.014) pero el blend rank 0.5/0.5 con exp045 sube +0.0060 pseudo / +0.0055 gold; 14 GPU-h por fold |
+| exp068 | compact_r7_receta | rodrigo | exp066 | trainer público R7 v9.8 + flags reproducibles (EMA, jitter, mirror, aug v2, cover, syn-decomp), fold 0 | didnt | 0.875 (pseudo L2) | 0.884 (f0) | — | Δ pseudo −0.0006, gold −0.013; blend con exp045 0.8939 (vs 0.8955); 10.1 GPU-h; flags R7 no explican su ventaja |
+| exp071 | raptor_nartaa_init_aug | rodrigo | exp045 | V1: init = pesos SWA de nartaa (OAI/MOAKS) en vez de ImageNet, receta exp045 (aug espacial) all-data; decide LB | didnt | — | 0.917 (all-data, contaminado) | 0.944 | LB solo 0.944 < 0.946 (+0.003 vs exp045 5f, ruido); gold init nartaa 0.919 → 0.917; 1.49 GPU-h 5090 |
+| exp072 | raptor_fm_aux | rodrigo | exp045 | V2: tarea auxiliar fastMRI+ estilo R7 (cajas 11 clases en ventanas coronales, λ 0.3) | didnt | 0.892 (pseudo L2) | 0.924 (f0) | — | Δ pseudo +0.0042 (<+0.005), gold +0.003, 1.87 GPU-h 5090; cabeza aux holdout AUC 0.80–0.99; tienda 995/1172 vols |
+| exp073 | mrnet_val_externa | rodrigo | exp045 | V3a: validación externa cero-shot de exp045 all-data en MRNet (anormal/LCA/menisco), sin entrenar | worked | — | — | — | MRNet valid (120) TTA: LCA 0.975, menisco 0.882, anormal 0.923 (noisy-OR 0.936); todo (1250): 0.908/0.879/0.887; 0.05 GPU-h |

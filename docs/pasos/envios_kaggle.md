@@ -48,3 +48,37 @@ sesión); aquí solo los números. Kernels privados, sin internet, GPU T4.
   (`docs/papers/00_competencia/README.md`); los pesos son un dataset público de Kaggle y blend-mine, público, ya los usa.
   OAI pide registro y acuerdo de uso (gratuito): si la organización lo considerara "no libre", afectaría por igual a
   blend-mine y a todo lo que use esos pesos.
+
+## 15-oct (cola del 15, disparo 00:05 UTC) — paso 8, sobre R7
+
+| ID | Kernel | Qué es | LB público |
+|---|---|---|---|
+| 57198921 | r7-raptor-repro v1 | R7 compact + Raptor nartaa 384, 0.5/0.5 tal cual (público dice 0.957) | 0.956 |
+| 57199075 | r7-raptor-r224flip v1 | + nartaa 224 plain+mirror 0.35 en el slot Raptor | 0.956 |
+| 57199209 | r7-raptor-exp064 v1 | R7 0.5 + slot Raptor = rank mean(nartaa384, exp064) | 0.956 |
+| 57199291 | r7-raptor-exp044 v1 | R7 0.5 + slot Raptor = rank mean(nartaa384, exp044) | 0.956 |
+| 57199375 | exp071-solo v1 | exp071 solo (decide su verdict: worked si ≥ 0.946) | 0.944 → didnt |
+
+- La reproducción de R7+Raptor da 0.956 (el público reporta 0.957; diferencia de redondeo/ruido, ~390 estudios).
+- Meter nuestras piezas de init nartaa (exp044, exp064) o nartaa 224 en el slot Raptor no mueve el LB: las cuatro 0.956.
+  Con Δ < 0.004 como ruido, no hay evidencia para seguir sumando piezas Raptor propias sobre R7.
+- Los R7 tardaron ~3 h 40 min hasta el score.
+
+## Regla de finales (fijada el 15-oct ~15:30 UTC, antes de ver los envíos del 16 al 18)
+
+- **A, mejor AUC:** núcleo R7+Raptor + la pieza (o unión de piezas ya medidas) con evidencia interna limpia y LB ≥ 0.956
+  que más diversidad aporte. Preferencia por fuerza de evidencia, no por el 4.º decimal: exp067 > S6fall > hijo L6 de
+  exp069. Si ninguna llega a 0.956, A = `r7-raptor-r224flip` (0.956). S6fall usa pesos CC BY-NC 4.0: antes de elegirlo
+  como final hay que confirmar que no choca con la licencia exigida a los ganadores; si choca, se salta al siguiente.
+- **B, eficiente:** antes del 18-oct leer las reglas del track de eficiencia. Por defecto, Raptor 384 solo con espejo
+  (0.949, ~27 min), o sin espejo si la regla prima el tiempo (exp026: −0.001, −50 % de tiempo). Si el track no necesita
+  una final propia, B = `r7-raptor-repro` como cobertura de A.
+- Cada pieza nueva cuenta como mejora solo si LB ≥ 0.958 (0.956 + 0.002); entre 0.956 y 0.957 = empate (ruido).
+
+## Cola 16-oct (disparo 00:05 UTC) y 17-oct
+
+| Fecha | Kernel | Pregunta | Criterio |
+|---|---|---|---|
+| 16 | r7-raptor-exp067 v1 | compact = rank R7 0.75 / exp067 0.25 | worked si ≥ 0.958 |
+| 16 | r7-raptor-s6fall v1 | padre r224flip; compact = rank R7 0.6 / S6fall 0.4 (leoprovorov v2) | ≥ 0.958; killed si S6 no puntúa 100 % (receipt) |
+| 17 | r7-raptor-exp069 v1 | compact = rank R7 0.75 / exp069 0.25 (control del hijo L6) | worked si ≥ 0.958 |
