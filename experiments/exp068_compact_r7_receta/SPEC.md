@@ -50,6 +50,23 @@ celda, fm-aux, review holdout, sidefix.
 - Pod `rsna-c68` (RTX PRO 4500, 400 GB): caché folds 1–4 → smoke → train → borra caché train → caché fold 0 + gold → eval →
   commit local `metrics.json` → podStop. Worker `orq/compact2/worker_compact.sh` (DELETE_TRAIN=1).
 
-## 3. VERDICT
+## 3. VERDICT (números de `results/exp068_compact_r7_receta/metrics.json`)
 
-(pendiente)
+**Resultado:** didnt · **Fase alcanzada:** screen (fold 0)
+
+| Métrica | Padre (exp066) | Este | Δ |
+|---|---|---|---|
+| pseudo AUC compact sola fold 0 (decide) | 0.8755 | 0.8749 | −0.0006 |
+| gold compact sola | 0.8972 | 0.8844 | −0.0128 (veto 0.8772: pasa) |
+| v1 compact sola | — | 0.8403 | — |
+| blend rank 0.5/0.5 con exp045 SWA f0: pseudo / gold (reporte) | 0.8955 / 0.926 | 0.8939 / 0.9161 | −0.0016 / −0.010 |
+| GPU-h (total) | — | 10.12 (RTX PRO 4500) | — |
+
+**Qué aprendimos (2-4 líneas):** las flags públicas de R7 (EMA 0.999, slice jitter, mirror, aug v2, muestreo por cobertura,
+syn-decomp) sobre nuestras etiquetas no mejoran la compact. La pseudo queda igual (−0.0006), el gold baja 0.013 y el blend
+con exp045 también baja. Es un paquete de varias flags, así que no se puede atribuir el efecto a ninguna sola. Lo más
+probable es que la ventaja de R7 venga de sus etiquetas/targets privados y no de la receta de entrenamiento.
+
+**Siguiente paso sugerido:** no hacer all-data con esta receta. Para la compact quedan exp067 (receta exp066 all-data) y
+exp069 (fine-tune sobre los pesos R7, que sí traen sus targets).
+
