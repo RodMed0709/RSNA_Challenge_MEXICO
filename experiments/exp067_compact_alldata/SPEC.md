@@ -49,4 +49,18 @@ ganar ~1.4× de velocidad. Si el smoke falla con compile, se corre sin compile (
 
 ## 3. VERDICT
 
-(pendiente)
+(pendiente: decide el LB público del envío de abajo)
+
+**Veto gold (metrics.json):** gold all-data = 0.9258 ≥ 0.8772 → pasa, no `killed`.
+
+### SPEC del envío Kaggle (fijada antes de correr el kernel, 2026-10-15 ~05:00 UTC)
+
+- Kernel `medellinrodrigo/r7-raptor-exp067` = copia de `r7-raptor-repro` (R7 + Raptor nartaa384, LB 0.956) con un solo cambio
+  en el slot compact. Dataset privado `medellinrodrigo/rsna-knee-exp067-compact` (los 4 archivos del export).
+- **Slot Raptor:** idéntico al repro (`raptor_ft_alldata_t16_blendjev_oai_d96_r384_swa.pt`, nartaa 384).
+- **Grupo compact:** rank mean por hallazgo de R7 (peso **0.75**) y exp067 all-data (peso **0.25**). exp067 corre con el mismo
+  worker `compact_infer.py` / `probe_dual.py` y el mismo preprocesado que R7 (views v4, crop 352, phys 3.5, side model),
+  `compact_train.py` de R7 (carga strict, 0 claves faltantes/inesperadas, verificado).
+- **Final:** 0.5 compact + 0.5 Raptor, rank mean como el repro (incluido el override OA = 0.5).
+- Pesos fijos; no se ajustan con gold ni con LB. Una sola variante.
+- Criterio (sección 1): `worked` si LB ≥ LB(R7 + Raptor repro = 0.956) + 0.002 = **0.958**; `didnt` si no.
