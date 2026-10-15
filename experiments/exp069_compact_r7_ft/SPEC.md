@@ -6,7 +6,7 @@
 | Padre | exp068_compact_r7_receta (trainer R7 v9.8 + flags públicos, desde ImageNet) |
 | Fecha | 2026-10-14 |
 | Rama | exp069_compact_r7_ft (desde exp068_compact_r7_receta) |
-| Estado | spec → run encadenado tras exp067 en `rsna-c67` |
+| Estado | verdict parcial: veto pasa, pendiente LB |
 
 Idea: análogo de exp044 (Raptor afinado desde los pesos de nartaa) para la compact: partir de los pesos públicos de R7
 (`heliosli/rsna-knee-compact-r7cnxfsss`, `E_lrprior_s0_f0.pt`, sha256 `ca8a76e0…`, licencia "other": uso en la competición)
@@ -49,4 +49,25 @@ limpia. Gold no se entrenó (manifest `gold_in_training 0`) pero puede estar con
 
 ## 3. VERDICT
 
-(pendiente)
+**Estado: pendiente LB** (veto pasa). Números de `results/exp069_compact_r7_ft/metrics.json` (fase `alldata`, última época).
+
+| Medida | Valor |
+|---|---|
+| Gold exp069 final | 0.9271 |
+| Gold init R7 f0 (sin estados/extent) | 0.9331 |
+| Δ gold vs init | −0.0060 (veto: > −0.02 → pasa) |
+| Gold vs mínimo absoluto 0.8772 | pasa |
+| Blend rank 0.5/0.5 con exp045 SWA f0 (gold) | 0.9346 |
+| GPU-h total | 3.98 (≤ 6) |
+
+- **Veto de olvido:** pasa (0.9271 ≥ 0.9331 − 0.02 y ≥ 0.8772). El fine-tune pierde algo de gold frente a R7 sin afinar
+  (bajan sobre todo Effusion 0.917→0.867 y Contusion 0.951→0.918; sube Medial Meniscus 0.952→0.983).
+- **Decide el LB (criterio fijo de la sección 1):** kernel `medellinrodrigo/r7-raptor-exp069` = copia exacta de
+  `r7-raptor-exp067` con el slot compact = rank mean (R7 0.75, exp069 0.25), Raptor y blend final iguales. Referencia sin
+  exp069 = R7+Raptor 0.956 → `worked` si LB ≥ 0.958 (Δ ≥ +0.002); si no, `didnt`. Encolado para el 2026-10-17.
+- **Datos:** all-data nominal 4348 estudios; entrenó con 4345 (3 errores al construir la caché `px384_v4`:
+  `cache.train.errors = 3`).
+- **Carga no estricta del init:** R7 f0 se cargó con `strict=False`; se perdieron la cabeza de estados, extent y aux
+  (necesitan los targets privados de heliosli). El checkpoint exportado no tiene esas piezas (`state_spec: null`) y carga
+  `strict=True` con el `compact_train.py` de R7 (sha `04df7e2e…`): 0 missing / 0 unexpected, `syn_decomp=True`.
+- Gold no seleccionó nada (última época por receta); gold puede estar contaminado por la selección de heliosli.

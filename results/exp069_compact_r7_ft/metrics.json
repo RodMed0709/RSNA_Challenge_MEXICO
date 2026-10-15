@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "exp": "exp069_compact_r7_ft",
+  "author": "rodrigo",
+  "parent": "exp068_compact_r7_receta",
+  "split": "split_v1_seed42",
+  "split_sha256": "9fac0679909efda4e52da6c92816442bcf79bffade391e567dc393c8a13e6a87",
+  "git": {
+    "commit": "84cb42c",
+    "branch": "exp069_compact_r7_ft",
+    "src_dirty": false
+  },
+  "timestamp_utc": "2026-10-15T09:38:55.532725+00:00",
+  "phase": "alldata",
+  "select_on": "none (last epoch, recipe)",
+  "params": {
+    "EXP": "exp069_compact_r7_ft",
+    "PADRE": "exp068_compact_r7_receta",
+    "FOLDS": [
+      0
+    ],
+    "SEED": 0,
+    "SPLIT": "split_v1_seed42",
+    "SELECT_ON": "pseudo",
+    "SMOKE": false,
+    "PHASE": "eval",
+    "PX_TRAIN": "/root/px384_v4_all",
+    "PX_EVAL": "/root/px384_v4_gold",
+    "RUN_DIR": "/root/run_exp069",
+    "PA": "/workspace/data/public_assets",
+    "CODE_DIR": "/root/compact/code",
+    "SRC_DIR": "/root/compact/src_r7",
+    "INIT": "/root/compact/pretrained/convnext_small_in22k_ft_in1k.safetensors",
+    "LABELS_SOFT": "/workspace/data/labels/public/dreaddevelopment/rsna-knee-labels/labels_llm_soft.parquet",
+    "L2_CSV": "/workspace/data/labels/public/stevenleehans/rsna-knee-llm-report-labels/llm_labels_v4_blend.csv",
+    "L3_CSV": "/workspace/data/labels/public/pilkwang/rsna-knee-llm-labels/report_labels_v2.csv",
+    "L4_CSV": "/workspace/data/labels/public/lixin73/rsna-knee-llm-report-labels-sol56/labels_llm_gpt56sol.csv",
+    "V1_CSV": "/workspace/data/labels/report_labels_v1.csv",
+    "REF_DIR": "/workspace/users/rodrigo/wt_exp045_raptor_aug_espacial/results/exp045_raptor_aug_espacial",
+    "REF_PSEUDO_SWA": 0.8894654941741685,
+    "REF_GOLD_SWA": 0.9201083029612395,
+    "REF_GOLD_COMPACT": 0.897173253306936,
+    "EXPORT_DIR": "/workspace/users/rodrigo/kaggle_export/exp069_compact_r7_ft",
+    "R7_INIT": "/workspace/data/public_assets/heliosli__rsna-knee-compact-r7cnxfsss/E_lrprior_s0_f0.pt",
+    "R7_INIT_SHA": "ca8a76e024828793e0663e5a2a13461de17e820bed6789eafe3f155072d3612f",
+    "R7_FLAGS": [
+      "--slice-jitter",
+      "0.25",
+      "--ema",
+      "0.999",
+      "--syn-decomp",
+      "--mirror",
+      "0.5",
+      "--aug",
+      "v2",
+      "--aug-grid-fp32",
+      "--draw-seed",
+      "--train-sampling",
+      "cover",
+      "--cover-stride",
+      "3"
+    ],
+    "L2_THRESHOLD": 0.5,
+    "P_CLIP": 0.01,
+    "ARM": "E_lrprior",
+    "BACKBONE": "convnext_small",
+    "EPOCHS": 5,
+    "BATCH": 2,
+    "TRAIN_WINDOWS": 176,
+    "CROP": 352,
+    "LR": 3e-05,
+    "HEAD_LR": 0.0003,
+    "WD": 0.05,
+    "SLICES": 3,
+    "PHYS_MM": 3.5,
+    "EVAL_STRIDE": 1,
+    "SPATIAL_ATTN": true,
+    "COMPILE": true,
+    "WORKERS": 12,
+    "SMOKE_N": 48,
+    "NOTES": "init R7 f0 público (sin estados/extent/aux) + trainer R7 flags públicos, 5 ép LR x0.3, consenso exp031 como LR, all-data 4348",
+    "LABELS": [
+      "ACL",
+      "MCL",
+      "Medial Meniscus",
+      "Lateral Meniscus",
+      "Medial OA",
+      "Lateral OA",
+      "PF OA",
+      "Effusion",
+      "Synovitis",
+      "Baker's",
+      "Contusion",
+      "Fracture"
+    ],
+    "AUTHOR": "rodrigo",
+    "L": "Fracture",
+    "PORT_SHA": "2f90a6b3acf902fb0090ed56205d83fc2fcc0c796ef978838a4bf8c4c9a5cab4",
+    "OUT": "/root/run_exp069/alldata",
+    "EVAL_S": 164.70095252990723
+  },
+  "recipe": {
+    "source": "heliosli/rsna-knee-compact-r7cnxfsss (trainer + init f0)",
+    "compact_train_sha256": "04df7e2e154b2c2521696908f272940c63ce17e9b6337b85847fee64504eeaba",
+    "port_sha256": "2f90a6b3acf902fb0090ed56205d83fc2fcc0c796ef978838a4bf8c4c9a5cab4",
+    "deviations": [
+      "targets: consenso exp031 (Raptor+L2+L3+L4) como L|prior y L|lr_prior = odds(p)/odds(base); los targets opusv11b no son públicos",
+      "init R7 f0 sin cabeza de estados/extent/aux (carga no estricta; ver log del port); R7 f0 entrenó con 3/4 del pool de heliosli (contaminación: no hay validación limpia)",
+      "all-data: folds 0-4 de split_v1_seed42 (4348), fold ficticio único en el port",
+      "caché px384_v4 reconstruida con el camino de inferencia público (compact_infer.CStudies) desde DICOM"
+    ]
+  },
+  "per_fold": {
+    "alldata": {
+      "n_train": 4348,
+      "n_val": 0,
+      "gold_auc": 0.9271116280421495,
+      "gold_per_label": {
+        "ACL": 0.9742647058823529,
+        "MCL": 0.9750566893424036,
+        "Medial Meniscus": 0.9831730769230769,
+        "Lateral Meniscus": 0.929192546583851,
+        "Medial OA": 0.986046511627907,
+        "Lateral OA": 0.8762088974854932,
+        "PF OA": 0.9086229086229086,
+        "Effusion": 0.867080745341615,
+        "Synovitis": 0.8136200716845878,
+        "Baker's": 0.9909420289855073,
+        "Contusion": 0.918353576248313,
+        "Fracture": 0.9027777777777778
+      }
+    }
+  },
+  "pseudo_auc": null,
+  "gold_auc": 0.9271116280421495,
+  "blend": {
+    "compact_alldata": {
+      "gold": {
+        "mean": 0.9271116280421495,
+        "per_label": {
+          "ACL": 0.9742647058823529,
+          "MCL": 0.9750566893424036,
+          "Medial Meniscus": 0.9831730769230769,
+          "Lateral Meniscus": 0.929192546583851,
+          "Medial OA": 0.986046511627907,
+          "Lateral OA": 0.8762088974854932,
+          "PF OA": 0.9086229086229086,
+          "Effusion": 0.867080745341615,
+          "Synovitis": 0.8136200716845878,
+          "Baker's": 0.9909420289855073,
+          "Contusion": 0.918353576248313,
+          "Fracture": 0.9027777777777778
+        }
+      }
+    },
+    "r7_init_no_state_extent": {
+      "gold": {
+        "mean": 0.9331285034026077,
+        "per_label": {
+          "ACL": 0.9938725490196079,
+          "MCL": 0.9750566893424036,
+          "Medial Meniscus": 0.9519230769230769,
+          "Lateral Meniscus": 0.9341614906832297,
+          "Medial OA": 0.9829457364341085,
+          "Lateral OA": 0.8800773694390717,
+          "PF OA": 0.9009009009009009,
+          "Effusion": 0.9173913043478261,
+          "Synovitis": 0.8237753882915173,
+          "Baker's": 0.9936594202898551,
+          "Contusion": 0.951417004048583,
+          "Fracture": 0.8923611111111112
+        }
+      }
+    },
+    "blend_rank_0.5_0.5_exp045swa_f0": {
+      "gold": {
+        "mean": 0.9345882639331397,
+        "per_label": {
+          "ACL": 0.9840686274509804,
+          "MCL": 0.9863945578231292,
+          "Medial Meniscus": 0.9795673076923077,
+          "Lateral Meniscus": 0.9204968944099379,
+          "Medial OA": 0.9906976744186047,
+          "Lateral OA": 0.8636363636363635,
+          "PF OA": 0.8738738738738738,
+          "Effusion": 0.9453416149068322,
+          "Synovitis": 0.8118279569892471,
+          "Baker's": 0.9791666666666666,
+          "Contusion": 0.9480431848852902,
+          "Fracture": 0.9319444444444445
+        }
+      }
+    },
+    "missing": {
+      "gold": 0
+    },
+    "eval_seconds": 164.70095252990723,
+    "delta_gold_vs_exp066": 0.029938374735213547,
+    "delta_gold_vs_init": -0.00601687536045814,
+    "decision_auto": "pending_lb"
+  },
+  "decision_auto": "pending_lb",
+  "cache": {
+    "train": {
+      "studies": 4346,
+      "errors": 3,
+      "rows": 2580603,
+      "sec_per_study_mean": 12.307411412793373
+    },
+    "gold": {
+      "studies": 58,
+      "errors": 0,
+      "rows": 35514,
+      "sec_per_study_mean": 45.74086206896553
+    }
+  },
+  "gpu_hours_train": 3.9313291359610028,
+  "gpu_hours_total": 3.9770794005526438
+}
