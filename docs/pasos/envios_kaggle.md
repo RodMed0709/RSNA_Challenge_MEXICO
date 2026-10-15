@@ -48,3 +48,18 @@ sesión); aquí solo los números. Kernels privados, sin internet, GPU T4.
   (`docs/papers/00_competencia/README.md`); los pesos son un dataset público de Kaggle y blend-mine, público, ya los usa.
   OAI pide registro y acuerdo de uso (gratuito): si la organización lo considerara "no libre", afectaría por igual a
   blend-mine y a todo lo que use esos pesos.
+
+## 15-oct (cola del 15, disparo 00:05 UTC) — paso 8, sobre R7
+
+| ID | Kernel | Qué es | LB público |
+|---|---|---|---|
+| 57198921 | r7-raptor-repro v1 | R7 compact + Raptor nartaa 384, 0.5/0.5 tal cual (público dice 0.957) | 0.956 |
+| 57199075 | r7-raptor-r224flip v1 | + nartaa 224 plain+mirror 0.35 en el slot Raptor | 0.956 |
+| 57199209 | r7-raptor-exp064 v1 | R7 0.5 + slot Raptor = rank mean(nartaa384, exp064) | 0.956 |
+| 57199291 | r7-raptor-exp044 v1 | R7 0.5 + slot Raptor = rank mean(nartaa384, exp044) | 0.956 |
+| 57199375 | exp071-solo v1 | exp071 solo (decide su verdict: worked si ≥ 0.946) | 0.944 → didnt |
+
+- La reproducción de R7+Raptor da 0.956 (el público reporta 0.957; diferencia de redondeo/ruido, ~390 estudios).
+- Meter nuestras piezas de init nartaa (exp044, exp064) o nartaa 224 en el slot Raptor no mueve el LB: las cuatro 0.956.
+  Con Δ < 0.004 como ruido, no hay evidencia para seguir sumando piezas Raptor propias sobre R7.
+- Los R7 tardaron ~3 h 40 min hasta el score.
