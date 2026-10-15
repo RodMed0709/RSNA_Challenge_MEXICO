@@ -78,19 +78,23 @@ el LB público tiene ruido ±0.004 y un solo envío; datos externos: vigilar reg
 
 ## 3. VERDICT (números de `results/exp071_raptor_nartaa_init_aug/alldata/metrics.json` y LB)
 
-**Resultado:** pendiente del LB · **Fase alcanzada:** all-data entrenado (14-oct 14:43–16:13 UTC, pod rsna-ext1 RTX 5090), sanidad OK
+**Resultado:** didnt · **Fase alcanzada:** all-data entrenado (14-oct 14:43–16:13 UTC, pod rsna-ext1 RTX 5090), sanidad OK
 
 Pesos: `/workspace/users/rodrigo/wt_exp071_raptor_nartaa_init_aug/results/exp071_raptor_nartaa_init_aug/swa_alldata.pt` (SWA épocas 13–15).
 
 | Métrica | Padre (exp045 all-data) | Este | Δ |
 |---|---|---|---|
-| LB público solo (decide) | 0.941 (5 folds) | pendiente | |
+| LB público solo (decide; envío 57199375, 15-oct) | 0.941 (5 folds) | 0.944 | +0.003 |
 | gold SWA all-data (sanidad, contaminada) | 0.9186 | 0.9173 | −0.0013 |
 | gold del init nartaa (sanidad) | — | 0.9191 | |
 | GPU-h | 2.81 (RTX PRO 4500) | 1.49 (RTX 5090) | |
 
 Sanidad: gold 0.9173 ≥ 0.90 y ≥ 0.9191 − 0.02 → pasa; se puede construir el kernel solo (TTA espejo, K_EVAL 24) y enviarlo.
 
-**Qué aprendimos (2-4 líneas):** pendiente del LB.
+**Qué aprendimos (2-4 líneas):** arrancar desde los pesos nartaa (OAI/MOAKS) con nuestra receta exp045 da LB 0.944.
+Es +0.003 sobre exp045 5 folds (0.941) y +0.001 sobre exp056 all-data (0.943): dentro del ruido del LB público y por debajo del
+umbral fijado (0.946). La receta exp045 (etiquetas consenso + aug espacial) aplicada sobre el init nartaa no alcanza
+al nartaa original (0.949). Probablemente pierde algo de lo que aportaba el preentreno: el gold bajó 0.9191 → 0.9173.
 
-**Siguiente paso sugerido:** dataset privado con `swa_alldata.pt` + kernel solo como los de exp045/exp056 → cola de envíos; aplicar criterio.
+**Siguiente paso sugerido:** no usarlo solo. Su único uso posible es como pieza del slot Raptor en el ensamble con R7
+(kernel `r7-raptor-exp071`, ya en la cola del 16-oct), que se decide en ese envío y no aquí.
