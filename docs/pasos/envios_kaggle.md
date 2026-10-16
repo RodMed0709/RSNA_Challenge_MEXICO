@@ -81,4 +81,19 @@ sesión); aquí solo los números. Kernels privados, sin internet, GPU T4.
 |---|---|---|---|
 | 16 | r7-raptor-exp067 v1 | compact = rank R7 0.75 / exp067 0.25 | worked si ≥ 0.958 |
 | 16 | r7-raptor-s6fall v1 | padre r224flip; compact = rank R7 0.6 / S6fall 0.4 (leoprovorov v2) | ≥ 0.958; killed si S6 no puntúa 100 % (receipt) |
-| 17 | r7-raptor-exp069 v1 | compact = rank R7 0.75 / exp069 0.25 (control del hijo L6) | worked si ≥ 0.958 |
+| 16 (adelantado del 17) | r7-raptor-exp069 v1 | compact = rank R7 0.75 / exp069 0.25 (control del hijo L6) | worked si ≥ 0.958 |
+
+exp069 se adelantó al 16-oct (ref 57250257, enviado 01:21 UTC a mano desde rsna-cron); la cola del 17 queda vacía.
+
+## Regla para los 2 lugares libres del 16-oct (fijada 01:30 UTC, antes de ver exp067 / S6fall / exp069)
+
+Cuenta igual que arriba: ≥ 0.958 = worked; 0.957 = empate; ≤ 0.956 = nada.
+
+- **Alguna pieza ≥ 0.958:**
+  1. Si ≥ 2 piezas worked → unión: compact = rank R7 + las piezas worked, repartiendo a partes iguales el peso que
+     tenían (exp067/exp069 0.25, S6fall 0.4). Si solo una → dosis: subir su peso (exp067/exp069 a 0.4, S6fall a 0.5).
+  2. Pieza worked + la mejor de las otras si sacó 0.957 (unión, mismo reparto). Si ninguna otra sacó 0.957, sin 2.º envío.
+- **Mejor = 0.957 (empate) en ≥ 2 piezas:** 1 solo envío, unión de las de 0.957 (pregunta: ¿se suman?).
+- **Todo ≤ 0.956 o solo una en 0.957:** no se usa ningún lugar (mejor menos que relleno).
+- Antes de enviar, el kernel debe caber en el tiempo de Kaggle (S6fall ya estima ~5.2 h): si la unión pasa de ~8 h, se
+  quita la pieza más lenta.
