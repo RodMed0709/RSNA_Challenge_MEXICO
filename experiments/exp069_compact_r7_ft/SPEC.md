@@ -49,7 +49,14 @@ limpia. Gold no se entrenó (manifest `gold_in_training 0`) pero puede estar con
 
 ## 3. VERDICT
 
-**Estado: pendiente LB** (veto pasa). Números de `results/exp069_compact_r7_ft/metrics.json` (fase `alldata`, última época).
+**Resultado:** didnt · **Fase alcanzada:** LB público · 2026-10-16. r7-raptor-exp069 v1 (ref 57250257, adelantado al 16-oct)
+= **0.957** < 0.958 (ref R7+Raptor 0.956; +0.001 = ruido). La unión con exp067 y S6fall (r7-raptor-union3) también 0.957.
+
+**Qué aprendimos:** afinar R7 con nuestras etiquetas de consenso y carga no estricta (sin cabeza de estados) no lo mejora:
+pierde algo de gold y en el LB empata. Un hijo con carga estricta + etiquetas L6 en formato de estados es la única variante
+que queda abierta (decide el go/no-go de L6).
+
+Veto gold (sin cambios): Números de `results/exp069_compact_r7_ft/metrics.json` (fase `alldata`, última época).
 
 | Medida | Valor |
 |---|---|
