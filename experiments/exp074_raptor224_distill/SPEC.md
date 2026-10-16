@@ -49,7 +49,12 @@ siempre, no contra el teacher).
 - **Licencias:** destila pesos de heliosli (R7, licencia "other") y de nartaa ("other", supervisión OAI). Antes de elegir el
   alumno como final de premio (ganadores CC BY-NC 4.0) hay que revisar las dos licencias. Código y pesos de heliosli nunca
   a git.
-- Tiempo: el teacher R7 necesita reconstruir la caché `px384_v4` (no está en el volumen).
+- Calibración: R7 da probabilidades casi binarias (1e-6 … 0.99999 en los 3 estudios visibles) y nartaa 384 da valores
+  moderados (0.15 … 0.95); la media en probabilidad (fijada así) hace que R7 domine la forma del objetivo. El 0.957 los
+  mezcla por rangos; no se cambia aquí (sería otra variable).
+- Fidelidad del teacher: se corren los dos scripts del kernel `r7-raptor-repro` sin cambios de modelo sobre una raíz
+  `/kaggle/input` simulada (R7 lee los DICOM con su propio decodificador, sin caché `px384_v4`). Smoke = los 3 estudios
+  visibles de test, comparados con las salidas de Kaggle de ese kernel.
 
 ## 2. PLAN
 
