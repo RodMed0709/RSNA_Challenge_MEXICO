@@ -120,3 +120,19 @@ Por la regla de finales, A = `r7-raptor-exp067` (0.957; preferencia exp067 > S6f
 Pregunta: ¿la TTA espejo del trainer v9.4 (`--flip-tta`) en R7 mejora la final A? Un solo cambio sobre `r7-raptor-exp067`
 (0.957): R7 corre con `--flip-tta`; exp067, Raptor y pesos iguales. worked si LB ≥ 0.959; entra a la cola solo si la
 validación del kernel termina COMPLETE sin error. Evidencia pública de flip TTA: sobre R6, no R7.
+
+## Track de eficiencia: lectura de reglas y envíos del 17-oct (fijado 16-oct ~14:30 UTC, antes de enviar)
+
+- Fórmula oficial: `Efficiency = AUC / (Benchmark − maxAUC) + RuntimeSeconds / 32400` (se minimiza; benchmark = sample
+  submission). Con maxAUC ≈ 0.965, **0.001 AUC ≈ 70 s**. Cuenta solo una submission seleccionada como final (o
+  autoseleccionada) que supere al benchmark en privado.
+- El LB de eficiencia público (ryanholbrook, 16-oct) usa la autoseleccionada = mejor LB público: Mexico-TEAM puesto
+  **3417 / 5955** con la 0.954 del 11-oct (~3.5 h). Los 0.945 rápidos (copias de nartaa 224) están en los puestos 22–35.
+  ⇒ **La final B tiene que ser la eficiente, elegida a mano.** Por defecto B = `exp041-sub-e1-94` (0.945, ~8 min).
+- nartaa `0945-efficient-224crop`: CoAtNet 224 (recorte 0.8 del campo 384), K94, fp16, sin TTA, lector DICOM `fastread
+  study_lut`, pool de procesos + un consumidor por T4. exp041 ya tiene todo eso (verificado): reenviarlo no pregunta nada.
+
+| Kernel | Pregunta | Esperado | Criterio |
+|---|---|---|---|
+| exp041-mirror224 v1 | ¿El espejo L/R (misma lectura, solo GPU) paga su runtime en el 224? Media en probabilidad plano + espejo (`_mirror_tri` de nartaa) | 0.945–0.947; +60–120 s | worked si LB ≥ 0.947 y envío→score ≤ exp041 + 3 min; si no, B = exp041 |
+| exp074-student224 v1 (condicional) | ¿El 224 de 3 slots destilado del 0.957 (exp074) sube el LB a runtime de exp057? | 0.945–0.950; runtime ≤ exp041 | solo si exp074 worked y hay all-data antes de 00:05 UTC; worked si LB ≥ 0.948 |
