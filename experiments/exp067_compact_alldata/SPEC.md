@@ -49,7 +49,20 @@ ganar ~1.4× de velocidad. Si el smoke falla con compile, se corre sin compile (
 
 ## 3. VERDICT
 
-(pendiente: decide el LB público del envío de abajo)
+**Resultado:** didnt · **Fase alcanzada:** LB público · 2026-10-16
+
+| Envío | LB público |
+|---|---|
+| r7-raptor-repro (referencia, 15-oct) | 0.956 |
+| r7-raptor-exp067 v1 (ref 57247862, 16-oct) | 0.957 |
+| r7-raptor-union3 v1 (R7 0.7 + exp067/exp069/S6fall 0.1 c/u, ref 57257627) | 0.957 |
+
+Criterio fijo: worked si ≥ 0.958. 0.957 = +0.001, dentro del ruido (~390 estudios públicos) → `didnt`.
+
+**Qué aprendimos:** exp067 a 0.25 en el slot compact empata con R7 solo (+0.001). Las otras dos piezas medidas el mismo día
+(exp069, S6fall) dieron también 0.957, y unir las tres no suma (0.957). Con estas etiquetas, una segunda compact no mueve R7.
+
+**Siguiente paso:** ninguno sobre exp067; la única palanca restante son etiquetas en formato de estados (plan L6).
 
 **Veto gold (metrics.json):** gold all-data = 0.9258 ≥ 0.8772 → pasa, no `killed`.
 
