@@ -67,15 +67,19 @@ siempre, no contra el teacher).
 
 ## 3. VERDICT (números de `results/exp074_raptor224_distill/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen / 5 folds
+**Resultado:** worked · **Fase alcanzada:** screen (fold 0) · escrito por el orquestador nube 2026-10-16 17:30 UTC; criterios de la sección 1 sin cambios (worked si pseudo f0 SWA ≥ 0.8939; killed si gold < 0.8896).
 
-| Métrica | Padre | Este | Δ |
+| Métrica | Padre (exp057) | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | | | |
-| gold AUC (screen: fold 0 contra fold 0 del padre) | | | |
-| OOF pseudo 5 folds | | | |
-| GPU-h | | | |
+| pseudo AUC fold 0 (SWA ép [14, 15, 13]) | 0.8889 | 0.8987 | +0.0098 |
+| gold AUC (screen: fold 0 contra fold 0 del padre) | 0.9096 | 0.9197 | +0.0102 |
+| OOF pseudo 5 folds | — | — | — |
+| GPU-h (solo alumno fold 0) | 1.20 | 0.87 | -0.33 |
 
-**Qué aprendimos (2-4 líneas):**
+**Qué aprendimos (2-4 líneas):** destilar el 0.957 (teacher R7 + nartaa384 en prob., 0.5) mezclado con el consenso sube el Raptor 224
+eficiente +0.010 en pseudo f0 y +0.010 en gold. Ojo (riesgo ya escrito en la SPEC): el teacher vio el fold 0 (R7 casi todo el pool),
+así que parte de la ganancia en pseudo puede ser fuga de etiquetas del teacher; lo decide el LB del all-data (E2).
+Teacher: 11 estudios sin R7 (NaN → solo consenso). Coste teacher aparte (~1.5 h en 2× 4090).
 
-**Siguiente paso sugerido:**
+**Siguiente paso sugerido:** all-data (ya corrido en paralelo en GPU1) → kernel `exp074-student224` = E2 de la cola del 17-oct
+(worked en LB si ≥ 0.948). Revisar licencias (R7 heliosli, nartaa) antes de elegirlo como final de premio.
