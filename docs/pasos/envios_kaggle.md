@@ -97,3 +97,17 @@ Cuenta igual que arriba: ≥ 0.958 = worked; 0.957 = empate; ≤ 0.956 = nada.
 - **Todo ≤ 0.956 o solo una en 0.957:** no se usa ningún lugar (mejor menos que relleno).
 - Antes de enviar, el kernel debe caber en el tiempo de Kaggle (S6fall ya estima ~5.2 h): si la unión pasa de ~8 h, se
   quita la pieza más lenta.
+
+## 16-oct — resultados (cola del 16 + exp069 adelantado)
+
+| ref | Kernel | LB | Lectura |
+|---|---|---|---|
+| 57247862 | r7-raptor-exp067 v1 (R7 0.75 / exp067 0.25) | 0.957 | empate (+0.001, ruido) |
+| 57248076 | r7-raptor-s6fall v1 (R7 0.6 / S6fall 0.4, padre r224flip) | 0.957 | empate |
+| 57250257 | r7-raptor-exp069 v1 (R7 0.75 / exp069 0.25) | 0.957 | empate |
+
+Ninguna pieza llega a 0.958 → ninguna `worked`. Tres en 0.957 → por la regla de arriba, 1 solo envío con la unión.
+Pesos de la unión (fijados aquí, antes de enviarla): compact = rank R7 0.7 + exp067 0.1 + exp069 0.1 + S6fall 0.1
+(el peso medio que tenían las piezas, 0.3, repartido a partes iguales). Base = kernel s6fall (Raptor r224flip). Una pieza que
+falle o no quepa en el reloj se quita por estudio y se renormalizan los pesos. Kernel `r7-raptor-union3` v1.
+Criterio: worked si ≥ 0.958; 0.957 = las piezas no se suman. El 5.º lugar del día queda sin usar.
