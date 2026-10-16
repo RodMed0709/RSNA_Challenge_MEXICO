@@ -111,3 +111,7 @@ Pesos de la unión (fijados aquí, antes de enviarla): compact = rank R7 0.7 + e
 (el peso medio que tenían las piezas, 0.3, repartido a partes iguales). Base = kernel s6fall (Raptor r224flip). Una pieza que
 falle o no quepa en el reloj se quita por estudio y se renormalizan los pesos. Kernel `r7-raptor-union3` v1.
 Criterio: worked si ≥ 0.958; 0.957 = las piezas no se suman. El 5.º lugar del día queda sin usar.
+
+**union3 (ref 57257627, enviado 06:10 UTC): 0.957.** Las tres piezas no se suman. Verdicts: exp067 didnt, exp069 didnt (en sus ramas).
+Por la regla de finales, A = `r7-raptor-exp067` (0.957; preferencia exp067 > S6fall, que además lleva pesos CC BY-NC).
+5.º lugar del 16 sin usar.
