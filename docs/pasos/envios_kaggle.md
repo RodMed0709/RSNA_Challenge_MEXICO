@@ -115,3 +115,8 @@ Criterio: worked si ≥ 0.958; 0.957 = las piezas no se suman. El 5.º lugar del
 **union3 (ref 57257627, enviado 06:10 UTC): 0.957.** Las tres piezas no se suman. Verdicts: exp067 didnt, exp069 didnt (en sus ramas).
 Por la regla de finales, A = `r7-raptor-exp067` (0.957; preferencia exp067 > S6fall, que además lleva pesos CC BY-NC).
 5.º lugar del 16 sin usar.
+
+## Candidato cola 17-oct: r7-raptor-exp067flip v1 (fijado 16-oct 14:40 UTC, antes de enviarlo)
+Pregunta: ¿la TTA espejo del trainer v9.4 (`--flip-tta`) en R7 mejora la final A? Un solo cambio sobre `r7-raptor-exp067`
+(0.957): R7 corre con `--flip-tta`; exp067, Raptor y pesos iguales. worked si LB ≥ 0.959; entra a la cola solo si la
+validación del kernel termina COMPLETE sin error. Evidencia pública de flip TTA: sobre R6, no R7.
