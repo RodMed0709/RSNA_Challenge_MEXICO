@@ -6,7 +6,7 @@
 | Padre | exp045_raptor_aug_espacial (fold 0: SWA pseudo L2 0.8895, gold 0.9201, 2.51 GPU-h) |
 | Fecha | 2026-10-16 |
 | Rama | exp075_raptor_ssl_dino |
-| Estado | run |
+| Estado | didnt |
 
 Idea: init del encoder CoAtNet-2 = ImageNet + preentreno autosupervisado DINO (sin etiquetas) sobre cortes 2D de los
 estudios de train, sin datos externos; después fine-tune fold 0 con la receta exp045 exacta.
@@ -61,4 +61,30 @@ aprendido; pocas épocas SSL para mover un CoAtNet-2.
 
 ## 3. VERDICT (números de `results/exp075_raptor_ssl_dino/metrics.json`)
 
-Pendiente.
+**Resultado:** didnt · **Fase alcanzada:** screen (fold 0)
+
+| Métrica | Padre exp045 | Este | Δ |
+|---|---|---|---|
+| pseudo L2 fold 0, SWA (decide) | 0.8895 (ép. 15/14/13) | 0.8903 (ép. 14/15/13) | +0.0009 |
+| pseudo L2 fold 0, mejor época | 0.8899 (ép. 15) | 0.8904 (ép. 14) | +0.0006 |
+| v1 fold 0, SWA | 0.8446 | 0.8462 | +0.0016 |
+| gold, SWA (veto) | 0.9201 | 0.9219 | +0.0018 |
+| GPU-h | 2.51 (PRO 4500) | 2.74 = SSL 0.95 + fine-tune 1.79 (A100 SXM) | — |
+| OOF pseudo 5 folds | — | no corrido | — |
+
+SSL: 3 épocas DINO, 2607 pasos × 64 ventanas × 2 vistas (166 848 ventanas 2.5D de 3477 estudios de folds 1–4;
+55 632 por época), 56.8 min, sin tope; pérdida DINO 8.72 → 0.63.
+
+Criterios: 0.8903 < 0.8945 → no `worked`; gold 0.9219 ≥ 0.9001 → no `killed` → **didnt**.
+
+**Qué aprendimos:** el init DINO arranca mejor (ép. 0 pseudo 0.748 vs 0.713; ép. 3 0.849 vs 0.835) pero la ventaja se
+diluye con las 16 épocas de fine-tune y termina en empate (+0.001, ruido). Un preentreno autosupervisado corto sobre
+los mismos datos no reproduce la ganancia del init OAI de nartaa: lo que aporta nartaa es supervisión externa, no
+"haber visto RM de rodilla". Por cada label: sube Medial OA/PF OA/Meniscus medial/Contusion, baja MCL (−0.009) y
+Lateral Meniscus (−0.009).
+
+**Kaggle (medición, no decide):** kernel `medellinrodrigo/exp075-solo` v1 (exp071-solo con un cambio: checkpoint SWA fold 0
+de exp075, sha256 63a8a6a7…), envío del 16-oct. LB: pendiente LB. Referencias: exp031 f0 solo 0.934, exp045 5 folds solo 0.941.
+
+**Siguiente paso sugerido:** no se hace all-data. Si se retoma SSL: fine-tune más corto (p. ej. 8 épocas) o LR de
+backbone menor para no borrar el init, o SSL más largo / con más datos (fold 0 incluido en una versión all-data).
