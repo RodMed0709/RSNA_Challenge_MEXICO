@@ -84,7 +84,7 @@ los mismos datos no reproduce la ganancia del init OAI de nartaa: lo que aporta 
 Lateral Meniscus (−0.009).
 
 **Kaggle (medición, no decide):** kernel `medellinrodrigo/exp075-solo` v1 (exp071-solo con un cambio: checkpoint SWA fold 0
-de exp075, sha256 63a8a6a7…), envío ref 57276803 (16-oct 17:05 UTC). LB: pendiente LB. Referencias: exp031 f0 solo 0.934, exp045 5 folds solo 0.941.
+de exp075, sha256 63a8a6a7…), envío ref 57276803 (16-oct 17:05 UTC). **LB público 0.941** con un solo fold: igual que exp045 con 5 folds (0.941) y +0.007 sobre exp031 f0 solo (0.934). La pseudo fold 0 no lo anticipaba; Rodrigo decide seguir la vía DINO (sub075_1 all-data).
 
 **Siguiente paso sugerido:** no se hace all-data. Si se retoma SSL: fine-tune más corto (p. ej. 8 épocas) o LR de
 backbone menor para no borrar el init, o SSL más largo / con más datos (fold 0 incluido en una versión all-data).
