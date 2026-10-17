@@ -136,3 +136,28 @@ validación del kernel termina COMPLETE sin error. Evidencia pública de flip TT
 |---|---|---|---|
 | exp041-mirror224 v1 | ¿El espejo L/R (misma lectura, solo GPU) paga su runtime en el 224? Media en probabilidad plano + espejo (`_mirror_tri` de nartaa) | 0.945–0.947; +60–120 s | worked si LB ≥ 0.947 y envío→score ≤ exp041 + 3 min; si no, B = exp041 |
 | exp074-student224 v1 (condicional) | ¿El 224 de 3 slots destilado del 0.957 (exp074) sube el LB a runtime de exp057? | 0.945–0.950; runtime ≤ exp041 | solo si exp074 worked y hay all-data antes de 00:05 UTC; worked si LB ≥ 0.948 |
+
+## 17-oct — R6 + flip TTA: copias fieles de los públicos a 0.958 (fijado 15:05 UTC, antes de ver LB)
+
+Origen: barrido público del 17-oct. Dos notebooks públicos llegan a 0.958 con **R6 + flip TTA** (bundle fe055406) en vez de
+R7, Raptor nartaa 0.65·384 + 0.35·224 con espejo y pesos de Raptor por hallazgo. Nuestro mejor: 0.957. Pesos copiados tal
+cual, sin ajustar nada. Usamos los 2 lugares que quedaban del 17 (ya había 3 envíos).
+
+| ref | Kernel | Copia de | Pregunta | Criterio | Validación |
+|---|---|---|---|---|---|
+| 57315883 | r6flip-repro v1 | heliosli/blend-mine-in-private-lb-luck-to-all-upvoters | ¿Reproducimos 0.958 con R6+flip+pesos por hallazgo (Raptor Syn 0.8, LatOA 0.2, PFOA 0.6, Baker 0.35, resto 0.5)? | worked si LB ≥ 0.958 | COMPLETE, 459 s, flip_tta True, sin fallback |
+| 57315940 | r6flip-v2 v1 | heliosli/this-is-best-public-dataset-new-version-0-9586 | ¿Pesos V2 (LatOA 0.15, PFOA 0.65, Syn 0.85, Baker 0.30) + lector 2.5D de goodpjw a 1/10 superan a r6flip-repro? | worked si LB ≥ 0.959 | COMPLETE, 535 s, flip_tta True, "own leg: blended 3 checkpoints" |
+
+- r6flip-repro: el código es idéntico byte a byte al público (solo se quitaron outputs); mismos datasets montados.
+- r6flip-v2: **una única desviación declarada**: `C_SLUG` apunta a `heliosli/rsna-knee-r6-frozen-fe055406-w1` en vez de
+  `heliosli/rsna-knee-r6-frozen-fe055406`, porque la última versión de este último contiene R7 (bundle 8c7b666e) y el
+  `assert bundle_id == fe055406` fallaría. -w1 es copia byte a byte de la v1 (R6); el notebook verifica el sha256 de cada
+  archivo del manifiesto. Resto igual (incluido kernel_source goodpjw2008/rsna-knee-coatnet-r6-2-5d-mil-lb-0-958).
+- Revisión del código: sin internet (`enable_internet: false`, sin urllib/requests/socket), solo lee `/kaggle/input` y
+  el test de la competición; pip offline (`--no-index`) desde wheels de los datasets; sin UIDs codificados ni nada que lea
+  etiquetas. `PROBE_CLASS = None`. Los `torch.load(weights_only=False)` son los de nartaa/goodpjw (ya usados antes).
+- Licencias de los datasets montados: nartaa/rsna-knee-publication-swa-weights-20261007 = "other" (uso investigación /
+  competición; adaptar y redistribuir solo no comercial con crédito; un ganador puede licenciar CC BY-NC 4.0; aviso OAI);
+  heliosli/rsna-knee-r6-frozen-fe055406(-w1) = "other" (sin texto de licencia); heliosli/rsna-orthofoundation-fold0-epoch7-20261004
+  = "other" ("no new open-source license is granted"; upstream con su licencia); goodpjw2008/rsna-knee-2-5d-convnext-reader
+  = Apache-2.0. ⇒ Ninguna de las dos es elegible como final sin aclarar las licencias de heliosli (R6/OrthoFoundation).
