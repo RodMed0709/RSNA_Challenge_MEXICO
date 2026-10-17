@@ -6,7 +6,7 @@
 | Padre | exp075_raptor_ssl_dino (fold 0 SWA: pseudo L2 0.8903, gold 0.9219; LB solo f0 0.941) |
 | Fecha | 2026-10-17 |
 | Rama | sub075_1_alldata |
-| Estado | run |
+| Estado | pendiente LB |
 
 Idea: sonda LB autorizada por Rodrigo (17-oct). exp075 (init DINO) sacó 0.941 en LB con solo el fold 0, igual que
 exp045 con 5 folds. ¿El init DINO en all-data supera al init nartaa en all-data (exp071 solo 0.944)?
@@ -46,6 +46,16 @@ consenso, LRs, semilla 42). La celda 6 copia `swa_alldata.pt` para el kernel (ca
 - Cadena en el pod: smoke (`SMOKE True`) → all-data → export → quita guard_skip → para el pod. Finisher en rsna-cron:
   dataset privado + kernel privado + validación COMPLETE sin Traceback → `orq/ssl/CANDIDATE.json` → cola del 18-oct.
 
-## 3. VERDICT
+## 3. VERDICT (números de `results/sub075_1_alldata/alldata/metrics.json`)
 
-Pendiente.
+**Resultado:** pendiente LB · **Fase alcanzada:** all-data
+
+| Métrica | exp045 all-data | exp071 all-data (init nartaa) | sub075_1 |
+|---|---|---|---|
+| gold SWA [13,14,15] (sanidad ≥ 0.90) | 0.9186 | 0.917 (contaminado) | 0.9195 |
+| GPU-h | 2.81 (PRO 4500) | 1.49 (5090) | 2.78 (PRO 4500) |
+| LB público solo | 0.941 (5 folds) | 0.944 | pendiente LB |
+
+Sanidad gold OK (0.9195 ≥ 0.90) → se construye el kernel `medellinrodrigo/sub075-1-solo` (exp075-solo con un cambio:
+checkpoint `sub075_1_swa_alldata.pt`, sha256 1a9e32e9…), dataset privado `medellinrodrigo/rsna-knee-sub075-1-weights`.
+El verdict lo decide el LB (worked ≥ 0.946 · didnt 0.941–0.945 · killed < 0.941).
