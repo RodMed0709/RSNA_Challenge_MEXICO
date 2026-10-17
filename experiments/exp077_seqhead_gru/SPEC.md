@@ -6,7 +6,7 @@
 | Padre | exp074_raptor224_distill |
 | Fecha | 2026-10-17 |
 | Rama | exp077_seqhead_gru |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: cabeza de secuencia (GRU unidireccional + attention-MIL) sobre embeddings de ventana del backbone exp074 congelado
 
@@ -98,14 +98,25 @@ extra (7, 123) de control y cabeza nueva para ver el ruido.
 
 ## 3. VERDICT (números de `results/exp077_seqhead_gru/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen / all-data
+**Resultado:** didnt · **Fase alcanzada:** screen (fold 0; sin all-data ni kernel)
 
-| Métrica | Padre | Control | Este | Δ vs padre | Δ vs control |
+| Métrica | Padre exp074 | Control (MIL reentrenada) | Este (GRU) | Δ vs padre | Δ vs control |
 |---|---|---|---|---|---|
-| pseudo AUC fold 0 (SWA) | | | | | |
-| gold AUC fold 0 (SWA) | | | | | |
-| GPU-h | | | | | |
+| pseudo AUC fold 0 (SWA) | 0.8987 | 0.9018 | 0.8999 | +0.0012 | −0.0020 |
+| gold AUC fold 0 (SWA) | 0.9197 | 0.9252 | 0.9192 | −0.0006 | −0.0061 |
+| GPU-h | 0.87 | — | 0.139 (embeddings 362 s + 6 cabezas) | | |
 
-**Qué aprendimos (2-4 líneas):**
+Informativo: padre sin reentrenar con 64 ventanas (las del kernel) pseudo 0.9004 · gold 0.9208. Semillas extra (SWA
+pseudo / gold): GRU s7 0.9009 / 0.9165, s123 0.8999 / 0.9198; control s7 0.9013 / 0.9212, s123 0.9024 / 0.9242.
+Criterio: 0.8999 < 0.9037 y < control 0.9018 → `didnt`; gold 0.9192 ≥ 0.8997 → sin veto. Cabeza GRU 0.97 ms/estudio
+(fp16) vs MIL 0.28 ms.
 
-**Siguiente paso sugerido:**
+**Qué aprendimos (2-4 líneas):** sobre el backbone exp074 congelado, la GRU unidireccional no mejora a la bolsa MIL:
+queda por debajo del control en las 3 semillas (0.8999–0.9009 vs 0.9013–0.9024) y con gold algo peor. El contexto entre
+ventanas que añade la GRU no aporta señal que la atención por hallazgo no tenga ya. Lo que sí sube algo es el protocolo:
+evaluar con 64 ventanas (+0.0017) y reentrenar la cabeza MIL sobre embeddings fijos (+0.0014) → control 0.9018 (+0.0031
+sobre el padre, < +0.005). Todas las cabezas tocan su mejor época pronto (ép 1–8 de 16): sobreajustan con embeddings fijos.
+
+**Siguiente paso sugerido:** no seguir con cabezas de secuencia sobre este backbone. Idea para otro experimento: el
+reentrenado de la cabeza MIL sobre embeddings congelados es casi gratis (+0.003 en fold 0); solo vale como experimento
+propio si se busca ≥ +0.005 (p. ej. con menos épocas o media de semillas).
