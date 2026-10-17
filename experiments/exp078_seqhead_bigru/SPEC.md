@@ -6,7 +6,7 @@
 | Padre | exp074_raptor224_distill |
 | Fecha | 2026-10-17 |
 | Rama | exp078_seqhead_bigru |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: cabeza de secuencia (Bi-GRU + attention-MIL) sobre embeddings de ventana del backbone exp074 congelado
 
@@ -98,14 +98,21 @@ extra (7, 123) de control y cabeza nueva para ver el ruido.
 
 ## 3. VERDICT (números de `results/exp078_seqhead_bigru/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen / all-data
+**Resultado:** didnt · **Fase alcanzada:** screen (fold 0; sin all-data ni kernel)
 
-| Métrica | Padre | Control | Este | Δ vs padre | Δ vs control |
+| Métrica | Padre exp074 | Control (MIL reentrenada) | Este (Bi-GRU) | Δ vs padre | Δ vs control |
 |---|---|---|---|---|---|
-| pseudo AUC fold 0 (SWA) | | | | | |
-| gold AUC fold 0 (SWA) | | | | | |
-| GPU-h | | | | | |
+| pseudo AUC fold 0 (SWA) | 0.8987 | 0.9018 | 0.9017 | +0.0030 | −0.0001 |
+| gold AUC fold 0 (SWA) | 0.9197 | 0.9252 | 0.9199 | +0.0002 | −0.0053 |
+| GPU-h | 0.87 | — | 0.056 (embeddings en caché de exp077 + 6 cabezas) | | |
 
-**Qué aprendimos (2-4 líneas):**
+Informativo: padre sin reentrenar con 64 ventanas pseudo 0.9004 · gold 0.9208. Semillas extra (SWA pseudo / gold):
+Bi-GRU s7 0.9001 / 0.9154, s123 0.9028 / 0.9170; control s7 0.9013 / 0.9212, s123 0.9024 / 0.9242. Hermano exp077 (GRU)
+0.8999 / 0.9192. Criterio: 0.9017 < 0.9037 y no > control 0.9018 → `didnt`; gold 0.9199 ≥ 0.8997 → sin veto.
 
-**Siguiente paso sugerido:**
+**Qué aprendimos (2-4 líneas):** la Bi-GRU empata con la bolsa MIL en pseudo (media de 3 semillas 0.9015 vs 0.9018) y
+pierde en gold en las 3 semillas (0.915–0.920 vs 0.921–0.925). La técnica de Lumbar/Abdominal no se traslada aquí: con
+64 ventanas 2.5D de 3 series y atención por hallazgo, el orden de los cortes no añade información útil. La mejora sobre el
+padre (+0.0030) es del protocolo (64 ventanas + cabeza reentrenada), que el control obtiene igual.
+
+**Siguiente paso sugerido:** cerrar la línea de cabezas de secuencia; kernel `exp074-student224` sin cambios.
