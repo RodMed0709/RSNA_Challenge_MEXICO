@@ -6,7 +6,7 @@
 | Padre | exp078_seqhead_bigru (fold 0 `didnt`); padre LB = exp074-student224 (LB 0.948) |
 | Fecha | 2026-10-17 |
 | Rama | sub078_1_bigru_alldata |
-| Estado | spec |
+| Estado | running (LB pendiente) |
 
 Idea: sonda de LB de la cabeza Bi-GRU de exp078 en all-data. **Decisión de Rodrigo del 17-oct**: llevarla al LB aunque
 el fold 0 salió `didnt` (pseudo SWA f0 0.9017 < 0.9037 y no > control 0.9018). No cambia el verdict de exp078.
@@ -35,5 +35,18 @@ GRU en fp16 en T4 (se valida en Kaggle).
   `SWA_EPOCHS = [1, 4, 6]`. Guarda `full_bigru_alldata.pt` (backbone + cabeza) → dataset privado → kernel privado
   `sub078-1-bigru224` → validación COMPLETE → `orq/seqhead/CANDIDATE_bigru.json` y cola del 18-oct.
 
-## 3. VERDICT
-(pendiente: gold de `results/sub078_1_bigru_alldata/alldata/metrics.json` + LB)
+## 3. VERDICT (números de `results/sub078_1_bigru_alldata/alldata/metrics.json`)
+
+**Resultado:** pendiente de LB · kernel privado `sub078-1-bigru224` v1 validado (COMPLETE, 3 × 13, sin NaN, sin
+Traceback/SystemExit/FALLBACK)
+
+| Métrica | Padre LB (exp074-student224) | Este |
+|---|---|---|
+| gold all-data (SWA ép [1, 4, 6], informativo) | — | 0.9200 |
+| GPU-h (embeddings all-data + cabeza) | — | 0.122 |
+| tiempo de validación en Kaggle (3 estudios) | DONE 12 s | DONE 13 s |
+| LB (criterio worked ≥ 0.950) | 0.948 | pendiente |
+
+Cabeza Bi-GRU 1.35 ms/estudio en fp16 (MIL 0.23 ms): ≈ +1.1 ms por estudio; mismo backbone y mismas 64 ventanas.
+
+**Qué aprendimos:** (pendiente del LB)
