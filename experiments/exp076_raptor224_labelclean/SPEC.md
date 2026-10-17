@@ -6,7 +6,7 @@
 | Padre | exp074_raptor224_distill |
 | Fecha | 2026-10-17 |
 | Rama | exp076_raptor224_labelclean |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: exp074 + limpieza OOF exp045: celdas de consenso contradichas -> solo teacher
 
@@ -78,15 +78,24 @@ OOF de exp045 fold 0 (fuera de fold).
 
 ## 3. VERDICT (números de `results/exp076_raptor224_labelclean/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen / 5 folds
+**Resultado:** didnt · **Fase alcanzada:** screen (fold 0)
 
-| Métrica | Padre | Este | Δ |
+| Métrica | Padre (exp074) | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | | | |
-| gold AUC (screen: fold 0 contra fold 0 del padre) | | | |
-| OOF pseudo 5 folds | | | |
-| GPU-h | | | |
+| pseudo AUC fold 0 (SWA [14, 15, 13]) | 0.8987 | 0.8985 | −0.0002 (criterio ≥ 0.9037) |
+| pseudo AUC fold 0 (mejor época 14) | 0.8988 | 0.8987 | −0.0001 |
+| gold AUC (SWA, solo veto) | 0.9197 | 0.9226 | +0.0029 (veto < 0.8997: no) |
+| v1 AUC fold 0 (SWA) | 0.8540 | 0.8508 | −0.0032 |
+| OOF pseudo 5 folds | — | — | no se corre |
+| GPU-h (fold 0) | 0.866 | 0.878 | +1 % |
 
-**Qué aprendimos (2-4 líneas):**
+Limpieza aplicada: 1760 celdas en 1372 estudios (3.42 % de las celdas de folds 1–4; PF OA 451, Medial OA 241, Lateral OA 210,
+Lateral Meniscus 160). All-data especulativo cancelado por la cadena (no worked): no hay kernel ni CANDIDATE.
 
-**Siguiente paso sugerido:**
+**Qué aprendimos (2-4 líneas):** con el objetivo ya destilado (0.5 teacher), quitar el consenso en el 3.4 % de celdas donde
+el OOF de exp045 lo contradice no mueve la pseudo fold 0 (−0.0002, por hallazgo todo dentro de ±0.005). El teacher ya
+amortigua ese ruido; en esas celdas el teacher estaba ~50/50 entre OOF y consenso, así que la "limpieza" cambia poco el
+objetivo (media 0.550 → 0.589). El +0.003 de gold es ruido de 58 estudios y no decide nada.
+
+**Siguiente paso sugerido:** no seguir por esta vía con el alumno destilado. Si se reintenta, que sea sobre un objetivo sin
+teacher (exp057/exp045, consenso puro) o con OOF de un ensamble más fuerte, como experimento nuevo.
