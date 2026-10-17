@@ -58,4 +58,4 @@ consenso, LRs, semilla 42). La celda 6 copia `swa_alldata.pt` para el kernel (ca
 
 Sanidad gold OK (0.9195 ≥ 0.90) → se construye el kernel `medellinrodrigo/sub075-1-solo` (exp075-solo con un cambio:
 checkpoint `sub075_1_swa_alldata.pt`, sha256 1a9e32e9…), dataset privado `medellinrodrigo/rsna-knee-sub075-1-weights`.
-El verdict lo decide el LB (worked ≥ 0.946 · didnt 0.941–0.945 · killed < 0.941).
+El verdict lo decide el LB (worked ≥ 0.946 · didnt 0.941–0.945 · killed < 0.941). Kernel v1 COMPLETE (17-oct 20:29 UTC, log sin Traceback) → `orq/ssl/CANDIDATE.json` y en la cola del 18-oct (4.ª entrada). LB: pendiente LB.
