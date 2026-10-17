@@ -160,4 +160,5 @@ cual, sin ajustar nada. Usamos los 2 lugares que quedaban del 17 (ya había 3 en
   competición; adaptar y redistribuir solo no comercial con crédito; un ganador puede licenciar CC BY-NC 4.0; aviso OAI);
   heliosli/rsna-knee-r6-frozen-fe055406(-w1) = "other" (sin texto de licencia); heliosli/rsna-orthofoundation-fold0-epoch7-20261004
   = "other" ("no new open-source license is granted"; upstream con su licencia); goodpjw2008/rsna-knee-2-5d-convnext-reader
-  = Apache-2.0. ⇒ Ninguna de las dos es elegible como final sin aclarar las licencias de heliosli (R6/OrthoFoundation).
+  = Apache-2.0. ⇒ Mismas condiciones de licencia que los assets heliosli que ya usa la final A (R7 + OrthoFoundation); el
+  único asset nuevo es el lector goodpjw (Apache-2.0).
