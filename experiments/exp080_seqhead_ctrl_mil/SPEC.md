@@ -6,7 +6,7 @@
 | Padre | exp074_raptor224_distill |
 | Fecha | 2026-10-17 |
 | Rama | exp080_seqhead_ctrl_mil |
-| Estado | didnt (fold 0) · sonda LB pendiente |
+| Estado | didnt (fold 0) · sonda LB didnt (0.949) |
 
 Idea: el control de exp077/exp078 como experimento propio: cabeza original (attention-MIL) reentrenada sobre embeddings
 del backbone exp074 congelado, evaluada con 64 ventanas. Sonda de LB por **decisión de Rodrigo del 17-oct**.
@@ -48,7 +48,7 @@ selección de épocas usa el mismo val que se reporta; el LB puede no moverse. F
 
 ## 3. VERDICT (números de `results/exp080_seqhead_ctrl_mil/metrics.json` y `alldata/metrics.json`)
 
-**Resultado fold 0:** didnt (regla normal) · **Sonda LB:** pendiente (kernel `exp080-ctrl224`, decisión de Rodrigo 17-oct)
+**Resultado fold 0:** didnt (regla normal) · **Sonda LB:** didnt — LB 0.949 < 0.950 (kernel `exp080-ctrl224` v1, ref 57330704, enviado 18-oct 00:07 UTC)
 
 | Métrica | Padre exp074 | Este | Δ |
 |---|---|---|---|
@@ -56,7 +56,7 @@ selección de épocas usa el mismo val que se reporta; el LB puede no moverse. F
 | gold AUC fold 0 (SWA) | 0.9197 | 0.9252 | +0.0055 |
 | gold all-data (SWA ép [2, 4, 6], informativo) | — | 0.9242 | |
 | GPU-h (fold 0 + all-data, embeddings incluidos) | 0.87 | 0.126 + 0.006 | |
-| LB (criterio worked ≥ 0.950; padre 0.948) | 0.948 | pendiente | |
+| LB (criterio worked ≥ 0.950; padre 0.948) | 0.948 | 0.949 | +0.001 |
 
 Repite exactamente el control de exp077/exp078 (0.9018 / 0.9252). Informativo: padre sin reentrenar con 64 ventanas
 0.9004 / 0.9208; semillas 7 y 123: 0.9013 / 0.9212 y 0.9024 / 0.9242. Cabeza 0.22 ms/estudio (fp16); el backbone y las
@@ -66,4 +66,7 @@ Repite exactamente el control de exp077/exp078 (0.9018 / 0.9252). Informativo: p
 evaluar con las 64 ventanas que ya usa el kernel y +0.0014 de reentrenar la cabeza sobre embeddings fijos; el kernel del
 padre ya tenía las 64 ventanas, así que en LB solo puede notarse la segunda parte.
 
-**Siguiente paso sugerido:** esperar el LB de la sonda (worked si ≥ 0.950).
+LB 0.949 vs padre 0.948 (+0.001, dentro del ruido de ~390 estudios): reentrenar la cabeza sobre embeddings fijos no se
+nota en el LB público; no alcanza 0.950.
+
+**Siguiente paso sugerido:** ninguno con esta cabeza; el alumno eficiente sigue siendo `exp074-student224(-fast)`.
