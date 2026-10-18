@@ -525,10 +525,12 @@ def cmd_build(args):
             "gold_rows": "hard gold 0/1 (58)", "format": "StudyInstanceUID + 12 LABELS, prob in [0,1]",
             "debate_status_counts": counts,
             "warning": (f"consenso_v6 gold macro AUC {g6:.4f} < consenso actual {g4:.4f} - 0.02 (informative; "
-                        f"sharpening creates ties)") if g6 < g4 - 0.02 else None}, indent=1))
+                        f"sharpening creates ties)") if (g6 is not None and g4 is not None and g6 < g4 - 0.02)
+            else None}, indent=1))
+    f4 = lambda v: "nan" if v is None else f"{v:.4f}"
     log(out, f"build: healthy={healthy} L6 health {health:.4f} agree0 {agree0:.3f} debate {counts} "
-             f"cost A ${a_cost:.2f} O ${o_cost:.2f}; gold macro L5 {gold_auc['L5']['macro']:.4f} "
-             f"L6 {gold_auc['L6_opus']['macro']:.4f} cons4 {g4:.4f} v6 {g6:.4f}")
+             f"cost A ${a_cost:.2f} O ${o_cost:.2f}; gold macro L5 {f4(gold_auc['L5']['macro'])} "
+             f"L6 {f4(gold_auc['L6_opus']['macro'])} L6s {f4(gold_auc['L6s_sonnet']['macro'])} cons4 {f4(g4)} v6 {f4(g6)}")
 
 
 if __name__ == "__main__":
