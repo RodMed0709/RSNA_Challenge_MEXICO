@@ -88,3 +88,4 @@ Estados: `spec`, `running`, `worked`, `didnt`, `killed`. Los números salen de `
 | exp074 | raptor224_distill | rodrigo | exp057 | objetivo de entrenamiento = 0.5 × teacher (R7 compact + nartaa 384, media en probabilidad) + 0.5 × consenso exp031 | worked | 0.899 (pseudo L2 f0 SWA) | 0.920 (f0) | pendiente (E2) | Δ pseudo +0.0098 (≥ 0.8939), gold +0.0102; posible fuga del teacher en fold 0; 0.87 GPU-h alumno |
 | exp080 | seqhead_ctrl_mil | rodrigo | exp074 | control de exp077/078 como experimento: cabeza MIL del padre reentrenada sobre embeddings congelados, 64 ventanas; sonda LB por decisión de Rodrigo (17-oct) | didnt (f0) · LB didnt | 0.9018 (pseudo L2 f0 SWA) | 0.925 (f0) · 0.924 (all-data) | 0.949 (exp080-ctrl224; worked si ≥ 0.950) | Δ pseudo +0.0032 < +0.005 (+0.0017 de 64 ventanas, +0.0014 de reentrenar la cabeza); 0.13 GPU-h |
 | exp084 | kernel_rapido | rodrigo | exp080 | — | spec | | | | |
+| exp087 | kernel_nice | rodrigo | exp084 | — | spec | | | | |
