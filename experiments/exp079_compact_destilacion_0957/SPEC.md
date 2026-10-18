@@ -6,7 +6,7 @@
 | Padre | exp066_compact_f0 (compact sola fold 0: pseudo L2 0.8755, gold 0.8972) |
 | Fecha | 2026-10-17 |
 | Rama | exp079_compact_destilacion_0957 (desde main a139cc8) |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: la destilación que funcionó en exp074 (Raptor 224) aplicada a la compact ConvNeXt-S (receta exp066/exp067):
 objetivo = 0.5 × maestro 0.957 en probabilidad + 0.5 × consenso exp031.
@@ -105,4 +105,24 @@ Congelación 19-oct 12:00 UTC: fin estimado ≈ 18-oct 10:00 UTC.
 
 ## 3. VERDICT (números de `results/exp079_compact_destilacion_0957/metrics.json`)
 
-(pendiente)
+**Resultado:** didnt · **Fase alcanzada:** screen (fold 0) · escrito 2026-10-18 02:20 UTC; criterios de la sección 1 sin
+cambios (worked si pseudo ≥ 0.8805; killed si gold < 0.8772).
+
+| Métrica | Padre (exp066) | Este | Δ |
+|---|---|---|---|
+| pseudo AUC fold 0 (compact sola, último modelo) | 0.8755 | 0.8766 | +0.0011 |
+| gold AUC (compact sola, veto) | 0.8972 | 0.8953 | −0.0018 |
+| v1 AUC fold 0 (info) | 0.8363 | 0.8364 | +0.0001 |
+| blend rank 0.5/0.5 con exp045 SWA f0, pseudo (info) | 0.8955 | 0.8951 | −0.0004 |
+| OOF pseudo 5 folds | — | — | — |
+| GPU-h (train / total) | 13.74 (sin compile) | 9.85 / 10.10 (compile) | — |
+
+**Qué aprendimos (2-4 líneas):** la destilación del 0.957 que subió el Raptor 224 +0.0098 (exp074) no mueve a la compact
+(+0.0011 pseudo, −0.0018 gold, todo dentro del ruido). Por hallazgo se reparte: sube meniscos/MCL/Medial OA y baja ACL y
+Baker's. Probable causa (riesgo ya escrito en la SPEC): R7 es una compact de la misma familia y domina la forma del objetivo
+(media en prob.), así que el alumno compact recibe poca información nueva; el Raptor 224, más débil y distinto, sí la
+aprovechaba. Con fuga leve declarada (el maestro vio el fold 0), ni así pasa el umbral.
+
+**Siguiente paso sugerido:** ninguno con este alumno. No se entrenó el all-data (la regla de la SPEC lo condiciona a fold 0
+`worked`), no hay kernel `r7-raptor-exp079` ni pregunta de LB: la final A sigue siendo `r7-raptor-exp067`. Si se quisiera
+otra vuelta: maestro sin R7 (solo nartaa 384) o mezcla por rangos — cada uno es un experimento aparte.
