@@ -3,8 +3,7 @@ X1 early prep: a new FIRST code cell forks the 6 prep processes and starts strea
    imported, the checkpoint is hashed and the models are loaded (main() consumes that iterator).
 X2 workers return only the 320x320 centre crop the model uses (uint8, same values) -> ~30 % less IPC per study.
 X3 cv2.setNumThreads(1) in the prep workers (6 procs on 4 vCPU; same output).
-X4 GPU windows from the cropped volume; float conversion by division instead of a 256-entry LUT + int64 index
-   (IEEE float32 division, same values as the CPU-built LUT).
+X4 GPU windows from the cropped volume (exp084: float by division -> max|dp| 1.3e-3; exp087: back to the parent's LUT).
 X5 (variant 'b') torch.backends.cudnn.benchmark = True (fixed (64,3,224,224) shape; may change fp16 rounding).
 X6 (variant 'n', exp087) os.nice(NICE) in the prep workers: torch/timm import, hash and model load keep CPU priority.
 apply(body, root_expr, cudnn_bench) -> (early_cell_source, new_body)."""
@@ -95,8 +94,7 @@ print(f"[early] {len(EARLY_IDS)} studies streaming from {EARLY_NPROC} prep proce
 
 GPU_WIN_X = '''
 def gpu_windows(vol, mask, k, res, dev, norm=NORM):
-    """[exp084] X4: vol is the 320x320 centre crop (prep workers crop); float conversion by IEEE division (same values
-    as the CPU float32 LUT of the original), no int64 index tensor."""
+    """[exp084] X4: vol is the 320x320 centre crop (prep workers crop); [exp087] float values from the parent's LUT."""
     D = mask.shape[0]
     cs = np.array([max(1, min(c, D - 2)) for c in _eval_centers(mask, D, k)])
     if vol.shape[-1] == IMG or not (norm == 'imagenet' and CROP_FRAC < 1.0):
@@ -105,7 +103,8 @@ def gpu_windows(vol, mask, k, res, dev, norm=NORM):
     if int(cs.max()) + 1 >= vg.shape[0]:
         vg = torch.cat([vg, vg.new_zeros((int(cs.max()) + 2 - vg.shape[0],) + tuple(vg.shape[1:]))], 0)
     tri = vg[torch.from_numpy(np.stack([cs - 1, cs, cs + 1], 1)).to(dev)]          # (k,3,320,320) uint8
-    x = tri.to(torch.float32).div_(255.0)
+    L0 = _WLUT.setdefault((str(dev), 'none'), torch.from_numpy(np.arange(256, dtype=np.uint8).astype(np.float32) / 255.0).to(dev))
+    x = L0[tri.long()]   # [exp087] CPU-built LUT as in the parent: CUDA scalar division is a reciprocal multiply (ulp drift, max|dp| 1.3e-3 in exp084)
     x = F.interpolate(x, size=(res, res), mode='bilinear', align_corners=False)
     return (x - _MEAN.to(dev)) / _STD.to(dev)
 
