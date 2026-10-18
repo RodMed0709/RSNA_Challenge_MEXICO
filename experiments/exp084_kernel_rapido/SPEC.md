@@ -6,7 +6,7 @@
 | Padre | exp080_seqhead_ctrl_mil (kernel `exp080-ctrl224-fast`, LB 0.949) |
 | Fecha | 2026-10-18 |
 | Rama | exp084_kernel_rapido |
-| Estado | spec |
+| Estado | killed |
 
 Idea: bajar el runtime del kernel exp080-ctrl224-fast sin cambiar sus predicciones (premio de eficiencia).
 
@@ -66,4 +66,23 @@ máximo); la cola de envíos de Kaggle mide el runtime real distinto del bench.
 
 ## 3. VERDICT (números de `results/exp084_kernel_rapido/metrics.json`)
 
-**Resultado:** pendiente
+**Resultado:** killed · **Fase alcanzada:** bench (1 corrida de `xb`; la 2.ª no se corrió porque el criterio (a) ya falló)
+
+| Métrica (bench Kaggle T4×2, 1300 estudios de train) | Padre exp080-bench-fastng6 (v1, v2) | `xb` X1–X5 (decide) | `x` X1–X4 (info) |
+|---|---|---|---|
+| `nb_elapsed_to_end` (s) | 272.0, 268.2 (media 270.1) | 297.3 (Δ +27.3) | 298.6 (Δ +28.5) |
+| `main_total_s` (s) | 251.7, 244.2 | 235.6 | 240.0 |
+| inicio de `main()` desde la 1.ª celda (s) | ~20–24 | ~62 | ~59 |
+| espera GPU total (s) | 74.7, 8.9 | 0.1 | 0.1 |
+| max\|Δ prob\| vs padre v1 | 0.0 (v2) | **1.37e-3** (> 1e-3) | 1.34e-3 |
+| gold58 AUC del bench | 0.9240 | 0.9240 | — |
+
+Sin Traceback ni FALLBACK en ninguna corrida.
+
+**Qué aprendimos:** (1) X1 sin prioridad es contraproducente: los 6 procesos de prep saturan los 4 vCPU mientras el
+proceso principal importa torch/timm, hace el hash y carga el modelo (main empieza ~40 s más tarde); con la prep
+adelantada la GPU pasa a ser el cuello (cola llena, espera ≈ 0), así que ese retraso se paga entero. (2) La deriva de
+probabilidades no viene de cudnn.benchmark (`x` sin X5 da lo mismo) sino de X4: en CUDA `x / 255` es multiplicación por el
+recíproco, no la división IEEE del CPU que generó la LUT; el fp16 la amplifica a ~1e-3.
+
+**Siguiente paso sugerido:** exp087 = `x` con la LUT del padre y procesos de prep con `os.nice(10)`.
