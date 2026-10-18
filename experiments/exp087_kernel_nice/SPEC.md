@@ -6,7 +6,7 @@
 | Padre | exp084_kernel_rapido (variante `x`, X1–X4) |
 | Fecha | 2026-10-18 |
 | Rama | exp087_kernel_nice |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: los procesos de prep tempranos (X1) con prioridad baja (`os.nice(10)`) para no frenar import/hash/carga del modelo.
 
@@ -49,4 +49,26 @@ corridas v1 271.97 s y v2 de hoy), métrica `nb_elapsed_to_end`.
 
 ## 3. VERDICT (números de `results/exp087_kernel_nice/metrics.json`)
 
-**Resultado:** pendiente
+**Resultado:** didnt · **Fase alcanzada:** bench (2 corridas)
+
+| Métrica (bench Kaggle T4×2, 1300 estudios de train) | Padre exp080-bench-fastng6 v1 / v2 | `xn` v1 | `xn` v2 | exp084 `x` (info) |
+|---|---|---|---|---|
+| `nb_elapsed_to_end` (s) | 272.0 / 268.2 (media 270.1) | 253.9 | 342.5 | 298.6 |
+| media `xn` − padre | | **+28.1 s** (criterio ≤ −30 s) | | +28.5 |
+| `main_total_s` (s) | 251.7 / 244.2 | 213.1 | 303.1 | 240.0 |
+| arranque hasta `main()` (s) | 20.3 / 23.9 | 40.8 | 39.4 | 58.6 |
+| prep por estudio, pared / CPU (s) | 1.00 / 0.48 · 0.78 / 0.49 | 1.03 / 0.42 | 1.50 / 0.41 | — |
+| espera GPU total (s) | 74.7 / 8.9 | 22.9 | 208.8 | 0.1 |
+| max\|Δ prob\| vs padre v1 | 0.0 | **0.0** | **0.0** | 1.34e-3 |
+
+Sin Traceback ni FALLBACK. gold58 del bench 0.9240 (= padre).
+
+**Qué aprendimos:** con la LUT del padre las probabilidades son idénticas (Δ 0.0). `nice 10` recorta el retraso del
+arranque (59 → 40 s hasta `main()`) pero no lo elimina (padre 20–24 s): la contención con la prep temprana no es solo de
+CPU (probablemente E/S al importar torch/timm mientras 6 procesos leen DICOM). v1 bajó 16 s; v2 cayó en una máquina con
+E/S lenta (prep 1.50 s/estudio de pared, GPU esperando 209 s) y subió 72 s: el ruido entre máquinas de Kaggle (±40 s) es
+mayor que las ganancias de ingeniería que quedan (~15 s ≈ 0.0002 de AUC en la métrica de eficiencia).
+
+**Siguiente paso sugerido:** no seguir con micro-optimizaciones del runtime de exp080-ctrl224-fast; si acaso, importar
+torch/timm antes de crear el pool temprano (solo solapar hash + carga), pero la ganancia esperada (< 10 s) no justifica
+sesiones GPU.
