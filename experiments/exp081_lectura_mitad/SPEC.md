@@ -6,7 +6,7 @@
 | Padre | exp080_seqhead_ctrl_mil |
 | Fecha | 2026-10-18 |
 | Rama | exp081_lectura_mitad (desde exp080_seqhead_ctrl_mil 278dd0f: exp074/exp080 aún no están en main) |
-| Estado | spec |
+| Estado | didnt (fold 0) |
 
 Idea: presupuesto de lectura/ventanas a la mitad (13/11/9 cortes, 32 ventanas) con la cabeza MIL reentrenada de exp080.
 Experimento de eficiencia autorizado por Rodrigo el 18-oct ("dale prueba todas"); propuesta 2 del informe eff2.
@@ -63,15 +63,23 @@ el ahorro de runtime es una estimación con estudios de train.
 
 ## 3. VERDICT (números de `results/exp081_lectura_mitad/metrics.json`)
 
-**Resultado:** worked / didnt / killed · **Fase alcanzada:** screen / 5 folds
+**Resultado:** didnt · **Fase alcanzada:** screen (fold 0). Sin all-data, sin kernel, sin CANDIDATE.
 
-| Métrica | Padre | Este | Δ |
+| Métrica | Padre exp080 | Este | Δ |
 |---|---|---|---|
-| pseudo AUC fold 0 | | | |
-| gold AUC (screen: fold 0 contra fold 0 del padre) | | | |
-| OOF pseudo 5 folds | | | |
-| GPU-h | | | |
+| pseudo AUC fold 0 (SWA ép [4, 9, 2]) | 0.9018 | 0.8950 | −0.0068 (criterio worked: > 0.90101, Δ > −0.00083) |
+| gold AUC fold 0 (SWA, solo veto; killed < 0.9052) | 0.9252 | 0.9217 | −0.0035 |
+| OOF pseudo 5 folds | — | — | — |
+| GPU-h (embeddings 194 s + cabezas) | 0.126 | 0.068 | |
+| Runtime bench Kaggle (bucle, 1300 estudios) | ~240 s (media 4 corridas fast) | 182 s | −58 s |
 
-**Qué aprendimos (2-4 líneas):**
+Informativo: cabeza del padre sin reentrenar sobre las 32 ventanas a la mitad: pseudo 0.8943 / gold 0.9133; semillas de cabeza
+7 y 123: 0.8945 / 0.9179 y 0.8956 / 0.9185 (la pérdida no es ruido de semilla).
 
-**Siguiente paso sugerido:**
+**Qué aprendimos (2-4 líneas):** leer la mitad de cortes y usar 32 ventanas cuesta −0.0068 de pseudo AUC en fold 0; al tipo
+de cambio (0.001 AUC = 70 s) eso equivale a ~476 s de runtime, 8× los 58 s que ahorra. Reentrenar la cabeza recupera solo
++0.0007 sobre la cabeza del padre sin reentrenar. Con el backbone exp074 congelado, la resolución en z importa más que el
+runtime que ahorra.
+
+**Siguiente paso sugerido:** no reducir el presupuesto de lectura. Si se vuelve a intentar, solo con el backbone reentrenado
+sobre la entrada a la mitad (otro experimento, mucho más caro), y aun así tendría que perder menos de 0.0008.
