@@ -6,7 +6,7 @@
 | Padre | exp080_seqhead_ctrl_mil |
 | Fecha | 2026-10-18 |
 | Rama | exp083_flip_tta_alterno |
-| Estado | spec |
+| Estado | didnt |
 
 Idea: TTA espejo a presupuesto constante: de las 64 ventanas del kernel, las de posición impar van espejadas (32 + 32), mismo costo GPU.
 
@@ -69,4 +69,22 @@ cabeza MIL es invariante al orden).
 
 ## 3. VERDICT (números de `results/exp083_flip_tta_alterno/metrics.json`)
 
-**Resultado:** pendiente
+**Resultado:** didnt · **Fase alcanzada:** screen (fold 0; no hay 5 folds: exp074 solo tiene backbone f0 y all-data)
+
+| Métrica (fold 0, cabeza exp080 sin reentrenar) | Control 64 sin espejo | Este: 64, impares espejadas | Δ |
+|---|---|---|---|
+| pseudo AUC L2 fold 0 (870) | 0.9018 | 0.9019 | +0.00002 (IC95 bootstrap −0.0008 / +0.0008; P(Δ>0) 0.55) |
+| gold AUC (58, solo veto) | 0.9252 | 0.9258 | +0.0006 |
+| v1 AUC | 0.8533 | 0.8535 | +0.0002 |
+| GPU-h | | 0.047 (embeddings 167 s, RTX PRO 4500) | |
+
+Control = exp080 SWA f0 exacto (Δ pseudo 0.00000, Δ gold 0.00000).
+Informativos (no deciden): fase par espejada 0.9025 / 0.9270; 64 todas espejadas 0.9021 / 0.9287; 64+64 media en prob.
+(doble costo) 0.9024 / 0.9262 (Δ +0.0005 < +0.004; IC95 −0.0002 / +0.0013); bolsa 128 0.9025 / 0.9265; 32+32 dos bolsas
+0.9017 / 0.9260; 32 sin espejo 0.9006 / 0.9239.
+
+**Qué aprendimos:** el backbone entrenado con espejo ya es casi invariante: cualquier combinación con ventanas espejadas
+mueve la pseudo ≤ +0.0007 (dentro del ruido), igual que exp041-mirror224 y r7-raptor-exp067flip en LB. A presupuesto
+constante el espejo no compra AUC; al doble de costo (~+185 s ≈ 0.0026 de AUC en la métrica) tampoco paga.
+
+**Siguiente paso sugerido:** no más TTA espejo para el 224; el margen de eficiencia está en runtime (exp084).
