@@ -449,6 +449,8 @@ def cmd_build(args):
         tgt.loc[a, lab] = np.where(l6.loc[a, lab] > 0.5, g.SHARP_POS, g.SHARP_NEG)
         no6 = l6[lab].isna()
         tgt.loc[no6, lab] = l5.loc[no6, lab]
+    pres = (l5 + l6) / 2                      # v6soft: unsharpened resolution probability
+    pres = pres.fillna(l5)
     rows, counts = [], {}
     for u, s in (st or {"studies": {}})["studies"].items():
         for k, c in s["cells"].items():
@@ -461,6 +463,7 @@ def cmd_build(args):
             else:                                   # ambiguous / unresolved / still open -> mean of last two
                 v = (c["pA"] + c["pB"]) / 2
             tgt.at[u, lab] = v
+            pres.at[u, lab] = c["p_judge"] if stt == "judged" else (c["pA"] + c["pB"]) / 2
             movA, movB = abs(c["pA"] - c["p5"]), abs(c["pB"] - c["p6"])
             who = "both" if abs(movA - movB) < 0.05 else ("GPT" if movA > movB else "Claude")
             counts[stt] = counts.get(stt, 0) + 1
@@ -487,8 +490,14 @@ def cmd_build(args):
     c4bin = (cons4 > 0.5).astype(float).where(cons4.notna())
     health, health_per = g.macro_auc_vs(c4bin, l6, nongold)
     coverage = float(l6.notna().all(axis=1).mean())
+    # v6soft (orchestrator, 18-oct): 0.5 * consenso4 + 0.5 * p_res, no sharpening; gold-58 hard
+    soft = (0.5 * cons4 + 0.5 * pres).where(cons4.notna(), pres)
+    soft_final = soft.copy()
+    soft_final.loc[gold.index, g.LABELS] = gold[g.LABELS].to_numpy()
+    assert soft_final.notna().all().all() and soft_final.stack().between(0, 1).all()
+    soft_final.index.name = "StudyInstanceUID"
     gold_auc = g.auc_table(gold, {"L5": l5, "L6_opus": l6, "L6s_sonnet": l6s, "consenso_actual_4src": cons4,
-                                  "consenso_v6": cons})
+                                  "consenso_v6": cons, "consenso_v6soft": soft})
     a_cost, o_cost = g.spent(out), spent_openai(out)
     agree0 = float((ok & l6.notna()).to_numpy().sum() / max(int(l6.notna().to_numpy().sum()), 1))
     m = {
@@ -508,7 +517,7 @@ def cmd_build(args):
                    "conceded_counts": R["conceded"].value_counts().to_dict() if len(R) else {},
                    "phases_done": (st or {}).get("phases_done")},
         "cells_filled_outside_debate": remaining,
-        "mean_target": {"consenso_v6": float(np.nanmean(cons.to_numpy())), "L5": float(np.nanmean(l5.to_numpy())),
+        "mean_target": {"consenso_v6": float(np.nanmean(cons.to_numpy())), "consenso_v6soft": float(np.nanmean(soft.to_numpy())), "L5": float(np.nanmean(l5.to_numpy())),
                         "L6": float(np.nanmean(l6.to_numpy())), "cons4": float(np.nanmean(cons4.to_numpy()))},
         "gold_auc_informative": gold_auc,
         "cost_usd": {"anthropic": round(a_cost, 4), "openai": round(o_cost, 4), "total": round(a_cost + o_cost, 4)},
@@ -518,6 +527,13 @@ def cmd_build(args):
     healthy = coverage >= 0.99 and health >= 0.93 and min(v for v in health_per.values() if v is not None) >= 0.80
     g6, g4 = gold_auc["consenso_v6"]["macro"], gold_auc["consenso_actual_4src"]["macro"]
     if healthy:
+        soft_final.reset_index().to_csv(dest / "consenso_v6soft.csv", index=False)
+        (dest / "READY_soft.json").write_text(json.dumps({
+            "path": str(dest / "consenso_v6soft.csv"), "created_at": now().isoformat(), "n_studies": int(len(soft_final)),
+            "regla": "por celda 0.5*consenso4 (Raptor+L2+L3+L4, media de presentes) + 0.5*p_res; p_res = media(L5, L6-Opus) "
+                     "si acordaron de entrada; media de las probs finales si acordaron en el debate; prob del juez si "
+                     "juzgado; media de las dos ultimas si ambiguous/sin resolver. Sin afilar. Gold-58 = gold dura 0/1.",
+            "gold_macro_auc_informative_before_gold_fix": gold_auc["consenso_v6soft"]["macro"]}, indent=1))
         (dest / "READY.json").write_text(json.dumps({
             "path": str(dest / "consenso_v6.csv"), "n_studies": int(len(final)),
             "n_adjudicated": len(R), "n_studies_adjudicated": m["debate"]["n_studies"],
@@ -530,7 +546,8 @@ def cmd_build(args):
     f4 = lambda v: "nan" if v is None else f"{v:.4f}"
     log(out, f"build: healthy={healthy} L6 health {health:.4f} agree0 {agree0:.3f} debate {counts} "
              f"cost A ${a_cost:.2f} O ${o_cost:.2f}; gold macro L5 {f4(gold_auc['L5']['macro'])} "
-             f"L6 {f4(gold_auc['L6_opus']['macro'])} L6s {f4(gold_auc['L6s_sonnet']['macro'])} cons4 {f4(g4)} v6 {f4(g6)}")
+             f"L6 {f4(gold_auc['L6_opus']['macro'])} L6s {f4(gold_auc['L6s_sonnet']['macro'])} cons4 {f4(g4)} v6 {f4(g6)} "
+             f"v6soft {f4(gold_auc['consenso_v6soft']['macro'])}")
 
 
 if __name__ == "__main__":

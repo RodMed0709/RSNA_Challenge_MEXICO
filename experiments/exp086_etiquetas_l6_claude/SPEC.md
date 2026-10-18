@@ -6,7 +6,7 @@
 | Padre | exp054_etiquetas_L5 |
 | Fecha | 2026-10-18 |
 | Rama | exp086_etiquetas_l6_claude |
-| Estado | spec |
+| Estado | worked |
 
 Idea (de Rodrigo, autorizada 18-oct): nueva fuente de etiquetas **L6** leyendo los 4407 informes de train con Claude, y
 **adjudicación** con un modelo más fuerte de las celdas (estudio × hallazgo) donde L5 (OpenAI) y L6 no concuerdan.
@@ -143,6 +143,41 @@ Fijada antes de ver ningún resultado del debate (solo se miró el costo de 10 t
   por estudio en ~1200 estudios: dentro del tope.
 - Código: `debate_L6.py` (pilot / run / build); `generar_L6.py` sigue haciendo L6 (Opus) y las utilidades.
 
+## 1d. VARIANTE v6soft (decidida por el orquestador el 18-oct ~21:40 UTC, antes de cualquier entrenamiento con ella)
+
+Cobertura por la advertencia de que v6 afilado deja la etiqueta casi binaria. Sin llamadas API nuevas.
+`consenso_v6soft.csv` = por celda 0.5 · consenso4 (Raptor+L2+L3+L4, el de exp044/exp085) + 0.5 · p_res, con
+p_res = media(L5, L6-Opus) si acordaron de entrada; media de las probabilidades finales de ambos si acordaron en el
+debate; probabilidad del juez si juzgado; media de las dos últimas si `ambiguous`. Sin afilar. Gold-58 = gold dura.
+Mismo formato/IDs que consenso_v6.csv; `READY_soft.json` {path, created_at, regla}. La decidió el orquestador después
+de ver la AUC gold informativa de v6 (0.810): se declara; no la eligió gold, la elegirá el LB.
+
 ## 3. VERDICT (números de `results/exp086_etiquetas_l6_claude/metrics.json`)
 
-(pendiente)
+**Resultado:** `worked` (L6 sana y READY a tiempo) · **Fase:** etiquetas entregadas (18-oct 21:20 UTC; v6soft 21:43 UTC)
+
+- Entregado: `/workspace/users/rodrigo/orq/labels_claude/consenso_v6.csv` + `READY.json` y `consenso_v6soft.csv` +
+  `READY_soft.json` (4407 filas; gold-58 duro). v1 (Sonnet + juez medium) archivada en `work/v1_sonnet_medium/`.
+- **L6 = Opus 5.5 effort high:** cobertura 1.000; macro AUC contra consenso de 4 (no-gold) **0.9894** (mín. por hallazgo
+  0.977) ⇒ sana. L6s Sonnet (informativa) 0.9881.
+- **Acuerdo inicial L5 vs L6** (por celda): **0.955**. En disputa: 2356 celdas en 1624 estudios.
+- **Debate** (GPT-5.6-sol vs Opus 5.5, 3 rondas completas): acuerdan 1960 celdas (ronda 1: 1727, ronda 2: 166,
+  ronda 3: 67); cedió GPT 1711, Claude 106, ambos 143. Al juez Opus max: 396 celdas en 362 estudios ⇒ `decided` 79,
+  `ambiguous` 317. Ninguna celda quedó fuera del debate.
+- **Costo real:** Anthropic **US$88.96** (incluye v1 US$27.62, pilotos y L6-Opus) · OpenAI **US$31.62** · total US$120.59.
+- Media del objetivo: consenso_v6 0.183 · v6soft 0.238 · L5 0.183 · L6 0.167 · consenso4 0.302.
+
+Gold-58, **informativo** (macro AUC; no seleccionó nada; v6 y v6soft antes de sustituir gold):
+
+| Fuente | L5 | L6 Opus | L6s Sonnet | consenso4 (actual) | consenso_v6 | consenso_v6soft |
+|---|---|---|---|---|---|---|
+| macro AUC gold | 0.8891 | 0.9065 | 0.9049 | 0.8948 | 0.8100 | 0.8994 |
+
+**Qué aprendimos:** Opus 5.5 y Sonnet 5.5 leen los informes mejor que L5 (gold 0.907/0.905 vs 0.889) con el mismo
+prompt. En el debate, el lector OpenAI (que parte de L5) cede casi siempre (87 % de los acuerdos). El juez a `max`
+declara `ambiguous` el 80 % de las celdas que sobreviven 3 rondas: son ambigüedades reales del informe. Afilar a
+0.95/0.05 destruye el orden dentro de cada lado (empates) y baja la AUC de etiqueta contra gold a 0.810; la variante
+continua v6soft (0.899) conserva el orden.
+
+**Siguiente paso:** reentrenar el tanque con consenso_v6 o v6soft (otro experimento, lo decide el LB). Idea: probar
+L6 Opus como 6.ª fuente blanda en el consenso de 5 (sin afilar).
