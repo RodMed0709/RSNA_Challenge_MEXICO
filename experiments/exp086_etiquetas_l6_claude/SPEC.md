@@ -88,6 +88,30 @@ exp054, el generador es `generar_L6.py` en esta carpeta). El uso en entrenamient
 - `results/exp086_etiquetas_l6_claude/metrics.json` = copia del `metrics.json` del build (solo números agregados).
 - Nada más cambia (no hay notebook de entrenamiento en este experimento).
 
+## 1b. ENMIENDA (18-oct ~20:00 UTC, por instrucción de Rodrigo vía orquestador)
+
+**Contexto honesto:** la v1 de arriba (L6 = Sonnet 5.5, adjudicación Opus 5.5 `effort: medium`, tope US$40) ya había
+corrido entera (batches rápidos, 19:40–19:53 UTC, US$27.62) cuando llegaron las dos instrucciones, y su `build` sí
+imprimió números agregados (acuerdo 0.952; gold informativo). La enmienda **no** sale de esos números: la pidió Rodrigo
+("no solo sonnet"; adjudicación a máxima potencia). La v1 se archiva (`work/v1_sonnet_medium/`) y su READY se retiró.
+
+| Punto | v1 | Enmienda (final) |
+|---|---|---|
+| L6 (la que entra al acuerdo con L5) | Sonnet 5.5, sin razonamiento | **`claude-opus-5-5`, `effort: high`**, razonamiento adaptativo, temperatura por defecto, max_tokens 16 000; mismo prompt B_reason y esquema |
+| Lectura Sonnet 5.5 | — | se conserva como fuente **informativa L6s** (no entra al consenso) |
+| Adjudicación | Opus 5.5 `effort: medium` | **Opus 5.5 `effort: max`**, razonamiento adaptativo, max_tokens 64 000 (streaming en síncrono) |
+| Tope API total (v1 incluida) | US$40 | **US$100** |
+
+Reglas añadidas (fijas antes de la adjudicación final):
+- Piloto 2: Opus L6 sobre la misma muestra de 50 (≥ 30 pedidos) + 20 adjudicaciones a `max`; se proyecta a 4407 con
+  precio de batch. Si la proyección total > US$100 ⇒ la cadena **para** (`OVER_BUDGET_100` en status.log) y espera al
+  orquestador; si este autoriza, guardia de presupuesto: se adjudican primero los estudios con mayor |L5 − L6|, el
+  resto = media(L5, L6).
+- Latencia: batch con espera máx. 2 h; si no termina, lo que falte va por llamadas síncronas concurrentes. Adjudicaciones
+  síncronas lanzadas después del 19-oct 03:15 UTC bajan a `effort: high` (se cuentan en `adj_effort_counts`); después de
+  04:20 UTC no se lanzan llamadas nuevas (celda ⇒ media(L5, L6)) y se construye y entrega.
+- Umbrales de acuerdo, afilado 0.95/0.05, `ambiguous` ⇒ media, gold-58 duro y chequeos de salud: **sin cambios**.
+
 ## 3. VERDICT (números de `results/exp086_etiquetas_l6_claude/metrics.json`)
 
 (pendiente)

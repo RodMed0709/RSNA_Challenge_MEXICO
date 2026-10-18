@@ -29,11 +29,14 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-L6_MODEL = "claude-sonnet-5-5"
+# Amendment 18-oct ~20:00 UTC (Rodrigo): L6 = Opus 5.5 effort high (Sonnet 5.5 reading kept as informative L6s),
+# adjudication = Opus 5.5 effort max, budget US$100 total.
+L6_MODEL = "claude-opus-5-5"
+L6S_MODEL = "claude-sonnet-5-5"
 ADJ_MODEL = "claude-opus-5-5"
-PRICE = {L6_MODEL: (2.00, 10.00), ADJ_MODEL: (4.00, 20.00)}   # USD / 1M tokens (in, out); Batch API = 50 %
+PRICE = {L6_MODEL: (4.00, 20.00), L6S_MODEL: (2.00, 10.00)}   # USD / 1M tokens (in, out); Batch API = 50 %
 CACHE_READ_FRAC, CACHE_WRITE_FRAC = 0.10, 1.25
-BUDGET_USD = 40.0          # hard cap for the whole experiment (pilot included)
+BUDGET_USD = 100.0         # hard cap for the whole experiment (pilots and the archived v1 included)
 BATCH_MAX_WAIT_S = 2 * 3600  # > 2 h -> cancel and fall back to concurrent sync calls
 AGREE_DELTA = 0.30         # SPEC: agreement = same side of 0.5 and |L5 - L6| <= 0.30
 SHARP_POS, SHARP_NEG = 0.95, 0.05
@@ -110,15 +113,21 @@ SCHEMA_ADJ = _obj({"adjudications": {"type": "array", "items": _obj({
     "probability": {"type": "integer"},
 })}})
 
-# thinking off for L6 (matches L5: gpt-4.1-mini without reasoning); Sonnet 5.5 rejects "disabled" -> "between_tools".
 # temperature cannot be set on Sonnet 5.5 / Opus 5.5 (non-default -> 400): declared in the SPEC.
-L6_PARAMS = dict(model=L6_MODEL, max_tokens=1500, system=SYS_B, thinking={"type": "between_tools"},
-                 output_config={"format": {"type": "json_schema", "schema": SCHEMA_B}})
-ADJ_EFFORT = os.environ.get("L6_ADJ_EFFORT", "medium")
+# v1 (archived, informative L6s): Sonnet 5.5, thinking "between_tools" (off), max_tokens 1500.
+L6_PARAMS = dict(model=L6_MODEL, max_tokens=16000, system=SYS_B, thinking={"type": "adaptive"},
+                 output_config={"effort": "high", "format": {"type": "json_schema", "schema": SCHEMA_B}})
+ADJ_EFFORT = os.environ.get("L6_ADJ_EFFORT", "max")
+ADJ_HIGH_AFTER = datetime(2026, 10, 19, 3, 15, tzinfo=timezone.utc)   # sync adjudications after this -> effort high
+HARD_STOP = datetime(2026, 10, 19, 4, 20, tzinfo=timezone.utc)        # no new API calls after this; build and deliver
+
+
+def now_utc():
+    return datetime.now(timezone.utc)
 
 
 def adj_params(effort):
-    return dict(model=ADJ_MODEL, max_tokens=16000, system=SYS_ADJ,
+    return dict(model=ADJ_MODEL, max_tokens=64000, system=SYS_ADJ, thinking={"type": "adaptive"},
                 output_config={"effort": effort, "format": {"type": "json_schema", "schema": SCHEMA_ADJ}})
 
 
@@ -181,8 +190,8 @@ def append_jsonl(path, rec, lock):
 
 def spent(out):
     tot = 0.0
-    for name in ("l6.jsonl", "adj.jsonl"):
-        for r in load_jsonl(Path(out) / name).values():
+    for path in Path(out).rglob("*.jsonl"):     # includes the archived v1 and the Sonnet L6s
+        for r in load_jsonl(path).values():
             tot += r.get("usd", 0.0)
     return tot
 
@@ -284,8 +293,11 @@ def run_sync(cl, jobs, worker, workers=8):
 
 def l6_worker_factory(out, lock):
     def one(cl, uid, report):
+        if now_utc() > HARD_STOP:
+            return
         for attempt in range(3):
-            msg = cl.messages.create(messages=[{"role": "user", "content": report_msg(report)}], **L6_PARAMS)
+            with cl.messages.stream(messages=[{"role": "user", "content": report_msg(report)}], **L6_PARAMS) as st:
+                msg = st.get_final_message()
             try:
                 obj, probs = parse_l6(msg)
                 break
@@ -301,9 +313,13 @@ def l6_worker_factory(out, lock):
 
 def adj_worker_factory(out, lock, rep, effort):
     def one(cl, uid, cells):
+        if now_utc() > HARD_STOP:
+            return
+        eff = "high" if (effort == "max" and now_utc() > ADJ_HIGH_AFTER) else effort
         txt, flip = adj_user(uid, rep[uid], cells)
         for attempt in range(3):
-            msg = cl.messages.create(messages=[{"role": "user", "content": txt}], **adj_params(effort))
+            with cl.messages.stream(messages=[{"role": "user", "content": txt}], **adj_params(eff)) as st:
+                msg = st.get_final_message()
             try:
                 obj, dec = parse_adj(msg, set(cells))
                 break
@@ -313,7 +329,7 @@ def adj_worker_factory(out, lock, rep, effort):
                     return
         u = usage_dict(msg.usage)
         append_jsonl(Path(out) / "adj.jsonl", {"uid": uid, "model": msg.model, "cells": cells, "flip": flip, "dec": dec,
-                                               "raw": obj, "effort": effort, "usage": u, "batch": False,
+                                               "raw": obj, "effort": eff, "usage": u, "batch": False,
                                                "usd": usd(ADJ_MODEL, u, False)}, lock)
     return one
 
@@ -337,7 +353,7 @@ def run_batch(cl, out, tag, requests, on_result):
         b = cl.messages.batches.retrieve(st["id"])
         if b.processing_status == "ended":
             break
-        if time.time() - st["created"] > BATCH_MAX_WAIT_S:
+        if time.time() - st["created"] > BATCH_MAX_WAIT_S or now_utc() > ADJ_HIGH_AFTER:
             log(out, f"batch {tag} > 2 h ({b.request_counts}); cancel -> sync fallback")
             cl.messages.batches.cancel(st["id"])
             for _ in range(60):
@@ -405,6 +421,52 @@ def cmd_pilot(args):
     return rep_
 
 
+def cmd_pilot2(args):
+    """Amendment pilot: Opus L6 (effort high) on the same 50-report sample + up to 20 adjudications at effort max."""
+    out = Path(args.out)
+    if (out / "pilot2.json").is_file():
+        log(out, "pilot2.json exists, skip")
+        return json.loads((out / "pilot2.json").read_text())
+    cl = client(args)
+    df = reports()
+    pil = df.sample(n=args.n, random_state=SEED)
+    lock = threading.Lock()
+    cache = load_jsonl(out / "l6.jsonl")
+    jobs = [(r.StudyInstanceUID, r.Report) for r in pil.itertuples() if r.StudyInstanceUID not in cache]
+    log(out, f"pilot2 L6 Opus high sync n={args.n} (todo {len(jobs)}); spent so far ${spent(out):.2f}")
+    run_sync(cl, jobs, l6_worker_factory(out, lock))
+    l6c = load_jsonl(out / "l6.jsonl")
+    pr = [l6c[u] for u in pil.StudyInstanceUID if u in l6c]
+    per_l6 = float(np.mean([usd(L6_MODEL, r["usage"], True) for r in pr]))
+    disp = disputes(out, list(pil.StudyInstanceUID))
+    sel = dict(list(disp.items())[:20])
+    rep_ = dict(zip(df.StudyInstanceUID, df.Report))
+    adjc = load_jsonl(out / "adj.jsonl")
+    ajobs = [(u, c) for u, c in sel.items() if u not in adjc]
+    log(out, f"pilot2 adjudication sync effort={ADJ_EFFORT}: {len(sel)} of {len(disp)} disputed studies")
+    run_sync(cl, ajobs, adj_worker_factory(out, lock, rep_, ADJ_EFFORT))
+    adjc = load_jsonl(out / "adj.jsonl")
+    ar = [adjc[u] for u in sel if u in adjc]
+    per_adj = float(np.mean([usd(ADJ_MODEL, r["usage"], True) for r in ar]))
+    frac = len(disp) / len(pr)
+    so_far = spent(out)
+    l6_rest = per_l6 * (len(df) - len(pr))
+    adj_rest = per_adj * max(frac * len(df) - len(ar), 0)
+    proj = so_far + l6_rest + adj_rest
+    r = {"n": len(pr), "frac_studies_disputed": frac,
+         "cells_disputed_frac": sum(len(c) for c in disp.values()) / (12 * len(pr)),
+         "l6_tokens_mean": {k: float(np.mean([x["usage"][k] for x in pr])) for k in ("in", "out")},
+         "adj_tokens_mean": {k: float(np.mean([x["usage"][k] for x in ar])) for k in ("in", "out")},
+         "l6_usd_per_report_batch": per_l6, "adj_usd_per_study_batch": per_adj, "n_adj_pilot": len(ar),
+         "spent_usd": so_far, "proj_l6_rest_batch_usd": l6_rest, "proj_adj_rest_batch_usd": adj_rest,
+         "proj_total_usd": proj, "adj_effort": ADJ_EFFORT, "budget_usd": BUDGET_USD}
+    (out / "pilot2.json").write_text(json.dumps(r, indent=1))
+    log(out, f"pilot2: spent ${so_far:.2f}; projection L6 Opus rest ${l6_rest:.2f} + adj max rest ${adj_rest:.2f} "
+             f"= ${proj:.2f} (disputed studies {frac:.0%}; L6 out tok {r['l6_tokens_mean']['out']:.0f}, "
+             f"adj out tok {r['adj_tokens_mean']['out']:.0f})")
+    return r
+
+
 def cmd_l6(args):
     out = Path(args.out)
     cl = client(args)
@@ -440,8 +502,7 @@ def cmd_adjud(args):
     df = reports()
     rep = dict(zip(df.StudyInstanceUID, df.Report))
     lock = threading.Lock()
-    pilot = json.loads((out / "pilot.json").read_text()) if (out / "pilot.json").is_file() else {}
-    effort = pilot.get("adj_effort_final", ADJ_EFFORT)
+    effort = ADJ_EFFORT
     disp = disputes(out)
     adjc = load_jsonl(out / "adj.jsonl")
     todo = {u: c for u, c in disp.items() if u not in adjc}
@@ -519,7 +580,10 @@ def cmd_build(args):
     l5 = l5_table().reindex(uids)
     l6 = l6_table(out).reindex(uids)
     l6.index.name = "StudyInstanceUID"
-    l6.reset_index().to_csv(out / "L6_sonnet55.csv", index=False)
+    l6.reset_index().to_csv(out / "L6_opus55.csv", index=False)
+    _s = load_jsonl(out / "l6s_sonnet.jsonl")
+    l6s = (pd.DataFrame({u: r["probs"] for u, r in _s.items()}, index=LABELS).T if _s
+           else pd.DataFrame(columns=LABELS)).reindex(uids)
     adjc = load_jsonl(out / "adj.jsonl")
 
     ok = agree_mask(l5, l6)
@@ -569,13 +633,15 @@ def cmd_build(args):
     st5 = np.stack([S[n].reindex(uids)[LABELS].to_numpy(float) for n in ["raptor", "L2", "L3", "L4"]] + [l5.to_numpy()])
     n5 = np.isfinite(st5).sum(0)
     cons5 = pd.DataFrame(np.where(n5 > 0, np.nansum(st5, 0) / np.maximum(n5, 1), np.nan), index=uids, columns=LABELS)
-    gold_auc = auc_table(gold, {"L5": l5, "L6": l6, "consenso_actual_4src": cons4, "consenso_5src_L5": cons5,
+    gold_auc = auc_table(gold, {"L5": l5, "L6": l6, "L6s_sonnet": l6s, "consenso_actual_4src": cons4, "consenso_5src_L5": cons5,
                                 "consenso_v6": cons_v6_nogoldfix})
     nongold = [u for u in uids if u not in set(gold.index)]
     c4bin = (cons4 > 0.5).astype(float).where(cons4.notna())
     health_macro, health_per = macro_auc_vs(c4bin, l6, nongold)
     l6_vs = {n: macro_auc_vs((S[n] > 0.5).astype(float).where(S[n].notna()), l6, nongold)[0] for n in S}
     l6_vs["L5"] = macro_auc_vs((l5 > 0.5).astype(float).where(l5.notna()), l6, nongold)[0]
+    l6_vs["L6s_sonnet"] = macro_auc_vs((l6s > 0.5).astype(float).where(l6s.notna()), l6, nongold)[0]
+    l6s_health = macro_auc_vs(c4bin, l6s, nongold)[0]
     cells = int(have6.to_numpy().sum())
     agree_frac = float(agree.to_numpy().sum() / max(cells, 1))
     agree_per = {lab: float(agree[lab].sum() / max(have6[lab].sum(), 1)) for lab in LABELS}
@@ -589,7 +655,10 @@ def cmd_build(args):
     metrics = {
         "schema_version": 1, "exp": "exp086_etiquetas_l6_claude", "parent": "exp054", "phase": "labels",
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
-        "models": {"L6": L6_MODEL, "adjudicator": ADJ_MODEL},
+        "models": {"L6": L6_MODEL + " effort high", "L6s_informative": L6S_MODEL,
+                   "adjudicator": ADJ_MODEL + " effort " + ADJ_EFFORT},
+        "l6s_sonnet_macro_auc_vs_cons4_nongold": l6s_health,
+        "adj_effort_counts": pd.Series([r.get("effort") for r in adjc.values()]).value_counts().to_dict(),
         "agreement_rule": {"same_side_of": 0.5, "max_abs_diff": AGREE_DELTA, "sharp": [SHARP_NEG, SHARP_POS]},
         "n_studies": len(uids), "l6_coverage_full_rows": coverage,
         "l6_health": {"macro_auc_vs_cons4_nongold": health_macro, "per_label": health_per,
@@ -641,9 +710,21 @@ def cmd_all(args):
     cmd_build(args)
 
 
+def cmd_all2(args):
+    p = cmd_pilot2(args)
+    out = Path(args.out)
+    if p["proj_total_usd"] > BUDGET_USD and not (out / "GO_OVER_BUDGET").is_file():
+        log(out, f"OVER_BUDGET_100: projection ${p['proj_total_usd']:.2f} > ${BUDGET_USD}; waiting for the coordinator "
+                 f"(create work/GO_OVER_BUDGET to continue with the budget guard)")
+        raise SystemExit(3)
+    cmd_l6(args)
+    cmd_adjud(args)
+    cmd_build(args)
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["pilot", "l6", "adjud", "build", "all"])
+    ap.add_argument("cmd", choices=["pilot", "pilot2", "l6", "adjud", "build", "all", "all2"])
     ap.add_argument("--out", required=True)
     ap.add_argument("--dest", default="/workspace/users/rodrigo/orq/labels_claude")
     ap.add_argument("--secrets", default="/root/.anthropic_env")
@@ -652,4 +733,5 @@ if __name__ == "__main__":
     ap.add_argument("--sync", action="store_true", help="skip the Batch API")
     a = ap.parse_args()
     Path(a.out).mkdir(parents=True, exist_ok=True)
-    {"pilot": cmd_pilot, "l6": cmd_l6, "adjud": cmd_adjud, "build": cmd_build, "all": cmd_all}[a.cmd](a)
+    {"pilot": cmd_pilot, "pilot2": cmd_pilot2, "l6": cmd_l6, "adjud": cmd_adjud, "build": cmd_build, "all": cmd_all,
+     "all2": cmd_all2}[a.cmd](a)
