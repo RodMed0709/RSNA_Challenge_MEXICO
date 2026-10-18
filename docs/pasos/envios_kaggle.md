@@ -162,3 +162,23 @@ cual, sin ajustar nada. Usamos los 2 lugares que quedaban del 17 (ya había 3 en
   = "other" ("no new open-source license is granted"; upstream con su licencia); goodpjw2008/rsna-knee-2-5d-convnext-reader
   = Apache-2.0. ⇒ Mismas condiciones de licencia que los assets heliosli que ya usa la final A (R7 + OrthoFoundation); el
   único asset nuevo es el lector goodpjw (Apache-2.0).
+
+## 17 y 18-oct — resultados (LB público)
+
+| Fecha | ref | Kernel | LB | Criterio fijado antes | Verdict |
+|---|---|---|---|---|---|
+| 17-oct | 57287682 | exp041-mirror224 v1 | 0.945 | worked si ≥ 0.947 | didnt |
+| 17-oct | 57287873 | exp074-student224 v1 | 0.948 | worked si ≥ 0.948 | worked |
+| 17-oct | 57287971 | r7-raptor-exp067flip v1 | 0.957 | worked si ≥ 0.959 | didnt |
+| 17-oct | 57315883 | r6flip-repro v1 | **0.958** | worked si ≥ 0.958 | worked |
+| 17-oct | 57315940 | r6flip-v2 v1 | 0.958 | worked si ≥ 0.959 | didnt |
+| 18-oct | 57330468 | sub078-1-bigru224 v1 | 0.948 | worked si ≥ 0.950 | didnt |
+| 18-oct | 57330704 | exp080-ctrl224 v1 | 0.949 | worked si ≥ 0.950 | didnt (mejor eficiente) |
+| 18-oct | 57330828 | exp074-student224-fast v1 | 0.948 | worked si ≥ 0.947 | worked (mismas predicciones) |
+| 18-oct | 57330942 | sub075-1-solo v1 | 0.942 | worked si ≥ 0.946; didnt 0.941–0.945 | didnt |
+
+Runtime de los eficientes (Kaggle no lo publica; medido con kernels bench privados `exp0xx-bench-*` que corren el pipeline
+puntuado sin cambios sobre 1300 estudios de train en T4×2; "about 1300 studies" en el test oculto). Bucle principal:
+exp041-sub-e1-94 506 s; exp074-student224 312 s; exp074-student224-fast 225–253 s (4 corridas, probabilidades idénticas
+a la base, max|Δ| = 0); exp080-ctrl224 260 s (otra máquina: la varianza entre VMs es de ±15 %). Sumar ~43 s de arranque y
+cierre del notebook. Es estimación con estudios de train, no el RuntimeSeconds oficial.
