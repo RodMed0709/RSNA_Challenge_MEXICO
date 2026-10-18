@@ -6,7 +6,7 @@
 | Padre | exp044_raptor_ft_nartaa (all-data: fine-tune 6 ép. de los pesos SWA de nartaa 384 con consenso exp031; gold SWA 0.9192; seed 7 = sub044_1, 1.04 GPU-h) |
 | Fecha | 2026-10-18 |
 | Rama | exp085_tank_seeds |
-| Estado | spec |
+| Estado | run (4 semillas all-data; pendiente LB) |
 
 Idea: "tanque" para la final A (r6flip-repro, LB 0.958): un Raptor 384 propio entrenado con el 100 % de train, incluidos
 los 58 gold con su etiqueta gold dura, ensamble de varias semillas, metido en la mitad Raptor de r6flip-repro.
@@ -80,4 +80,20 @@ corte por deadline con fallback); colisión de salidas entre pods (nombres por s
 
 ## 3. VERDICT (números de `results/exp085_tank_seeds/alldata_s*/metrics.json` y LB público de Kaggle)
 
-pendiente LB
+**Resultado:** pendiente LB · **Fase alcanzada:** all-data, 4 semillas (todas antes del congelamiento)
+
+| Semilla | n_train | GPU-h | pérdida ép. 0 → ép. 5 | gold SWA (entrenamiento, solo sanidad) |
+|---|---|---|---|---|
+| 42 | 4407 | 1.065 | 0.7845 → 0.7575 | 0.9375 |
+| 7 | 4407 | 1.057 | 0.7827 → 0.7584 | 0.9424 |
+| 123 | 4407 | 1.065 | 0.7821 → 0.7581 | 0.9424 |
+| 2024 | 4407 | 1.058 | 0.7836 → 0.7564 | 0.9382 |
+| **Total** | | **4.245** | | |
+
+Sanidad OK: 58 gold dentro con etiqueta dura (|consenso − gold| medio 0.236), carga estricta del init (gold-58 del init 0.9191),
+pérdida finita y decreciente. Gold no es medida limpia (está en el entrenamiento). Pods RTX PRO 4500 (rsna-tsC, rsna-tsD).
+
+**Kernel:** `medellinrodrigo/tank-seeds` (privado), dataset privado `medellinrodrigo/rsna-knee-exp085-tank-seeds`.
+Pregunta: ¿la mitad Raptor con 384 = 0.5 nartaa384 + 0.5 media de las 4 semillas sube r6flip-repro (0.958)? worked si LB ≥ 0.959.
+
+**LB:** pendiente.
