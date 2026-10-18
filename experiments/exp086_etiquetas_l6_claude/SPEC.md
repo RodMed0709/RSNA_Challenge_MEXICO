@@ -112,6 +112,37 @@ Reglas añadidas (fijas antes de la adjudicación final):
   04:20 UTC no se lanzan llamadas nuevas (celda ⇒ media(L5, L6)) y se construye y entrega.
 - Umbrales de acuerdo, afilado 0.95/0.05, `ambiguous` ⇒ media, gold-58 duro y chequeos de salud: **sin cambios**.
 
+Piloto 2 (20:06 UTC): 14 estudios en disputa en la muestra (no 20); proyección con juez a `max` US$118 > US$100 ⇒
+la cadena paró (`OVER_BUDGET_100`). Antes de seguir llegó la enmienda 2.
+
+## 1c. ENMIENDA 2 (18-oct ~20:30 UTC, Rodrigo vía orquestador): DEBATE adversarial en vez de un solo juez
+
+Fijada antes de ver ningún resultado del debate (solo se miró el costo de 10 turnos GPT de prueba).
+
+- Entra al debate cada estudio con ≥ 1 celda en desacuerdo L5 vs **L6-Opus** (regla de acuerdo sin cambios); todas sus
+  celdas en desacuerdo van en la misma conversación.
+- Lector A = **`gpt-5.6-sol`** (`reasoning_effort: medium`; el modelo OpenAI más fuerte de la cuenta a precio
+  razonable: US$4/20 por M; gpt-5.5 US$5/30 y las variantes pro quedan fuera). Parte de su lectura previa = **L5**.
+  Lector B = **Claude Opus 5.5 `effort: high`**; parte de L6 con sus notas como argumento.
+- Ronda r (máx. 3): turno A (recibe informe + su prob. + prob., argumento y cita del otro; debe atacar el argumento del
+  otro y defender o revisar citando el texto) → chequeo de acuerdo → turno B (lo mismo con lo de A) → chequeo.
+  Salida JSON por celda: probabilidad, cita textual, ataque y argumento (1-2 frases). A los lectores no se les dice qué
+  modelo es el otro ("the other reader").
+- **Acuerdo** = mismo lado de 0.5 y |pA − pB| ≤ 0.30 ⇒ objetivo afilado 0.95/0.05 (lado de la media) y la celda sale.
+- Sin acuerdo tras 3 rondas ⇒ **juez final Opus 5.5 `effort: max`** con todo el transcript (Reader A / Reader B);
+  `decided` ⇒ su probabilidad; `ambiguous` (o sin respuesta) ⇒ media de las dos últimas probabilidades.
+- Se registra por celda: ronda de acuerdo, quién cedió (el que más se movió desde su lectura inicial; "both" si la
+  diferencia de movimiento < 0.05), turnos y costo. Gold-58: informativo, no selecciona.
+- Topes: Anthropic **US$100** (todo incluido: v1, pilotos, L6-Opus), OpenAI **US$45**. Guardias: si OpenAI llega a 95 % se
+  corta el debate; si Anthropic pasa 85 % no hay más turnos Claude y el juez adjudica por mayor |pA − pB| hasta el tope;
+  lo que no quepa ⇒ media de las dos últimas.
+- Tiempo: turnos Claude por Batch (espera máx. 1 h, si no síncrono concurrente); GPT síncrono concurrente (16 hilos).
+  Si a las 02:30 UTC no empezó la ronda 3, el debate se limita a 2 rondas. Sin llamadas nuevas después de 04:15 UTC
+  (abiertas ⇒ media de las dos últimas). Juez a `high` si se lanza en síncrono después de 03:15 UTC. Todo se declara.
+- Prueba de costo GPT (10 turnos ronda 1, 20:39 UTC): US$0.0123/turno (1373 tokens in, 342 out) ⇒ ~US$30 para ~2 turnos
+  por estudio en ~1200 estudios: dentro del tope.
+- Código: `debate_L6.py` (pilot / run / build); `generar_L6.py` sigue haciendo L6 (Opus) y las utilidades.
+
 ## 3. VERDICT (números de `results/exp086_etiquetas_l6_claude/metrics.json`)
 
 (pendiente)
