@@ -12,9 +12,11 @@ from analyze_stress import (
     atomic_write_public_metrics,
     macro_auc_filtered,
     paired_mean_delta,
+    render_verdict,
     select_hard_cases,
     stability_metrics,
     validate_public_metrics,
+    update_registry_text,
 )
 from infer_stress import (
     INFERENCE_CONDITIONS,
@@ -28,6 +30,7 @@ from infer_stress import (
     select_cohort_indices,
     slice_plan,
     validate_panel_config,
+    writable_array,
 )
 
 
@@ -57,6 +60,15 @@ class ConditionContractTests(unittest.TestCase):
         self.assertEqual((0, 1, 2), resolved["use_slots"])
         self.assertEqual(24, resolved["k_eval"])
         self.assertEqual([0, 1, 2], model["use_slots"])
+
+    def test_memmap_volume_is_copied_to_writable_storage_before_torch(self):
+        source = np.arange(8, dtype=np.uint8).reshape(2, 2, 2)
+        source.flags.writeable = False
+        result = writable_array(source)
+        self.assertTrue(result.flags.writeable)
+        self.assertTrue(result.flags.c_contiguous)
+        np.testing.assert_array_equal(source, result)
+        self.assertFalse(np.shares_memory(source, result))
 
     def test_cohort_selection_keeps_target_fold_and_gold_separate(self):
         folds = np.array([0, 1, -1, 0, -2])
@@ -99,6 +111,30 @@ class ConditionContractTests(unittest.TestCase):
 
 
 class AggregateMetricTests(unittest.TestCase):
+    def test_verdict_renders_only_aggregate_metric_values(self):
+        metrics = {
+            "coverage": {"complete": True, "completed": 45, "planned": 45},
+            "reproduction_gate": {"auc": 0.8681754489, "delta": -0.0000022061, "passed": True},
+            "hypotheses": {"H1": {"rho": 0.25}, "H2": {"confirmed": 3, "tested": 5}, "H3": {"delta_bce_ref": -0.0123}},
+            "runtime": {"gpu_hours": 8.5, "estimated_runpod_cost_usd": 6.12},
+        }
+        verdict = render_verdict(metrics)
+        self.assertIn("worked", verdict)
+        self.assertIn("0.868175", verdict)
+        self.assertIn("-0.012300", verdict)
+        self.assertNotIn("StudyInstanceUID", verdict)
+
+    def test_registry_update_changes_only_exp091_row(self):
+        original = (
+            "header\n"
+            "| exp090 | old | rodrigo | exp074 | x | worked | | | | ok |\n"
+            "| exp091 | stress_v1 | rodrigo | exp040 | stress | spec | | | | |\n"
+        )
+        updated = update_registry_text(original, "worked", 0.8681754489, "H1 rho=0.250; coverage 45/45")
+        self.assertIn("| exp090 | old |", updated)
+        self.assertIn("| exp091 | stress_v1 | rodrigo | exp040 | stress | worked | 0.8682 (gate ref)", updated)
+        self.assertEqual(1, updated.count("| exp091 |"))
+
     def test_initialize_cli_writes_versionable_partial_metrics(self):
         here = Path(__file__).resolve().parent
         with tempfile.TemporaryDirectory() as directory:

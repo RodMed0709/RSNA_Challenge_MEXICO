@@ -147,6 +147,12 @@ def select_cohort_indices(folds: np.ndarray, is_gold: np.ndarray, target_fold: i
     return validation, gold
 
 
+def writable_array(array: np.ndarray) -> np.ndarray:
+    """Return an owned C-contiguous array safe for ``torch.from_numpy``."""
+
+    return np.array(array, copy=True, order="C")
+
+
 def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
@@ -386,13 +392,15 @@ def _run_gpu(args, config: Mapping, model: Mapping) -> dict:
         for start in range(0, len(ids), args.bs):
             bags = []
             for index in range(start, min(start + args.bs, len(ids))):
-                volume = torch.from_numpy(get_volume(index)).to(device, non_blocking=True)
+                volume = torch.from_numpy(writable_array(get_volume(index))).to(device, non_blocking=True)
                 bags.append(make_bag(volume, masks[rows[index]], ids[index], condition))
             window_count += sum(len(bag) for bag in bags)
             predictions[start:start + len(bags)] = forward_bags(bags)
         torch.cuda.synchronize()
         frame = pd.DataFrame(predictions, index=pd.Index(ids, name="StudyInstanceUID"), columns=LABELS)
-        frame.to_parquet(destination)
+        temporary_predictions = destination.with_suffix(".tmp.parquet")
+        frame.to_parquet(temporary_predictions)
+        temporary_predictions.replace(destination)
         timings[condition] = {
             "seconds": time.time() - started,
             "n": len(ids),
