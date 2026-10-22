@@ -1,0 +1,183 @@
+# exp086_etiquetas_l6_claude
+
+| Campo | Valor |
+|---|---|
+| Autor | rodrigo (agente labels_claude) |
+| Padre | exp054_etiquetas_L5 |
+| Fecha | 2026-10-18 |
+| Rama | exp086_etiquetas_l6_claude |
+| Estado | worked |
+
+Idea (de Rodrigo, autorizada 18-oct): nueva fuente de etiquetas **L6** leyendo los 4407 informes de train con Claude, y
+**adjudicación** con un modelo más fuerte de las celdas (estudio × hallazgo) donde L5 (OpenAI) y L6 no concuerdan.
+El resultado, **consenso_v6**, es un objetivo de entrenamiento para reentrenar el tanque (final A, exp085). Este
+experimento **solo produce etiquetas** (CPU + API, 0 GPU-h, sin notebook de entrenamiento: igual que la fase 1 de
+exp054, el generador es `generar_L6.py` en esta carpeta). El uso en entrenamiento lo hace otro experimento y lo decide el LB.
+
+## 1. SPEC (fijada antes de llamar a la API)
+
+### L6
+
+| Punto | Decisión (fija) |
+|---|---|
+| Modelo | `claude-sonnet-5-5`, k = 1 lectura por informe, sin razonamiento extendido (`thinking: between_tools`, el equivalente a "apagado" en Sonnet 5.5; L5 usó gpt-4.1-mini sin razonamiento). |
+| Temperatura | **no se puede fijar**: Sonnet 5.5 y Opus 5.5 rechazan valores no por defecto (400). Desviación declarada frente al brief (pedía 0). |
+| Prompt | **B_reason de L5, verbatim** (`exp054/generar_L5.py`, en inglés): mejor lectura individual de L5 contra el consenso de 4 (macro AUC 0.986 vs A 0.969, C 0.983). Notas ≤ 60 palabras + 12 probabilidades enteras 0–100 con la misma guía de calibración y las definiciones oficiales (discusión 733343). Salida JSON con esquema estricto (`output_config.format`). |
+| Esquema | 12 hallazgos, mismos nombres y orden que L5; probabilidad = entero / 100. Mismo recorte del informe (12 000 caracteres). |
+| API | Message Batches (50 %). Si un batch tarda > 2 h: se cancela y lo que falte va por llamadas síncronas concurrentes (8 hilos). Header `anthropic-workspace-id` en cada request. |
+
+### Acuerdo y adjudicación (umbrales fijos)
+
+- Celda en **acuerdo** si L5 y L6 están del mismo lado de 0.5 (positivo = p > 0.5) **y** |L5 − L6| ≤ 0.30.
+  Objetivo afilado: **0.95** si positivo, **0.05** si negativo.
+- Si no ⇒ **desacuerdo** ⇒ adjudicación con `claude-opus-5-5` (`effort: medium`, razonamiento adaptativo, que en
+  Opus 5.5 no se puede apagar). Una llamada por estudio con todas sus celdas en desacuerdo. Recibe el informe y las dos
+  lecturas como "Reading 1 / Reading 2" en **orden aleatorio por estudio** (semilla 86 + UID), sin decir qué modelo es
+  cuál. Instrucción adversarial: argumentar contra cada lectura (≤ 40 palabras cada una), decidir una probabilidad
+  0–100 con la misma guía de calibración, y responder `ambiguous` si el informe es genuinamente ambiguo.
+  - `decided` ⇒ objetivo = probabilidad de Opus / 100.
+  - `ambiguous` ⇒ objetivo = media(L5, L6).
+  - Adjudicación ausente (error, rechazo, fuera de presupuesto) ⇒ media(L5, L6) (se cuenta y se reporta).
+- Estudio sin L6 (error persistente) ⇒ objetivo = L5 de esa celda (se cuenta).
+- **Gold (58)**: etiqueta gold dura 0/1 (decisión de Rodrigo, como exp085). L6 y la adjudicación sí se calculan en los
+  58 para el reporte, pero gold no ajusta nada (ni prompts, ni umbrales, ni mapeos).
+- Salida: `/workspace/users/rodrigo/orq/labels_claude/consenso_v6.csv` (StudyInstanceUID + 12 columnas, probabilidad
+  en [0, 1], 4407 filas: mismo formato que las fuentes que lee el notebook de exp044/exp085) y `READY.json`
+  {path, n_studies, n_adjudicated, cost_usd, created_at}. L6 suelta: `.../labels_claude/work/L6_sonnet55.csv`. Datos:
+  no van a git (licencia MIRA).
+
+### Presupuesto y corte
+
+- Tope **US$40** de API en total. Piloto síncrono de 50 informes (muestra semilla 86) + adjudicación de sus desacuerdos;
+  se proyecta a 4407 con precio de batch (Sonnet 5.5 US$2/10 por M, Opus 5.5 US$4/20; batch −50 %).
+- Si la proyección total > US$40: adjudicador a `effort: low` y guardia de presupuesto (se adjudican primero los estudios
+  con mayor |L5 − L6|; los que no quepan ⇒ media(L5, L6)). Si L6 sola no cabe ⇒ parar (`OVER_BUDGET`) sin L6.
+- Fecha dura: etiquetas en el volumen antes del 19-oct 05:00 UTC; si no se llega, se entrega lo que haya y se dice.
+
+### Validación (sin gold para decidir; criterios fijos antes de la corrida)
+
+- L6 **sana** si: cobertura ≥ 99 % de los 4407 con las 12 celdas; macro AUC de L6 contra el consenso de 4 de exp031
+  (Raptor+L2+L3+L4, media por celda > 0.5) ≥ 0.93 en los no-gold; ningún hallazgo < 0.80; costo ≤ US$40.
+  (Mismos chequeos que L5 en exp054.)
+- `READY.json` solo se escribe si L6 está sana. Si no: `didnt`, sin READY.
+- **Informativo (no selecciona nada):** macro y por hallazgo AUC contra gold-58 de L5, L6, consenso actual (4 fuentes,
+  el de exp085; Raptor no cubre gold), consenso de 5 (con L5) y consenso_v6 (antes de sustituir gold); % de acuerdo
+  global y por hallazgo; nº de celdas/estudios adjudicados, `ambiguous`, ausentes; media del objetivo; costo real.
+  Si consenso_v6 queda > 0.02 por debajo del consenso actual en gold, se anota como `warning` en READY.json
+  (no veta: el uso lo decide otro experimento y el LB).
+- **Verdict de este experimento:** `worked` = L6 sana y READY a tiempo; `didnt` = L6 no sana o no llegó a tiempo.
+
+**Sesgos y riesgos declarados:**
+- Afilar a 0.95/0.05 las celdas en acuerdo **cambia la escala** del objetivo frente al consenso blando de 4 fuentes
+  (más confiado). Es lo que pide la idea; el entrenamiento lo juzgará el LB.
+- L5 y L6 usan las **mismas definiciones estrictas** y el mismo prompt B: su acuerdo no es independiente del prompt.
+- Solo dos lectores: L2/L3/L4/Raptor no entran en consenso_v6.
+- Informes en 10 idiomas; el adjudicador ve los números de ambas lecturas (anclaje posible).
+- Sin temperatura 0: la lectura no es exactamente reproducible.
+- Afilar a 0.95/0.05 crea **empates masivos**: la AUC de consenso_v6 contra gold (informativa) baja por los empates
+  aunque las etiquetas sean igual de correctas (prueba en seco del build con L6 falsa = L5 B_reason y sin adjudicar:
+  macro gold 0.840 vs 0.895 del consenso de 4). Por eso esa AUC no puede decidir nada aquí; la medida útil es el LB.
+
+**Presupuesto:** ≤ US$40 de API, 0 GPU-h. Corre en el pod CPU rsna-cron (clave en `/root`, fuera del volumen).
+
+## 2. PLAN
+
+- `generar_L6.py all --out /workspace/users/rodrigo/orq/labels_claude/work`: piloto (50, síncrono) → L6 (batch) →
+  adjudicación (batch) → build (CSV, `metrics.json`, READY.json). Cachés jsonl reanudables; log en
+  `orq/labels_claude/status.log`.
+- `results/exp086_etiquetas_l6_claude/metrics.json` = copia del `metrics.json` del build (solo números agregados).
+- Nada más cambia (no hay notebook de entrenamiento en este experimento).
+
+## 1b. ENMIENDA (18-oct ~20:00 UTC, por instrucción de Rodrigo vía orquestador)
+
+**Contexto honesto:** la v1 de arriba (L6 = Sonnet 5.5, adjudicación Opus 5.5 `effort: medium`, tope US$40) ya había
+corrido entera (batches rápidos, 19:40–19:53 UTC, US$27.62) cuando llegaron las dos instrucciones, y su `build` sí
+imprimió números agregados (acuerdo 0.952; gold informativo). La enmienda **no** sale de esos números: la pidió Rodrigo
+("no solo sonnet"; adjudicación a máxima potencia). La v1 se archiva (`work/v1_sonnet_medium/`) y su READY se retiró.
+
+| Punto | v1 | Enmienda (final) |
+|---|---|---|
+| L6 (la que entra al acuerdo con L5) | Sonnet 5.5, sin razonamiento | **`claude-opus-5-5`, `effort: high`**, razonamiento adaptativo, temperatura por defecto, max_tokens 16 000; mismo prompt B_reason y esquema |
+| Lectura Sonnet 5.5 | — | se conserva como fuente **informativa L6s** (no entra al consenso) |
+| Adjudicación | Opus 5.5 `effort: medium` | **Opus 5.5 `effort: max`**, razonamiento adaptativo, max_tokens 64 000 (streaming en síncrono) |
+| Tope API total (v1 incluida) | US$40 | **US$100** |
+
+Reglas añadidas (fijas antes de la adjudicación final):
+- Piloto 2: Opus L6 sobre la misma muestra de 50 (≥ 30 pedidos) + 20 adjudicaciones a `max`; se proyecta a 4407 con
+  precio de batch. Si la proyección total > US$100 ⇒ la cadena **para** (`OVER_BUDGET_100` en status.log) y espera al
+  orquestador; si este autoriza, guardia de presupuesto: se adjudican primero los estudios con mayor |L5 − L6|, el
+  resto = media(L5, L6).
+- Latencia: batch con espera máx. 2 h; si no termina, lo que falte va por llamadas síncronas concurrentes. Adjudicaciones
+  síncronas lanzadas después del 19-oct 03:15 UTC bajan a `effort: high` (se cuentan en `adj_effort_counts`); después de
+  04:20 UTC no se lanzan llamadas nuevas (celda ⇒ media(L5, L6)) y se construye y entrega.
+- Umbrales de acuerdo, afilado 0.95/0.05, `ambiguous` ⇒ media, gold-58 duro y chequeos de salud: **sin cambios**.
+
+Piloto 2 (20:06 UTC): 14 estudios en disputa en la muestra (no 20); proyección con juez a `max` US$118 > US$100 ⇒
+la cadena paró (`OVER_BUDGET_100`). Antes de seguir llegó la enmienda 2.
+
+## 1c. ENMIENDA 2 (18-oct ~20:30 UTC, Rodrigo vía orquestador): DEBATE adversarial en vez de un solo juez
+
+Fijada antes de ver ningún resultado del debate (solo se miró el costo de 10 turnos GPT de prueba).
+
+- Entra al debate cada estudio con ≥ 1 celda en desacuerdo L5 vs **L6-Opus** (regla de acuerdo sin cambios); todas sus
+  celdas en desacuerdo van en la misma conversación.
+- Lector A = **`gpt-5.6-sol`** (`reasoning_effort: medium`; el modelo OpenAI más fuerte de la cuenta a precio
+  razonable: US$4/20 por M; gpt-5.5 US$5/30 y las variantes pro quedan fuera). Parte de su lectura previa = **L5**.
+  Lector B = **Claude Opus 5.5 `effort: high`**; parte de L6 con sus notas como argumento.
+- Ronda r (máx. 3): turno A (recibe informe + su prob. + prob., argumento y cita del otro; debe atacar el argumento del
+  otro y defender o revisar citando el texto) → chequeo de acuerdo → turno B (lo mismo con lo de A) → chequeo.
+  Salida JSON por celda: probabilidad, cita textual, ataque y argumento (1-2 frases). A los lectores no se les dice qué
+  modelo es el otro ("the other reader").
+- **Acuerdo** = mismo lado de 0.5 y |pA − pB| ≤ 0.30 ⇒ objetivo afilado 0.95/0.05 (lado de la media) y la celda sale.
+- Sin acuerdo tras 3 rondas ⇒ **juez final Opus 5.5 `effort: max`** con todo el transcript (Reader A / Reader B);
+  `decided` ⇒ su probabilidad; `ambiguous` (o sin respuesta) ⇒ media de las dos últimas probabilidades.
+- Se registra por celda: ronda de acuerdo, quién cedió (el que más se movió desde su lectura inicial; "both" si la
+  diferencia de movimiento < 0.05), turnos y costo. Gold-58: informativo, no selecciona.
+- Topes: Anthropic **US$100** (todo incluido: v1, pilotos, L6-Opus), OpenAI **US$45**. Guardias: si OpenAI llega a 95 % se
+  corta el debate; si Anthropic pasa 85 % no hay más turnos Claude y el juez adjudica por mayor |pA − pB| hasta el tope;
+  lo que no quepa ⇒ media de las dos últimas.
+- Tiempo: turnos Claude por Batch (espera máx. 1 h, si no síncrono concurrente); GPT síncrono concurrente (16 hilos).
+  Si a las 02:30 UTC no empezó la ronda 3, el debate se limita a 2 rondas. Sin llamadas nuevas después de 04:15 UTC
+  (abiertas ⇒ media de las dos últimas). Juez a `high` si se lanza en síncrono después de 03:15 UTC. Todo se declara.
+- Prueba de costo GPT (10 turnos ronda 1, 20:39 UTC): US$0.0123/turno (1373 tokens in, 342 out) ⇒ ~US$30 para ~2 turnos
+  por estudio en ~1200 estudios: dentro del tope.
+- Código: `debate_L6.py` (pilot / run / build); `generar_L6.py` sigue haciendo L6 (Opus) y las utilidades.
+
+## 1d. VARIANTE v6soft (decidida por el orquestador el 18-oct ~21:40 UTC, antes de cualquier entrenamiento con ella)
+
+Cobertura por la advertencia de que v6 afilado deja la etiqueta casi binaria. Sin llamadas API nuevas.
+`consenso_v6soft.csv` = por celda 0.5 · consenso4 (Raptor+L2+L3+L4, el de exp044/exp085) + 0.5 · p_res, con
+p_res = media(L5, L6-Opus) si acordaron de entrada; media de las probabilidades finales de ambos si acordaron en el
+debate; probabilidad del juez si juzgado; media de las dos últimas si `ambiguous`. Sin afilar. Gold-58 = gold dura.
+Mismo formato/IDs que consenso_v6.csv; `READY_soft.json` {path, created_at, regla}. La decidió el orquestador después
+de ver la AUC gold informativa de v6 (0.810): se declara; no la eligió gold, la elegirá el LB.
+
+## 3. VERDICT (números de `results/exp086_etiquetas_l6_claude/metrics.json`)
+
+**Resultado:** `worked` (L6 sana y READY a tiempo) · **Fase:** etiquetas entregadas (18-oct 21:20 UTC; v6soft 21:43 UTC)
+
+- Entregado: `/workspace/users/rodrigo/orq/labels_claude/consenso_v6.csv` + `READY.json` y `consenso_v6soft.csv` +
+  `READY_soft.json` (4407 filas; gold-58 duro). v1 (Sonnet + juez medium) archivada en `work/v1_sonnet_medium/`.
+- **L6 = Opus 5.5 effort high:** cobertura 1.000; macro AUC contra consenso de 4 (no-gold) **0.9894** (mín. por hallazgo
+  0.977) ⇒ sana. L6s Sonnet (informativa) 0.9881.
+- **Acuerdo inicial L5 vs L6** (por celda): **0.955**. En disputa: 2356 celdas en 1624 estudios.
+- **Debate** (GPT-5.6-sol vs Opus 5.5, 3 rondas completas): acuerdan 1960 celdas (ronda 1: 1727, ronda 2: 166,
+  ronda 3: 67); cedió GPT 1711, Claude 106, ambos 143. Al juez Opus max: 396 celdas en 362 estudios ⇒ `decided` 79,
+  `ambiguous` 317. Ninguna celda quedó fuera del debate.
+- **Costo real:** Anthropic **US$88.96** (incluye v1 US$27.62, pilotos y L6-Opus) · OpenAI **US$31.62** · total US$120.59.
+- Media del objetivo: consenso_v6 0.183 · v6soft 0.238 · L5 0.183 · L6 0.167 · consenso4 0.302.
+
+Gold-58, **informativo** (macro AUC; no seleccionó nada; v6 y v6soft antes de sustituir gold):
+
+| Fuente | L5 | L6 Opus | L6s Sonnet | consenso4 (actual) | consenso_v6 | consenso_v6soft |
+|---|---|---|---|---|---|---|
+| macro AUC gold | 0.8891 | 0.9065 | 0.9049 | 0.8948 | 0.8100 | 0.8994 |
+
+**Qué aprendimos:** Opus 5.5 y Sonnet 5.5 leen los informes mejor que L5 (gold 0.907/0.905 vs 0.889) con el mismo
+prompt. En el debate, el lector OpenAI (que parte de L5) cede casi siempre (87 % de los acuerdos). El juez a `max`
+declara `ambiguous` el 80 % de las celdas que sobreviven 3 rondas: son ambigüedades reales del informe. Afilar a
+0.95/0.05 destruye el orden dentro de cada lado (empates) y baja la AUC de etiqueta contra gold a 0.810; la variante
+continua v6soft (0.899) conserva el orden.
+
+**Siguiente paso:** reentrenar el tanque con consenso_v6 o v6soft (otro experimento, lo decide el LB). Idea: probar
+L6 Opus como 6.ª fuente blanda en el consenso de 5 (sin afilar).
