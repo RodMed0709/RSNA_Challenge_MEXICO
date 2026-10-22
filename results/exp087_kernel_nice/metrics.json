@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "exp": "exp087_kernel_nice",
+  "author": "rodrigo",
+  "parent": "exp084",
+  "git": {
+    "commit": "53f80ac",
+    "branch": "exp087_kernel_nice",
+    "src_dirty": false
+  },
+  "timestamp_utc": "2026-10-18T21:42:26.249748+00:00",
+  "phase": "bench",
+  "select_on": "no aplica (bench de runtime, predicciones iguales)",
+  "params": {
+    "EXP": "exp087_kernel_nice",
+    "PADRE": "exp084",
+    "SMOKE": false,
+    "SELECT_ON": "pseudo",
+    "BENCH": "bench",
+    "BASELINE_RAW": "exp080-bench-fastng6_v1",
+    "PARENT_RUNS": [
+      "exp080-bench-fastng6_v1",
+      "exp080-bench-fastng6_v2"
+    ],
+    "DECIDE_RUNS": [
+      "exp087-bench-xn_v1",
+      "exp087-bench-xn_v2"
+    ],
+    "INFO_RUNS": [
+      "exp084-bench-x_v1"
+    ],
+    "CRIT_DPROB": 0.001,
+    "CRIT_DT": -30.0,
+    "NOTES": "exp084: runtime con predicciones iguales; tiempo = nb_elapsed_to_end del bench (incluye imports, hash, carga y bucle)",
+    "LABELS": [
+      "ACL",
+      "MCL",
+      "Medial Meniscus",
+      "Lateral Meniscus",
+      "Medial OA",
+      "Lateral OA",
+      "PF OA",
+      "Effusion",
+      "Synovitis",
+      "Baker's",
+      "Contusion",
+      "Fracture"
+    ],
+    "AUTHOR": "rodrigo",
+    "FASTX": "\"\"\"exp084 prediction-preserving speedups on top of exp080-ctrl224-fast (scored body = 2nd code cell).\nX1 early prep: a new FIRST code cell forks the 6 prep processes and starts streaming studies before torch/timm are\n   imported, the checkpoint is hashed and the models are loaded (main() consumes that iterator).\nX2 workers return only the 320x320 centre crop the model uses (uint8, same values) -> ~30 % less IPC per study.\nX3 cv2.setNumThreads(1) in the prep workers (6 procs on 4 vCPU; same output).\nX4 GPU windows from the cropped volume (exp084: float by division -> max|dp| 1.3e-3; exp087: back to the parent's LUT).\nX5 (variant 'b') torch.backends.cudnn.benchmark = True (fixed (64,3,224,224) shape; may change fp16 rounding).\nX6 (variant 'n', exp087) os.nice(NICE) in the prep workers: torch/timm import, hash and model load keep CPU priority.\napply(body, root_expr, cudnn_bench) -> (early_cell_source, new_body).\"\"\"\n\n\ndef rep(t, a, b, n=1):\n    assert t.count(a) == n, (a[:70], t.count(a))\n    return t.replace(a, b)\n\n\ndef early_cell(fastread_line, root_expr, nice=0):\n    return '''# [exp084] early prep: fork the DICOM prep processes and start streaming before torch/timm import and model load.\nimport os, sys, glob, time, json, gc, threading, queue\nimport numpy as np, pandas as pd\nimport multiprocessing as mp\nT_EARLY0 = time.time()\nIMG = 384\nSLOTS = [(\"Sagittal\", 1, 26), (\"Sagittal\", 0, 22), (\"Coronal\", 1, 18),\n         (\"Coronal\", 0, 12), (\"Axial\", -1, 18)]\nMAXS = sum(s[2] for s in SLOTS)\nFASTREAD_VARIANT = 'study_lut'\nFR_HDR, FR_PX = 32, 16\nCROP_FRAC = 320 / 384\nEARLY_NPROC = 6\nEARLY_NICE = ''' + str(nice) + '''\n''' + fastread_line + '''\ndef _load_fastread():\n    import base64 as _b, importlib.util as _iu\n    p = '/kaggle/working/_fastread.py' if os.path.isdir('/kaggle/working') else os.path.join(os.getcwd(), '_fastread.py')\n    if not os.path.exists(p):\n        open(p, 'wb').write(_b.b64decode(_FASTREAD_B64))\n    spec = _iu.spec_from_file_location('_fastread', p); m = _iu.module_from_spec(spec); spec.loader.exec_module(m)\n    return m\n\n\ndef _early_root():\n    for b in [\"/kaggle/input/competitions/rsna-knee-abnormality-detection\", \"/kaggle/input/rsna-knee-abnormality-detection\"]:\n        if os.path.exists(b + \"/test.csv\"):\n            return b\n    for d, _, f in os.walk(\"/kaggle/input\"):\n        if \"test.csv\" in f and (os.path.isdir(d + \"/test_series\") or os.path.isdir(d + \"/test_images\")):\n            return d\n    for d, _, f in os.walk(\"/kaggle/input\"):\n        if \"test.csv\" in f:\n            return d\n    raise RuntimeError(\"no test root under /kaggle/input\")\n\n\n_ESER = None; _ETSDIR = None; _EREADER = None\ndef _early_init():\n    global _EREADER\n    if EARLY_NICE:\n        os.nice(EARLY_NICE)   # [exp087] X6: prep yields the CPU to import/hash/model load and the GPU feeders\n    try:\n        import cv2; cv2.setNumThreads(1)   # [exp084] X3: one cv2 thread per prep process (same output)\n    except Exception:\n        pass\n    _EREADER = _load_fastread().make_builder(FASTREAD_VARIANT, IMG, SLOTS[:3], hdr_threads=FR_HDR, px_threads=FR_PX)\n\n\ndef _early_one(sid):\n    _t0 = time.time(); _c0 = time.process_time()\n    try:\n        vol, mask = _EREADER(sid, _ESER, _ETSDIR)\n    except Exception as e:\n        print(f\"  [pre] {sid[:16]} FAILED ({type(e).__name__}: {e})\", flush=True)\n        vol = np.zeros((MAXS, IMG, IMG), np.uint8); mask = np.zeros(MAXS, np.uint8)\n    H = vol.shape[-1]; ch = int(round(H * CROP_FRAC)); y0 = (H - ch) // 2\n    vol = np.ascontiguousarray(vol[:, y0:y0 + ch, y0:y0 + ch])   # [exp084] X2: only the centre crop the model reads\n    return sid, vol, mask, (time.time() - _t0, time.process_time() - _c0)\n\n\nEARLY_ROOT = ''' + root_expr + '''\nEARLY_TSDIR = EARLY_ROOT + \"/test_series\"\nif not os.path.isdir(EARLY_TSDIR):\n    EARLY_TSDIR = EARLY_ROOT + \"/test_images\"\n_et = pd.read_csv(EARLY_ROOT + \"/test.csv\"); _et[\"StudyInstanceUID\"] = _et[\"StudyInstanceUID\"].astype(str)\nEARLY_IDS = _et[\"StudyInstanceUID\"].tolist()\n_es = pd.read_csv(EARLY_ROOT + \"/test_series.csv\")\n_es[\"StudyInstanceUID\"] = _es[\"StudyInstanceUID\"].astype(str); _es[\"SeriesInstanceUID\"] = _es[\"SeriesInstanceUID\"].astype(str)\n_ESER = {k: v.to_dict(\"records\") for k, v in _es.groupby(\"StudyInstanceUID\")}\n_ETSDIR = EARLY_TSDIR\nEARLY_POOL = mp.get_context(\"fork\").Pool(EARLY_NPROC, initializer=_early_init)\nEARLY_IT = EARLY_POOL.imap_unordered(_early_one, EARLY_IDS, chunksize=2)\nprint(f\"[early] {len(EARLY_IDS)} studies streaming from {EARLY_NPROC} prep processes | {time.time() - T_EARLY0:.1f}s\", flush=True)\n'''\n\n\nGPU_WIN_X = '''\ndef gpu_windows(vol, mask, k, res, dev, norm=NORM):\n    \"\"\"[exp084] X4: vol is the 320x320 centre crop (prep workers crop); [exp087] float values from the parent's LUT.\"\"\"\n    D = mask.shape[0]\n    cs = np.array([max(1, min(c, D - 2)) for c in _eval_centers(mask, D, k)])\n    if vol.shape[-1] == IMG or not (norm == 'imagenet' and CROP_FRAC < 1.0):\n        return _gpu_windows_orig(vol, mask, k, res, dev, norm)\n    vg = torch.from_numpy(vol).to(dev)\n    if int(cs.max()) + 1 >= vg.shape[0]:\n        vg = torch.cat([vg, vg.new_zeros((int(cs.max()) + 2 - vg.shape[0],) + tuple(vg.shape[1:]))], 0)\n    tri = vg[torch.from_numpy(np.stack([cs - 1, cs, cs + 1], 1)).to(dev)]          # (k,3,320,320) uint8\n    L0 = _WLUT.setdefault((str(dev), 'none'), torch.from_numpy(np.arange(256, dtype=np.uint8).astype(np.float32) / 255.0).to(dev))\n    x = L0[tri.long()]   # [exp087] CPU-built LUT as in the parent: CUDA scalar division is a reciprocal multiply (ulp drift, max|dp| 1.3e-3 in exp084)\n    x = F.interpolate(x, size=(res, res), mode='bilinear', align_corners=False)\n    return (x - _MEAN.to(dev)) / _STD.to(dev)\n\n'''\n\n\ndef apply(body, root_expr, cudnn_bench, bench=False, nice=0):\n    lines = body.split(\"\\n\")\n    fr = [l for l in lines if l.startswith(\"_FASTREAD_B64 = \")]\n    assert len(fr) == 1\n    body = body.replace(fr[0] + \"\\n\", \"\", 1)\n    # X4: the fast gpu_windows of exp080-ctrl224-fast becomes the crop-aware one\n    a = body.index(\"\\ndef gpu_windows(vol, mask, k, res, dev, norm=NORM):\\n\")\n    b = body.index(\"\\n@torch.no_grad()\\ndef infer_probs(\")\n    body = body[:a] + \"\\n\" + GPU_WIN_X + body[b:]\n    if cudnn_bench:\n        body = rep(body, \"torch.backends.cudnn.benchmark = False   # exp027: no per-thread cudnn autotune\",\n                   \"torch.backends.cudnn.benchmark = True   # [exp084] X5: fixed (64,3,224,224) shape, autotune once per GPU\")\n    # X1: main consumes the early iterator instead of creating the pool\n    old_loop = (\"    with mp.get_context(\\\"fork\\\").Pool(nproc, initializer=_pre_init) as pool:\\n\"\n                \"        for i, (sid, vol, mask) in enumerate(pool.imap_unordered(_pre_one, test_ids, chunksize=2)):\\n\"\n                \"            q.put((sid, vol, mask))\\n\")\n    new_loop = (\"    assert EARLY_IDS == test_ids, \\\"[exp084] early prep ids differ from test.csv\\\"\\n\"\n                \"    nproc = EARLY_NPROC\\n\"\n                \"    if True:   # [exp084] X1: prep processes started in the first cell\\n\"\n                \"        for i, (sid, vol, mask, _pt) in enumerate(EARLY_IT):\\n\"\n                + (\"            PRE_T[sid] = _pt; QS.append(q.qsize())\\n\" if bench else \"\")\n                + \"            q.put((sid, vol, mask))\\n\")\n    body = rep(body, old_loop, new_loop)\n    body = rep(body, \"    for _ in devs: q.put(None)\\n\", \"    EARLY_POOL.close()\\n    for _ in devs: q.put(None)\\n\")\n    return early_cell(fr[0], root_expr, nice), body\n",
+    "DT": 28.14079999923706,
+    "DT_INFO": 28.532276511192322,
+    "OK_PROB": true,
+    "OK_CLEAN": true,
+    "VERDICT_AUTO": "didnt",
+    "INFO_OK": false
+  },
+  "runs": {
+    "exp080-bench-fastng6_v1": {
+      "variant": "fastng6",
+      "nb_elapsed_to_end": 271.96594309806824,
+      "main_total_s": 251.66562390327454,
+      "pre_done": 250.80013298988342,
+      "gpu_done": 251.2632133960724,
+      "early_start_s": null,
+      "gpu_wait_sum": 74.6796293258667,
+      "gpu_mean": 0.30285839099150436,
+      "pre_wall_mean": 1.0040732493767373,
+      "pre_cpu_mean": 0.4788127214915385,
+      "gold_auc": 0.9239901054934009,
+      "max_abs_dprob": 0.0,
+      "mean_abs_dprob": 0.0,
+      "traceback": false
+    },
+    "exp080-bench-fastng6_v2": {
+      "variant": "fastng6",
+      "nb_elapsed_to_end": 268.17011642456055,
+      "main_total_s": 244.2469117641449,
+      "pre_done": 237.21188807487488,
+      "gpu_done": 243.80288934707642,
+      "early_start_s": null,
+      "gpu_wait_sum": 8.882225513458252,
+      "gpu_mean": 0.3340094903799204,
+      "pre_wall_mean": 0.774682242503533,
+      "pre_cpu_mean": 0.48602386051153856,
+      "gold_auc": 0.9239901054934009,
+      "max_abs_dprob": 0.0,
+      "mean_abs_dprob": 0.0,
+      "traceback": false
+    },
+    "exp087-bench-xn_v1": {
+      "variant": "xn",
+      "nb_elapsed_to_end": 253.91206622123718,
+      "main_total_s": 213.13225293159485,
+      "pre_done": 211.64593362808228,
+      "gpu_done": 212.78147792816162,
+      "early_start_s": 1.1538124084472656,
+      "gpu_wait_sum": 22.93741250038147,
+      "gpu_mean": 0.2854775047302246,
+      "pre_wall_mean": 1.0343895140061012,
+      "pre_cpu_mean": 0.41689257343153835,
+      "gold_auc": 0.9239901054934009,
+      "max_abs_dprob": 0.0,
+      "mean_abs_dprob": 0.0,
+      "traceback": false
+    },
+    "exp087-bench-xn_v2": {
+      "variant": "xn",
+      "nb_elapsed_to_end": 342.5055932998657,
+      "main_total_s": 303.07477927207947,
+      "pre_done": 301.7743127346039,
+      "gpu_done": 302.6642508506775,
+      "early_start_s": 1.2322924137115479,
+      "gpu_wait_sum": 208.82987236976624,
+      "gpu_mean": 0.2855287594061631,
+      "pre_wall_mean": 1.497305198265956,
+      "pre_cpu_mean": 0.4052198607176923,
+      "gold_auc": 0.9239901054934009,
+      "max_abs_dprob": 0.0,
+      "mean_abs_dprob": 0.0,
+      "traceback": false
+    },
+    "exp084-bench-x_v1": {
+      "variant": "x",
+      "nb_elapsed_to_end": 298.6003062725067,
+      "main_total_s": 239.95274090766907,
+      "pre_done": 231.42217230796814,
+      "gpu_done": 239.620112657547,
+      "early_start_s": 1.0817046165466309,
+      "gpu_wait_sum": 0.12109136581420898,
+      "gpu_mean": 0.33223192911881666,
+      "pre_wall_mean": 0.7687485251059899,
+      "pre_cpu_mean": 0.40597839426076915,
+      "gold_auc": 0.9240479758637713,
+      "max_abs_dprob": 0.0013404399999999983,
+      "mean_abs_dprob": 4.696335910256405e-05,
+      "traceback": false
+    }
+  },
+  "parent_mean_nb_elapsed": 270.0680297613144,
+  "decide_mean_nb_elapsed": 298.20882976055145,
+  "delta_s": 28.14079999923706,
+  "delta_s_info_x": 28.532276511192322,
+  "max_abs_dprob_decide": 0.0,
+  "ok_prob": true,
+  "ok_clean": true,
+  "info_x_meets": false,
+  "gold_auc_bench": {
+    "exp080-bench-fastng6_v1": 0.9239901054934009,
+    "exp080-bench-fastng6_v2": 0.9239901054934009,
+    "exp087-bench-xn_v1": 0.9239901054934009,
+    "exp087-bench-xn_v2": 0.9239901054934009,
+    "exp084-bench-x_v1": 0.9240479758637713
+  },
+  "verdict_auto": "didnt",
+  "criteria": {
+    "worked": "max|dprob| <= 0.001 (2 runs), no Traceback/FALLBACK, mean nb_elapsed_to_end - parent <= -30.0 s",
+    "killed": "dprob or clean fails"
+  },
+  "gpu_hours_total": 0.0
+}
