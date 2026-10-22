@@ -4,6 +4,7 @@ Trabajamos con **SDD (spec-driven development)**: ningún experimento se program
 Si en esta sesión no has leído los documentos de abajo, léelos ANTES de proponer, editar o correr nada.
 
 ## Lee primero, en este orden
+0. `docs/now/NOW.md` — estado vivo (finales, envíos, pendientes). Con Codex, también `docs/now/CODEX.md`.
 1. `docs/00_EMPIEZA_AQUI.md` — setup del pod y estructura de carpetas.
 2. `docs/02_REGLAS_DEL_EQUIPO.md` — git, carpetas y convivencia en el volumen.
 3. `docs/06_SDD.md` — ciclo SPEC → PLAN → IMPLEMENT → RUN → VERDICT → PROMOTE/ARCHIVE y reglas de decisión.
