@@ -10,3 +10,9 @@
   aislado. No hubo push ni merge. Riesgo: el orquestador deberá rebasar antes de integrar si GitHub tiene un main posterior.
 - Auditoría de pesos/OOF/metrics cerrada antes de implementar. Paneles y exclusiones quedaron fijados en `SPEC.md`.
 - Fase SDD al cerrar este bloque: SPEC/PLAN; gate siguiente: commit de SPEC/PLAN, tests RED→GREEN, smoke.
+
+## 2026-10-22 02:13 UTC — verdict
+
+- Estado: worked; cobertura 45/45.
+- Gate exp029: 0.868175449 (Δ -0.000002206).
+- Coste RunPod estimado: USD 11.64.

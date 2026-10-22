@@ -159,8 +159,29 @@ def validate_public_metrics(payload: Any) -> None:
     visit(payload)
 
 
+def suppress_small_cells(payload: Any) -> tuple[Any, int]:
+    """Replace metric cells with n < 20 by a marker, per the SPEC privacy rule; count them."""
+    count = 0
+
+    def visit(value: Any) -> Any:
+        nonlocal count
+        if isinstance(value, dict):
+            if "n" in value and isinstance(value["n"], (int, float)) and value["n"] < 20:
+                count += 1
+                return {"suppressed": True, "reason": "n<20"}
+            return {key: visit(child) for key, child in value.items()}
+        if isinstance(value, list):
+            return [visit(child) for child in value]
+        return value
+
+    return visit(payload), count
+
+
 def atomic_write_public_metrics(path: str | Path, payload: Any) -> Path:
     path = Path(path)
+    payload, suppressed = suppress_small_cells(payload)
+    if isinstance(payload, dict) and suppressed:
+        payload["suppressed_cells_n_lt_20"] = suppressed
     validate_public_metrics(payload)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(".tmp")
@@ -461,6 +482,8 @@ def _full_analysis(config, results: Path, bootstrap: int = 1000):
         all_ids = split.loc[split.fold.isin(range(5)), "StudyInstanceUID"].astype(str).tolist()
         hard_target_frame = l2.loc[all_ids, labels].copy()
         hard_target_frame = hard_target_frame.where(~np.isclose(hard_target_frame, 0.5))
+        # SPEC: pseudo L2 binarized > 0.5; 0.5/NaN stay excluded (NaN)
+        hard_target_frame = (hard_target_frame > 0.5).astype(float).where(hard_target_frame.notna())
         target = hard_target_frame.to_numpy()
         combined = {family: {} for family in family_predictions}
         for family in combined:

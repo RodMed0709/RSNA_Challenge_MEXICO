@@ -6,7 +6,7 @@
 | Padre | exp040_robustez |
 | Fecha | 2026-10-21 |
 | Rama | exp091_stress_v1 |
-| Estado | spec |
+| Estado | worked |
 
 Idea: benchmark descriptivo de robustez, solo inferencia, sobre checkpoints existentes. Esta SPEC aplica
 `stress_test/SPEC_v1_modesto.md` y su addendum de Panel S; no entrena ni selecciona checkpoints con gold.
@@ -145,4 +145,15 @@ y figuras agregadas.
 
 ## 3. VERDICT (números de `results/exp091_stress_v1/metrics.json`)
 
-Pendiente. Se llenará sin cambiar hipótesis, paneles, condiciones ni gates.
+**Resultado:** worked · **Fase alcanzada:** análisis de inferencia S/R/F
+
+- Cobertura: 45/45 checkpoints; completa=true.
+- Gate exp029: pseudo AUC 0.868175; Δ -0.000002206; passed=true.
+- H1: rho(clean, R_plaus)=-0.172.
+- H2: 2/6 comparaciones confirmadas.
+- H3: Δ BCE pareado exp054−exp045 en hard cases (ref)=-0.008311.
+- Inferencia: 11.198 GPU-h medidas; coste RunPod estimado USD 11.64.
+
+**Qué aprendimos:** ver H1–H3 y tablas agregadas en `metrics.json`; Panel S es descriptivo e in-sample. No se calculó correlación con LB ni se usó gold para seleccionar.
+
+**Siguiente paso sugerido:** conservar estas métricas como diagnóstico; no convertirlas en criterio de selección sin una validación futura fuera de familia/tiempo.
