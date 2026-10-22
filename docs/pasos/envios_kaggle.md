@@ -81,4 +81,117 @@ sesión); aquí solo los números. Kernels privados, sin internet, GPU T4.
 |---|---|---|---|
 | 16 | r7-raptor-exp067 v1 | compact = rank R7 0.75 / exp067 0.25 | worked si ≥ 0.958 |
 | 16 | r7-raptor-s6fall v1 | padre r224flip; compact = rank R7 0.6 / S6fall 0.4 (leoprovorov v2) | ≥ 0.958; killed si S6 no puntúa 100 % (receipt) |
-| 17 | r7-raptor-exp069 v1 | compact = rank R7 0.75 / exp069 0.25 (control del hijo L6) | worked si ≥ 0.958 |
+| 16 (adelantado del 17) | r7-raptor-exp069 v1 | compact = rank R7 0.75 / exp069 0.25 (control del hijo L6) | worked si ≥ 0.958 |
+
+exp069 se adelantó al 16-oct (ref 57250257, enviado 01:21 UTC a mano desde rsna-cron); la cola del 17 queda vacía.
+
+## Regla para los 2 lugares libres del 16-oct (fijada 01:30 UTC, antes de ver exp067 / S6fall / exp069)
+
+Cuenta igual que arriba: ≥ 0.958 = worked; 0.957 = empate; ≤ 0.956 = nada.
+
+- **Alguna pieza ≥ 0.958:**
+  1. Si ≥ 2 piezas worked → unión: compact = rank R7 + las piezas worked, repartiendo a partes iguales el peso que
+     tenían (exp067/exp069 0.25, S6fall 0.4). Si solo una → dosis: subir su peso (exp067/exp069 a 0.4, S6fall a 0.5).
+  2. Pieza worked + la mejor de las otras si sacó 0.957 (unión, mismo reparto). Si ninguna otra sacó 0.957, sin 2.º envío.
+- **Mejor = 0.957 (empate) en ≥ 2 piezas:** 1 solo envío, unión de las de 0.957 (pregunta: ¿se suman?).
+- **Todo ≤ 0.956 o solo una en 0.957:** no se usa ningún lugar (mejor menos que relleno).
+- Antes de enviar, el kernel debe caber en el tiempo de Kaggle (S6fall ya estima ~5.2 h): si la unión pasa de ~8 h, se
+  quita la pieza más lenta.
+
+## 16-oct — resultados (cola del 16 + exp069 adelantado)
+
+| ref | Kernel | LB | Lectura |
+|---|---|---|---|
+| 57247862 | r7-raptor-exp067 v1 (R7 0.75 / exp067 0.25) | 0.957 | empate (+0.001, ruido) |
+| 57248076 | r7-raptor-s6fall v1 (R7 0.6 / S6fall 0.4, padre r224flip) | 0.957 | empate |
+| 57250257 | r7-raptor-exp069 v1 (R7 0.75 / exp069 0.25) | 0.957 | empate |
+
+Ninguna pieza llega a 0.958 → ninguna `worked`. Tres en 0.957 → por la regla de arriba, 1 solo envío con la unión.
+Pesos de la unión (fijados aquí, antes de enviarla): compact = rank R7 0.7 + exp067 0.1 + exp069 0.1 + S6fall 0.1
+(el peso medio que tenían las piezas, 0.3, repartido a partes iguales). Base = kernel s6fall (Raptor r224flip). Una pieza que
+falle o no quepa en el reloj se quita por estudio y se renormalizan los pesos. Kernel `r7-raptor-union3` v1.
+Criterio: worked si ≥ 0.958; 0.957 = las piezas no se suman. El 5.º lugar del día queda sin usar.
+
+**union3 (ref 57257627, enviado 06:10 UTC): 0.957.** Las tres piezas no se suman. Verdicts: exp067 didnt, exp069 didnt (en sus ramas).
+Por la regla de finales, A = `r7-raptor-exp067` (0.957; preferencia exp067 > S6fall, que además lleva pesos CC BY-NC).
+5.º lugar del 16 sin usar.
+
+## Candidato cola 17-oct: r7-raptor-exp067flip v1 (fijado 16-oct 14:40 UTC, antes de enviarlo)
+Pregunta: ¿la TTA espejo del trainer v9.4 (`--flip-tta`) en R7 mejora la final A? Un solo cambio sobre `r7-raptor-exp067`
+(0.957): R7 corre con `--flip-tta`; exp067, Raptor y pesos iguales. worked si LB ≥ 0.959; entra a la cola solo si la
+validación del kernel termina COMPLETE sin error. Evidencia pública de flip TTA: sobre R6, no R7.
+
+## Track de eficiencia: lectura de reglas y envíos del 17-oct (fijado 16-oct ~14:30 UTC, antes de enviar)
+
+- Fórmula oficial: `Efficiency = AUC / (Benchmark − maxAUC) + RuntimeSeconds / 32400` (se minimiza; benchmark = sample
+  submission). Con maxAUC ≈ 0.965, **0.001 AUC ≈ 70 s**. Cuenta solo una submission seleccionada como final (o
+  autoseleccionada) que supere al benchmark en privado.
+- El LB de eficiencia público (ryanholbrook, 16-oct) usa la autoseleccionada = mejor LB público: Mexico-TEAM puesto
+  **3417 / 5955** con la 0.954 del 11-oct (~3.5 h). Los 0.945 rápidos (copias de nartaa 224) están en los puestos 22–35.
+  ⇒ **La final B tiene que ser la eficiente, elegida a mano.** Por defecto B = `exp041-sub-e1-94` (0.945, ~8 min).
+- nartaa `0945-efficient-224crop`: CoAtNet 224 (recorte 0.8 del campo 384), K94, fp16, sin TTA, lector DICOM `fastread
+  study_lut`, pool de procesos + un consumidor por T4. exp041 ya tiene todo eso (verificado): reenviarlo no pregunta nada.
+
+| Kernel | Pregunta | Esperado | Criterio |
+|---|---|---|---|
+| exp041-mirror224 v1 | ¿El espejo L/R (misma lectura, solo GPU) paga su runtime en el 224? Media en probabilidad plano + espejo (`_mirror_tri` de nartaa) | 0.945–0.947; +60–120 s | worked si LB ≥ 0.947 y envío→score ≤ exp041 + 3 min; si no, B = exp041 |
+| exp074-student224 v1 (condicional) | ¿El 224 de 3 slots destilado del 0.957 (exp074) sube el LB a runtime de exp057? | 0.945–0.950; runtime ≤ exp041 | solo si exp074 worked y hay all-data antes de 00:05 UTC; worked si LB ≥ 0.948 |
+
+## 17-oct — R6 + flip TTA: copias fieles de los públicos a 0.958 (fijado 15:05 UTC, antes de ver LB)
+
+Origen: barrido público del 17-oct. Dos notebooks públicos llegan a 0.958 con **R6 + flip TTA** (bundle fe055406) en vez de
+R7, Raptor nartaa 0.65·384 + 0.35·224 con espejo y pesos de Raptor por hallazgo. Nuestro mejor: 0.957. Pesos copiados tal
+cual, sin ajustar nada. Usamos los 2 lugares que quedaban del 17 (ya había 3 envíos).
+
+| ref | Kernel | Copia de | Pregunta | Criterio | Validación |
+|---|---|---|---|---|---|
+| 57315883 | r6flip-repro v1 | heliosli/blend-mine-in-private-lb-luck-to-all-upvoters | ¿Reproducimos 0.958 con R6+flip+pesos por hallazgo (Raptor Syn 0.8, LatOA 0.2, PFOA 0.6, Baker 0.35, resto 0.5)? | worked si LB ≥ 0.958 | COMPLETE, 459 s, flip_tta True, sin fallback |
+| 57315940 | r6flip-v2 v1 | heliosli/this-is-best-public-dataset-new-version-0-9586 | ¿Pesos V2 (LatOA 0.15, PFOA 0.65, Syn 0.85, Baker 0.30) + lector 2.5D de goodpjw a 1/10 superan a r6flip-repro? | worked si LB ≥ 0.959 | COMPLETE, 535 s, flip_tta True, "own leg: blended 3 checkpoints" |
+
+- r6flip-repro: el código es idéntico byte a byte al público (solo se quitaron outputs); mismos datasets montados.
+- r6flip-v2: **una única desviación declarada**: `C_SLUG` apunta a `heliosli/rsna-knee-r6-frozen-fe055406-w1` en vez de
+  `heliosli/rsna-knee-r6-frozen-fe055406`, porque la última versión de este último contiene R7 (bundle 8c7b666e) y el
+  `assert bundle_id == fe055406` fallaría. -w1 es copia byte a byte de la v1 (R6); el notebook verifica el sha256 de cada
+  archivo del manifiesto. Resto igual (incluido kernel_source goodpjw2008/rsna-knee-coatnet-r6-2-5d-mil-lb-0-958).
+- Revisión del código: sin internet (`enable_internet: false`, sin urllib/requests/socket), solo lee `/kaggle/input` y
+  el test de la competición; pip offline (`--no-index`) desde wheels de los datasets; sin UIDs codificados ni nada que lea
+  etiquetas. `PROBE_CLASS = None`. Los `torch.load(weights_only=False)` son los de nartaa/goodpjw (ya usados antes).
+- Licencias de los datasets montados: nartaa/rsna-knee-publication-swa-weights-20261007 = "other" (uso investigación /
+  competición; adaptar y redistribuir solo no comercial con crédito; un ganador puede licenciar CC BY-NC 4.0; aviso OAI);
+  heliosli/rsna-knee-r6-frozen-fe055406(-w1) = "other" (sin texto de licencia); heliosli/rsna-orthofoundation-fold0-epoch7-20261004
+  = "other" ("no new open-source license is granted"; upstream con su licencia); goodpjw2008/rsna-knee-2-5d-convnext-reader
+  = Apache-2.0. ⇒ Mismas condiciones de licencia que los assets heliosli que ya usa la final A (R7 + OrthoFoundation); el
+  único asset nuevo es el lector goodpjw (Apache-2.0).
+
+## 17 y 18-oct — resultados (LB público)
+
+| Fecha | ref | Kernel | LB | Criterio fijado antes | Verdict |
+|---|---|---|---|---|---|
+| 17-oct | 57287682 | exp041-mirror224 v1 | 0.945 | worked si ≥ 0.947 | didnt |
+| 17-oct | 57287873 | exp074-student224 v1 | 0.948 | worked si ≥ 0.948 | worked |
+| 17-oct | 57287971 | r7-raptor-exp067flip v1 | 0.957 | worked si ≥ 0.959 | didnt |
+| 17-oct | 57315883 | r6flip-repro v1 | **0.958** | worked si ≥ 0.958 | worked |
+| 17-oct | 57315940 | r6flip-v2 v1 | 0.958 | worked si ≥ 0.959 | didnt |
+| 18-oct | 57330468 | sub078-1-bigru224 v1 | 0.948 | worked si ≥ 0.950 | didnt |
+| 18-oct | 57330704 | exp080-ctrl224 v1 | 0.949 | worked si ≥ 0.950 | didnt (mejor eficiente) |
+| 18-oct | 57330828 | exp074-student224-fast v1 | 0.948 | worked si ≥ 0.947 | worked (mismas predicciones) |
+| 18-oct | 57330942 | sub075-1-solo v1 | 0.942 | worked si ≥ 0.946; didnt 0.941–0.945 | didnt |
+
+Runtime de los eficientes (Kaggle no lo publica; medido con kernels bench privados `exp0xx-bench-*` que corren el pipeline
+puntuado sin cambios sobre 1300 estudios de train en T4×2; "about 1300 studies" en el test oculto). Bucle principal:
+exp041-sub-e1-94 506 s; exp074-student224 312 s; exp074-student224-fast 225–253 s (4 corridas, probabilidades idénticas
+a la base, max|Δ| = 0); exp080-ctrl224 260 s (otra máquina: la varianza entre VMs es de ±15 %). Sumar ~43 s de arranque y
+cierre del notebook. Es estimación con estudios de train, no el RuntimeSeconds oficial.
+
+## 18 a 21-oct — resultados añadidos (LB público, leídos de Kaggle el 21-oct 17:01 UTC)
+
+| Fecha | ref | Kernel | LB | Criterio fijado antes | Verdict |
+|---|---|---|---|---|---|
+| 18-oct | 57334779 | exp080-ctrl224-fast (final B) | 0.949 | — | final B |
+| 19-oct | 57373574 | tank-seeds (exp085) | 0.957 | worked si ≥ 0.959 | didnt |
+| 19-oct | 57400180 | tank-v6 (exp088) | 0.957 | worked si > 0.957 y ≥ 0.959 | didnt |
+| 19-oct | 57400221 | tank-v6soft (exp089) | 0.957 | worked si > 0.957 y ≥ 0.959 | didnt |
+| 20-oct | 57455236 | exp090 exploratorio all-data | 0.947 | — (no registrado) | — |
+| 21-oct | 57459212 | exp082 exploratorio (exp080 + nartaa rank-mean 50-50) | 0.952 | umbral estimado 0.975 por runtime | didnt |
+
+Nota: los envíos del 13 y 14-oct (exp045, exp049, exp042a/b, exp054, exp056, exp057) existen en Kaggle y faltan en este archivo.
