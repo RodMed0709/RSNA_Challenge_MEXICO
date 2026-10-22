@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "exp": "exp086_etiquetas_l6_claude",
+  "parent": "exp054",
+  "phase": "labels",
+  "timestamp_utc": "2026-10-18T21:43:21.977724+00:00",
+  "models": {
+    "L6": "claude-opus-5-5 effort high",
+    "L6s_informative": "claude-sonnet-5-5",
+    "debate": {
+      "A": "gpt-5.6-sol",
+      "B": "claude-opus-5-5 effort high"
+    },
+    "judge": "claude-opus-5-5 effort max"
+  },
+  "n_studies": 4407,
+  "l6_coverage_full_rows": 1.0,
+  "l6_health": {
+    "macro_auc_vs_cons4_nongold": 0.989371275180465,
+    "per_label": {
+      "ACL": 0.9899500320147465,
+      "MCL": 0.9849996424229421,
+      "Medial Meniscus": 0.9962987307885365,
+      "Lateral Meniscus": 0.9943812731528197,
+      "Medial OA": 0.9848773673341692,
+      "Lateral OA": 0.9774901504527395,
+      "PF OA": 0.9868420884089716,
+      "Effusion": 0.9808621644746823,
+      "Synovitis": 0.9994897562303706,
+      "Baker's": 0.9933456571387606,
+      "Contusion": 0.9859508337239105,
+      "Fracture": 0.9979676060229313
+    },
+    "l6s_sonnet_macro_auc_vs_cons4_nongold": 0.988103226049887
+  },
+  "agreement_initial_cells_frac": 0.9554496634142652,
+  "agreement_initial_per_label": {
+    "ACL": 0.9568867710460631,
+    "MCL": 0.9670977989562061,
+    "Medial Meniscus": 0.9714091218515998,
+    "Lateral Meniscus": 0.9823008849557522,
+    "Medial OA": 0.9332879509870661,
+    "Lateral OA": 0.9518947129566598,
+    "PF OA": 0.910142954390742,
+    "Effusion": 0.9282958928976628,
+    "Synovitis": 0.9768550034036759,
+    "Baker's": 0.9625595643294759,
+    "Contusion": 0.9441797140912185,
+    "Fracture": 0.9804855911050602
+  },
+  "debate": {
+    "n_studies": 1624,
+    "n_cells": 2356,
+    "status_counts": {
+      "agreed": 1960,
+      "ambiguous": 317,
+      "judged": 79
+    },
+    "agreed_by_round": {
+      "1.0": 1727,
+      "2.0": 166,
+      "3.0": 67
+    },
+    "conceded_counts": {
+      "GPT": 1711,
+      "both": 143,
+      "Claude": 106
+    },
+    "phases_done": [
+      "r1_gpt",
+      "r1_claude",
+      "r2_gpt",
+      "r2_claude",
+      "r3_gpt",
+      "r3_claude",
+      "judge"
+    ]
+  },
+  "cells_filled_outside_debate": 0,
+  "mean_target": {
+    "consenso_v6": 0.1827535738597685,
+    "consenso_v6soft": 0.2379586492764037,
+    "L5": 0.18336358823084484,
+    "L6": 0.16713694122986156,
+    "cons4": 0.30226855791291635
+  },
+  "gold_auc_informative": {
+    "L5": {
+      "macro": 0.8890944457474353,
+      "per_label": {
+        "ACL": 0.991421568627451,
+        "MCL": 0.9750566893424036,
+        "Medial Meniscus": 0.9417067307692308,
+        "Lateral Meniscus": 0.8732919254658386,
+        "Medial OA": 0.9124031007751937,
+        "Lateral OA": 0.8191489361702129,
+        "PF OA": 0.8880308880308879,
+        "Effusion": 0.8795031055900622,
+        "Synovitis": 0.7747909199522103,
+        "Baker's": 0.927536231884058,
+        "Contusion": 0.8049932523616734,
+        "Fracture": 0.88125
+      },
+      "n_gold": 58
+    },
+    "L6_opus": {
+      "macro": 0.9064652140946373,
+      "per_label": {
+        "ACL": 0.991421568627451,
+        "MCL": 0.9807256235827664,
+        "Medial Meniscus": 0.9645432692307693,
+        "Lateral Meniscus": 0.8739130434782608,
+        "Medial OA": 0.9325581395348836,
+        "Lateral OA": 0.8491295938104448,
+        "PF OA": 0.9375804375804375,
+        "Effusion": 0.8559006211180126,
+        "Synovitis": 0.8142174432497014,
+        "Baker's": 0.9230072463768115,
+        "Contusion": 0.8427800269905533,
+        "Fracture": 0.9118055555555555
+      },
+      "n_gold": 58
+    },
+    "L6s_sonnet": {
+      "macro": 0.904946067437311,
+      "per_label": {
+        "ACL": 0.9932598039215685,
+        "MCL": 0.9909297052154196,
+        "Medial Meniscus": 0.9627403846153846,
+        "Lateral Meniscus": 0.8819875776397514,
+        "Medial OA": 0.9147286821705427,
+        "Lateral OA": 0.8636363636363635,
+        "PF OA": 0.9362934362934363,
+        "Effusion": 0.8571428571428571,
+        "Synovitis": 0.7897252090800477,
+        "Baker's": 0.9347826086956522,
+        "Contusion": 0.8299595141700404,
+        "Fracture": 0.9041666666666667
+      },
+      "n_gold": 58
+    },
+    "consenso_actual_4src": {
+      "macro": 0.8948112944772516,
+      "per_label": {
+        "ACL": 0.9901960784313727,
+        "MCL": 0.9795918367346939,
+        "Medial Meniscus": 0.9549278846153846,
+        "Lateral Meniscus": 0.8813664596273291,
+        "Medial OA": 0.9310077519379845,
+        "Lateral OA": 0.8075435203094778,
+        "PF OA": 0.9028314028314028,
+        "Effusion": 0.8795031055900621,
+        "Synovitis": 0.7879330943847073,
+        "Baker's": 0.9465579710144927,
+        "Contusion": 0.8609986504723346,
+        "Fracture": 0.8152777777777777
+      },
+      "n_gold": 58
+    },
+    "consenso_v6": {
+      "macro": 0.8099591581833003,
+      "per_label": {
+        "ACL": 0.9791666666666667,
+        "MCL": 0.9195011337868481,
+        "Medial Meniscus": 0.8936298076923077,
+        "Lateral Meniscus": 0.848447204968944,
+        "Medial OA": 0.8550387596899225,
+        "Lateral OA": 0.6431334622823985,
+        "PF OA": 0.7380952380952381,
+        "Effusion": 0.8124223602484472,
+        "Synovitis": 0.6367980884109915,
+        "Baker's": 0.8115942028985507,
+        "Contusion": 0.8184885290148449,
+        "Fracture": 0.7631944444444445
+      },
+      "n_gold": 58
+    },
+    "consenso_v6soft": {
+      "macro": 0.8993788595590297,
+      "per_label": {
+        "ACL": 0.9926470588235294,
+        "MCL": 0.979591836734694,
+        "Medial Meniscus": 0.9675480769230769,
+        "Lateral Meniscus": 0.8819875776397516,
+        "Medial OA": 0.9302325581395349,
+        "Lateral OA": 0.8152804642166344,
+        "PF OA": 0.9202059202059203,
+        "Effusion": 0.8577639751552795,
+        "Synovitis": 0.8028673835125448,
+        "Baker's": 0.9365942028985507,
+        "Contusion": 0.8744939271255061,
+        "Fracture": 0.8333333333333333
+      },
+      "n_gold": 58
+    }
+  },
+  "cost_usd": {
+    "anthropic": 88.9648,
+    "openai": 31.6232,
+    "total": 120.588
+  }
+}
