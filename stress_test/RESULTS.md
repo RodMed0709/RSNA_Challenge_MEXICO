@@ -47,3 +47,24 @@ Regla de subida a Kaggle (SPEC_v1 §5b): reducción ≥ 20 % en `S_plaus` y `S_s
 
 ## Límites
 Panel S es descriptivo (modelos entrenados con esos estudios); el stress no demuestra mejora en private LB ni en hospitales externos.
+
+## Transferibilidad (22-oct, análisis post-hoc, descriptivo)
+
+Pregunta: ¿alguna métrica de estrés predice el LB? **Respuesta: no hay evidencia; nada queda validado como transferible.**
+
+| Modelo | S_plaus (menor = más estable) | LB público |
+|---|---|---|
+| exp090 | 0.0234 | 0.947 |
+| tank-v6 (exp088) | 0.0239 | 0.957 |
+| exp080 | 0.0269 | 0.949 |
+| tank-v6soft (exp089) | 0.0284 | 0.957 |
+| tank-seeds (exp085) | 0.0290 | 0.957 |
+
+- El más estable (exp090) tiene el LB más bajo; los tres tanques difieren hasta 17 % en estabilidad y empatan en 0.957.
+- Spearman informal (n=5, calculado a mano, no está en `metrics.json`): ≈ +0.67 (más estable ↔ peor LB). No significativo y
+  confundido (exp090/exp080 no son tanques). Con 3 a 5 familias independientes no se calculó correlación formal (SPEC pedía ≥ 8).
+- H1: AUC limpia y robustez son ejes distintos (rho −0.17, IC [−0.57, 0.30]).
+- Lo más sólido: exp045/exp046 mejoran `R_sev` sin perder AUC (2 de 6 augmentations, solo fold 0).
+- Por qué no se puede concluir más: el LB público no resuelve diferencias de este tamaño; las perturbaciones no equivalen al
+  shift de hospital/población del privado; tanques y all-data son `in_sample`; `split_v1` no permite OOD verdadero.
+- Métrica con historial: OOF pseudo AUC (regla Δ ≥ +0.005). La robustez, a lo sumo, sirve de desempate; no está probada.
