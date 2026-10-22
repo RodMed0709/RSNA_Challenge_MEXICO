@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "corpus": "/workspace/data/cache/raptor96_384",
+  "l2_csv": "/workspace/data/labels/public/stevenleehans/rsna-knee-llm-report-labels/llm_labels_v4_blend.csv",
+  "v1_csv": "/workspace/data/labels/report_labels_v1.csv",
+  "panels": {
+    "R": [
+      {"id":"exp029","checkpoint":"/workspace/users/rodrigo/wt_exp029/results/exp029_raptor_entreno/best_f0.pt","oof":"/workspace/users/rodrigo/wt_exp029/results/exp029_raptor_entreno/oof_best_f0.csv","pseudo_auc":0.868177655,"fold":0,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp030","checkpoint":"/workspace/users/rodrigo/wt_exp030/results/exp030_raptor_etiquetas_L2/best_f0.pt","oof":"/workspace/users/rodrigo/wt_exp030/results/exp030_raptor_etiquetas_L2/oof_best_f0.csv","pseudo_auc":0.879464247,"fold":0,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp031","checkpoint":"/workspace/users/rodrigo/wt_exp031_raptor_etiquetas_consenso/results/exp031_raptor_etiquetas_consenso/best_f0.pt","oof":"/workspace/users/rodrigo/wt_exp031_raptor_etiquetas_consenso/results/exp031_raptor_etiquetas_consenso/oof_best_f0.csv","pseudo_auc":0.883632344,"fold":0,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp033","checkpoint":"/workspace/users/rodrigo/wt_exp033_raptor_24epocas/results/exp033_raptor_24epocas/swa_f0.pt","oof":"/workspace/users/rodrigo/wt_exp033_raptor_24epocas/results/exp033_raptor_24epocas/oof_swa_f0.csv","pseudo_auc":0.871547643,"fold":0,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp045","checkpoint":"/workspace/users/rodrigo/wt_exp045_raptor_aug_espacial/results/exp045_raptor_aug_espacial/best_f0.pt","oof":"/workspace/users/rodrigo/wt_exp045_raptor_aug_espacial/results/exp045_raptor_aug_espacial/oof_best_f0.csv","pseudo_auc":0.889889948,"fold":0,"res":320,"use_slots":[0,1,2,3,4],"parent":"exp031","recipe":"spatial_aug"},
+      {"id":"exp046","checkpoint":"/workspace/users/rodrigo/wt_exp046_raptor_aug_intensidad/results/exp046_raptor_aug_intensidad/swa_f0.pt","oof":"/workspace/users/rodrigo/wt_exp046_raptor_aug_intensidad/results/exp046_raptor_aug_intensidad/oof_swa_f0.csv","pseudo_auc":0.885761400,"fold":0,"res":320,"use_slots":[0,1,2,3,4],"parent":"exp031","recipe":"intensity_aug"},
+      {"id":"exp047","checkpoint":"/workspace/users/rodrigo/wt_exp047_raptor_slot_dropout/results/exp047_raptor_slot_dropout/swa_f0.pt","oof":"/workspace/users/rodrigo/wt_exp047_raptor_slot_dropout/results/exp047_raptor_slot_dropout/oof_swa_f0.csv","pseudo_auc":0.884930336,"fold":0,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp048","checkpoint":"/workspace/users/rodrigo/wt_exp048_raptor_mixup/results/exp048_raptor_mixup/swa_f0.pt","oof":"/workspace/users/rodrigo/wt_exp048_raptor_mixup/results/exp048_raptor_mixup/oof_swa_f0.csv","pseudo_auc":0.884695436,"fold":0,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp052","checkpoint":"/workspace/users/rodrigo/wt_exp052_raptor_etiqueta_estocastica/results/exp052_raptor_etiqueta_estocastica/best_f0.pt","oof":"/workspace/users/rodrigo/wt_exp052_raptor_etiqueta_estocastica/results/exp052_raptor_etiqueta_estocastica/oof_best_f0.csv","pseudo_auc":0.885057021,"fold":0,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp053","checkpoint":"/workspace/users/rodrigo/wt_exp053_raptor_etiqueta_temperatura/results/exp053_raptor_etiqueta_temperatura/swa_f0.pt","oof":"/workspace/users/rodrigo/wt_exp053_raptor_etiqueta_temperatura/results/exp053_raptor_etiqueta_temperatura/oof_swa_f0.csv","pseudo_auc":0.886243779,"fold":0,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp054","checkpoint":"/workspace/users/rodrigo/wt_exp054_etiquetas_L5/results/exp054_etiquetas_L5/best_f0.pt","oof":"/workspace/users/rodrigo/wt_exp054_etiquetas_L5/results/exp054_etiquetas_L5/oof_best_f0.csv","pseudo_auc":0.889598301,"fold":0,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp056","checkpoint":"/workspace/users/rodrigo/wt_exp056_raptor_combo/results/exp056_raptor_combo/best_f0.pt","oof":"/workspace/users/rodrigo/wt_exp056_raptor_combo/results/exp056_raptor_combo/oof_best_f0.csv","pseudo_auc":0.885671058,"fold":0,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp062_s42","checkpoint":"/workspace/users/rodrigo/wt_exp062_aug_artefactos_light/results/exp062_aug_artefactos_light/best_f0.pt","oof":"/workspace/users/rodrigo/wt_exp062_aug_artefactos_light/results/exp062_aug_artefactos_light/oof_best_f0.csv","pseudo_auc":0.888269962,"fold":0,"res":320,"use_slots":[0,1,2,3,4],"parent":"exp045","recipe":"artifact_light"},
+      {"id":"exp062_s7","checkpoint":"/workspace/users/rodrigo/wt_exp062_aug_artefactos_light_seed7/results/exp062_aug_artefactos_light/best_f0.pt","oof":"/workspace/users/rodrigo/wt_exp062_aug_artefactos_light_seed7/results/exp062_aug_artefactos_light/oof_best_f0.csv","pseudo_auc":0.888009677,"fold":0,"res":320,"use_slots":[0,1,2,3,4],"parent":"exp045","recipe":"artifact_light"},
+      {"id":"exp063_s42","checkpoint":"/workspace/users/rodrigo/wt_exp063_aug_artefactos_strong/results/exp063_aug_artefactos_strong/best_f0.pt","oof":"/workspace/users/rodrigo/wt_exp063_aug_artefactos_strong/results/exp063_aug_artefactos_strong/oof_best_f0.csv","pseudo_auc":0.886003033,"fold":0,"res":320,"use_slots":[0,1,2,3,4],"parent":"exp045","recipe":"artifact_strong"},
+      {"id":"exp063_s7","checkpoint":"/workspace/users/rodrigo/wt_exp063_aug_artefactos_strong_seed7/results/exp063_aug_artefactos_strong/best_f0.pt","oof":"/workspace/users/rodrigo/wt_exp063_aug_artefactos_strong_seed7/results/exp063_aug_artefactos_strong/oof_best_f0.csv","pseudo_auc":0.887277802,"fold":0,"res":320,"use_slots":[0,1,2,3,4],"parent":"exp045","recipe":"artifact_strong"},
+      {"id":"exp072","checkpoint":"/workspace/users/rodrigo/wt_exp072_raptor_fm_aux/results/exp072_raptor_fm_aux/swa_f0.pt","oof":"/workspace/users/rodrigo/wt_exp072_raptor_fm_aux/results/exp072_raptor_fm_aux/oof_swa_f0.csv","pseudo_auc":0.892370878,"fold":0,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp075","checkpoint":"/workspace/users/rodrigo/wt_exp075_raptor_ssl_dino/results/exp075_raptor_ssl_dino/best_f0.pt","oof":"/workspace/users/rodrigo/wt_exp075_raptor_ssl_dino/results/exp075_raptor_ssl_dino/oof_best_f0.csv","pseudo_auc":0.890443483,"fold":0,"res":320,"use_slots":[0,1,2,3,4]}
+    ],
+    "F": [
+      {"id":"exp045_f0","checkpoint":"/workspace/users/rodrigo/wt_exp045_raptor_aug_espacial/results/exp045_raptor_aug_espacial/best_f0.pt","oof":"/workspace/users/rodrigo/wt_exp045_raptor_aug_espacial/results/exp045_raptor_aug_espacial/oof_best_f0.csv","pseudo_auc":0.889889948,"fold":0,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp045_f1","checkpoint":"/workspace/users/rodrigo/wt_exp045_f1/results/exp045_raptor_aug_espacial/swa_f1.pt","oof":"/workspace/users/rodrigo/wt_exp045_f1/results/exp045_raptor_aug_espacial/oof_swa_f1.csv","pseudo_auc":0.884419225,"fold":1,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp045_f2","checkpoint":"/workspace/users/rodrigo/wt_exp045_f2/results/exp045_raptor_aug_espacial/swa_f2.pt","oof":"/workspace/users/rodrigo/wt_exp045_f2/results/exp045_raptor_aug_espacial/oof_swa_f2.csv","pseudo_auc":0.885823724,"fold":2,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp045_f3","checkpoint":"/workspace/users/rodrigo/wt_exp045_f3/results/exp045_raptor_aug_espacial/swa_f3.pt","oof":"/workspace/users/rodrigo/wt_exp045_f3/results/exp045_raptor_aug_espacial/oof_swa_f3.csv","pseudo_auc":0.880969402,"fold":3,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp045_f4","checkpoint":"/workspace/users/rodrigo/wt_exp045_f4/results/exp045_raptor_aug_espacial/best_f4.pt","oof":"/workspace/users/rodrigo/wt_exp045_f4/results/exp045_raptor_aug_espacial/oof_best_f4.csv","pseudo_auc":0.884910978,"fold":4,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp054_f0","checkpoint":"/workspace/users/rodrigo/wt_exp054_etiquetas_L5/results/exp054_etiquetas_L5/best_f0.pt","oof":"/workspace/users/rodrigo/wt_exp054_etiquetas_L5/results/exp054_etiquetas_L5/oof_best_f0.csv","pseudo_auc":0.889598301,"fold":0,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp054_f1","checkpoint":"/workspace/users/rodrigo/wt_exp054_f1/results/exp054_etiquetas_L5/swa_f1.pt","oof":"/workspace/users/rodrigo/wt_exp054_f1/results/exp054_etiquetas_L5/oof_swa_f1.csv","pseudo_auc":0.884317437,"fold":1,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp054_f2","checkpoint":"/workspace/users/rodrigo/wt_exp054_f2/results/exp054_etiquetas_L5/swa_f2.pt","oof":"/workspace/users/rodrigo/wt_exp054_f2/results/exp054_etiquetas_L5/oof_swa_f2.csv","pseudo_auc":0.882719086,"fold":2,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp054_f3","checkpoint":"/workspace/users/rodrigo/wt_exp054_f3/results/exp054_etiquetas_L5/swa_f3.pt","oof":"/workspace/users/rodrigo/wt_exp054_f3/results/exp054_etiquetas_L5/oof_swa_f3.csv","pseudo_auc":0.885592642,"fold":3,"res":320,"use_slots":[0,1,2,3,4]},
+      {"id":"exp054_f4","checkpoint":"/workspace/users/rodrigo/wt_exp054_f4/results/exp054_etiquetas_L5/best_f4.pt","oof":"/workspace/users/rodrigo/wt_exp054_f4/results/exp054_etiquetas_L5/oof_best_f4.csv","pseudo_auc":0.883586111,"fold":4,"res":320,"use_slots":[0,1,2,3,4]}
+    ],
+    "S": [
+      {"id":"exp056_all","checkpoint":"/workspace/users/rodrigo/wt_exp056_raptor_combo/results/exp056_raptor_combo/swa_alldata.pt","fold":0,"res":320,"use_slots":[0,1,2,3,4],"val_in_sample":true,"gold_in_sample":false},
+      {"id":"exp057_all","checkpoint":"/workspace/users/rodrigo/wt_exp057_raptor_eficiente/results/exp057_raptor_eficiente/swa_alldata.pt","fold":0,"res":224,"use_slots":[0,1,2],"val_in_sample":true,"gold_in_sample":false},
+      {"id":"exp071_all","checkpoint":"/workspace/users/rodrigo/kaggle_export/exp071/exp071_swa_alldata.pt","fold":0,"res":320,"use_slots":[0,1,2,3,4],"val_in_sample":true,"gold_in_sample":false},
+      {"id":"sub075_1_all","checkpoint":"/workspace/users/rodrigo/kaggle_export/sub075_1_alldata/sub075_1_swa_alldata.pt","fold":0,"res":320,"use_slots":[0,1,2,3,4],"val_in_sample":true,"gold_in_sample":false},
+      {"id":"exp074_all","checkpoint":"/workspace/users/rodrigo/kaggle_export/exp074_raptor224_distill/swa_alldata.pt","fold":0,"res":224,"use_slots":[0,1,2],"val_in_sample":true,"gold_in_sample":false},
+      {"id":"exp080_all","checkpoint":"/workspace/users/rodrigo/kaggle_export/exp080_seqhead_ctrl_mil/full_mil_alldata.pt","fold":0,"res":224,"use_slots":[0,1,2],"val_in_sample":true,"gold_in_sample":false},
+      {"id":"exp090_all","checkpoint":"/workspace/users/rodrigo/kaggle_export/exp090_raptor224_v6soft_distill/swa_alldata.pt","fold":0,"res":224,"use_slots":[0,1,2],"val_in_sample":true,"gold_in_sample":false},
+      {"id":"exp085_s42","checkpoint":"/workspace/users/rodrigo/kaggle_export/exp085_tank_seeds/swa_alldata_s42.pt","fold":0,"res":320,"use_slots":[0,1,2,3,4],"val_in_sample":true,"gold_in_sample":true},
+      {"id":"exp085_s7","checkpoint":"/workspace/users/rodrigo/kaggle_export/exp085_tank_seeds/swa_alldata_s7.pt","fold":0,"res":320,"use_slots":[0,1,2,3,4],"val_in_sample":true,"gold_in_sample":true},
+      {"id":"exp085_s123","checkpoint":"/workspace/users/rodrigo/kaggle_export/exp085_tank_seeds/swa_alldata_s123.pt","fold":0,"res":320,"use_slots":[0,1,2,3,4],"val_in_sample":true,"gold_in_sample":true},
+      {"id":"exp085_s2024","checkpoint":"/workspace/users/rodrigo/kaggle_export/exp085_tank_seeds/swa_alldata_s2024.pt","fold":0,"res":320,"use_slots":[0,1,2,3,4],"val_in_sample":true,"gold_in_sample":true},
+      {"id":"exp088_s42","checkpoint":"/workspace/users/rodrigo/kaggle_export/exp088_tank_v6/swa_alldata_s42.pt","fold":0,"res":320,"use_slots":[0,1,2,3,4],"val_in_sample":true,"gold_in_sample":true},
+      {"id":"exp088_s7","checkpoint":"/workspace/users/rodrigo/kaggle_export/exp088_tank_v6/swa_alldata_s7.pt","fold":0,"res":320,"use_slots":[0,1,2,3,4],"val_in_sample":true,"gold_in_sample":true},
+      {"id":"exp088_s123","checkpoint":"/workspace/users/rodrigo/kaggle_export/exp088_tank_v6/swa_alldata_s123.pt","fold":0,"res":320,"use_slots":[0,1,2,3,4],"val_in_sample":true,"gold_in_sample":true},
+      {"id":"exp088_s2024","checkpoint":"/workspace/users/rodrigo/kaggle_export/exp088_tank_v6/swa_alldata_s2024.pt","fold":0,"res":320,"use_slots":[0,1,2,3,4],"val_in_sample":true,"gold_in_sample":true},
+      {"id":"exp089_s42","checkpoint":"/workspace/users/rodrigo/kaggle_export/exp089_tank_v6soft/swa_alldata_s42.pt","fold":0,"res":320,"use_slots":[0,1,2,3,4],"val_in_sample":true,"gold_in_sample":true},
+      {"id":"exp089_s7","checkpoint":"/workspace/users/rodrigo/kaggle_export/exp089_tank_v6soft/swa_alldata_s7.pt","fold":0,"res":320,"use_slots":[0,1,2,3,4],"val_in_sample":true,"gold_in_sample":true}
+    ]
+  },
+  "derived_ensembles": [
+    {"id":"exp085_ens4","members":["exp085_s42","exp085_s7","exp085_s123","exp085_s2024"]},
+    {"id":"exp088_ens4","members":["exp088_s42","exp088_s7","exp088_s123","exp088_s2024"]},
+    {"id":"exp089_ens2","members":["exp089_s42","exp089_s7"]}
+  ],
+  "lb_table": [
+    {"id":"exp029","public_lb":0.933},
+    {"id":"exp031","public_lb":0.934},
+    {"id":"exp049","public_lb":0.932,"panel_status":"not_run_preprocessing_mismatch"},
+    {"id":"exp045_5f","public_lb":0.941},
+    {"id":"exp075","public_lb":0.941},
+    {"id":"exp045_exp054_10f","public_lb":0.942}
+  ]
+}
