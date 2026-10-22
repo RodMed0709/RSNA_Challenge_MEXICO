@@ -182,3 +182,16 @@ puntuado sin cambios sobre 1300 estudios de train en T4×2; "about 1300 studies"
 exp041-sub-e1-94 506 s; exp074-student224 312 s; exp074-student224-fast 225–253 s (4 corridas, probabilidades idénticas
 a la base, max|Δ| = 0); exp080-ctrl224 260 s (otra máquina: la varianza entre VMs es de ±15 %). Sumar ~43 s de arranque y
 cierre del notebook. Es estimación con estudios de train, no el RuntimeSeconds oficial.
+
+## 18 a 21-oct — resultados añadidos (LB público, leídos de Kaggle el 21-oct 17:01 UTC)
+
+| Fecha | ref | Kernel | LB | Criterio fijado antes | Verdict |
+|---|---|---|---|---|---|
+| 18-oct | 57334779 | exp080-ctrl224-fast (final B) | 0.949 | — | final B |
+| 19-oct | 57373574 | tank-seeds (exp085) | 0.957 | worked si ≥ 0.959 | didnt |
+| 19-oct | 57400180 | tank-v6 (exp088) | 0.957 | worked si > 0.957 y ≥ 0.959 | didnt |
+| 19-oct | 57400221 | tank-v6soft (exp089) | 0.957 | worked si > 0.957 y ≥ 0.959 | didnt |
+| 20-oct | 57455236 | exp090 exploratorio all-data | 0.947 | — (no registrado) | — |
+| 21-oct | 57459212 | exp082 exploratorio (exp080 + nartaa rank-mean 50-50) | 0.952 | umbral estimado 0.975 por runtime | didnt |
+
+Nota: los envíos del 13 y 14-oct (exp045, exp049, exp042a/b, exp054, exp056, exp057) existen en Kaggle y faltan en este archivo.

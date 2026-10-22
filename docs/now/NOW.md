@@ -35,9 +35,11 @@
 | 18-oct | exp080-ctrl224-fast | 0.949 | worked (final B) |
 | 18-oct | exp074-student224-fast / sub078-1-bigru224 / exp080-ctrl224 / sub075-1-solo | 0.948 / 0.948 / 0.949 / 0.942 | ver envios_kaggle.md |
 | 19-oct | tank-seeds (exp085) | **0.957** | didnt (pedía ≥ 0.959) |
-| 19-oct | tank-v6 (exp088), ref 57400180 | pendiente | worked si > 0.957 y ≥ 0.959 |
-| 19-oct | tank-v6soft (exp089), ref 57400221 | pendiente | idem |
-- 19-oct: 3 de 5 envíos usados → quedan 2 hoy.
+| 19-oct | tank-v6 (exp088), ref 57400180 | **0.957** | didnt (pedía > 0.957 y ≥ 0.959) |
+| 19-oct | tank-v6soft (exp089), ref 57400221 | **0.957** | didnt |
+| 20-oct | exp090 exploratorio all-data, ref 57455236 | 0.947 | sin criterio registrado |
+| 21-oct | exp082 exploratorio (exp080 + nartaa), ref 57459212 | 0.952 | didnt (umbral por runtime 0.975) |
+- Actualizado 22-oct 02:50 UTC con Kaggle en vivo (48 envíos). Final A sigue siendo r6flip-repro 0.958; ningún tanque la supera.
 - Registrar todo en `docs/pasos/envios_kaggle.md` (rama `exp010_dev_informes`).
 
 ## 4. Experimentos de esta última ronda (16–19 oct)
@@ -56,8 +58,9 @@
 | exp085 | tank_seeds: 4 semillas fine-tune nartaa 384, 100 % train + gold duro | LB 0.957 didnt | #34 |
 | exp086 | etiquetas L6 Claude Opus + debate Claude-vs-GPT | worked (etiquetas listas) | #37 |
 | exp087 | kernel nice | didnt | #36 |
-| exp088 | tank_v6: 4 semillas con consenso_v6 (afilado 0.95/0.05) | LB pendiente | ver orq/tank_v6 |
-| exp089 | tank_v6soft: 2 semillas con consenso_v6soft (continuo) | LB pendiente | ver orq/tank_v6 |
+| exp088 | tank_v6: 4 semillas con consenso_v6 (afilado 0.95/0.05) | LB 0.957 didnt | ver orq/tank_v6 |
+| exp089 | tank_v6soft: 2 semillas con consenso_v6soft (continuo) | LB 0.957 didnt | ver orq/tank_v6 |
+| exp091 | stress_v1: robustez solo inferencia, 45 checkpoints (paneles S/R/F) | worked: gate exp029 pasa; ningún candidato supera la regla de subida (≥ 20 % de estabilidad); H1 rho −0.17 | PR #38; resultados en `stress_test/RESULTS.md` |
 - Etiquetas exp086 (volumen, NUNCA a git): `/workspace/users/rodrigo/orq/labels_claude/consenso_v6.csv`, `consenso_v6soft.csv`.
   Gold macro AUC (informativo): L6 Opus 0.9065, L6 Sonnet 0.9049, consenso4 0.8948, L5 GPT 0.8891, v6soft 0.8994, v6 0.810 (empates por afilado).
   Debate: 95.5 % acuerdo inicial; 2356 celdas en disputa → 1960 acordaron (GPT cedió 87 %), 79 juez, 317 ambiguas. Costo $88.96 Anthropic + $31.62 OpenAI.
@@ -74,7 +77,7 @@
 - Barrido público 18-oct: nada nuevo ≥ 0.958; única pieza nueva "B-leg" (R6 + soft labels Qwen, vio gold, licencia "other"), no probada.
 
 ## 6. Pendientes (en orden)
-1. Leer LB de tank-v6 y tank-v6soft → verdict en SPEC/EXPERIMENTOS (exp088/exp089) y envios_kaggle.md; decidir final A.
+1. ~~Leer LB de tank-v6 y tank-v6soft~~ (hecho: 0.957 ambos, didnt). Falta verdict en SPEC/EXPERIMENTOS de exp088/exp089 y exp090/exp082; final A = r6flip-repro (0.958).
 2. Terminar exp082 (eficiencia) con los envíos que queden: leer bench, fijar umbral LB = 0.949 + ceil(Δt/70000 a milésima) + 0.001 ANTES de enviar, validar kernel, encolar.
 3. Del 20 al 22-oct: máx 5 envíos/día, solo ensambles sin entrenar; una pregunta por envío; criterios fijados antes.
 4. **Elegir finales A y B a mano** antes del 22-oct 23:59 UTC.
