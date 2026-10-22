@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "exp": "exp085_tank_seeds",
+  "author": "rodrigo",
+  "parent": "exp044",
+  "split": "split_v1_seed42",
+  "split_sha256": "9fac0679909efda4e52da6c92816442bcf79bffade391e567dc393c8a13e6a87",
+  "git": {
+    "commit": "eb20d2f",
+    "branch": "exp085_tank_seeds",
+    "src_dirty": false
+  },
+  "timestamp_utc": "2026-10-18T19:21:24.097147+00:00",
+  "phase": "alldata",
+  "select_on": "pseudo_L2_bin>0.5",
+  "params": {
+    "EXP": "exp085_tank_seeds",
+    "PADRE": "exp044",
+    "FOLDS": [
+      0
+    ],
+    "SEED": 123,
+    "SPLIT": "split_v1_seed42",
+    "SELECT_ON": "pseudo",
+    "SMOKE": false,
+    "ALL_DATA": true,
+    "SWA_EPOCHS": [
+      3,
+      4,
+      5
+    ],
+    "INIT_CKPT": "/workspace/data/public_assets/nartaa__rsna-knee-publication-swa-weights-20261007/raptor_ft_alldata_t16_blendjev_oai_d96_r384_swa.pt",
+    "INIT_SHA256": "7e5315dad125b99fc65b340b3de41de628e9be51ff5835355dd61c86472244ef",
+    "CORPUS": "/root/corpus96_384",
+    "LABELS_SOFT": "/workspace/data/labels/public/dreaddevelopment/rsna-knee-labels/labels_llm_soft.parquet",
+    "L3_CSV": "/workspace/data/labels/public/pilkwang/rsna-knee-llm-labels/report_labels_v2.csv",
+    "L4_CSV": "/workspace/data/labels/public/lixin73/rsna-knee-llm-report-labels-sol56/labels_llm_gpt56sol.csv",
+    "L2_CSV": "/workspace/data/labels/public/stevenleehans/rsna-knee-llm-report-labels/llm_labels_v4_blend.csv",
+    "V1_CSV": "/workspace/data/labels/report_labels_v1.csv",
+    "ARCH": "coatnet_rmlp_2_rw_384.sw_in12k_ft_in1k",
+    "IMG": 384,
+    "RES": 320,
+    "NORM": "imagenet",
+    "K": 12,
+    "K_EVAL": 24,
+    "EPOCHS": 6,
+    "BATCH_SIZE": 8,
+    "BB_LR": 1e-05,
+    "HEAD_LR": 0.0001,
+    "WEIGHT_DECAY": 0.02,
+    "PCT_START": 0.15,
+    "GRAD_CLIP": 3.0,
+    "TOPK": 3,
+    "L2_THRESHOLD": 0.5,
+    "GRAD_CKPT": true,
+    "GOLD_IN_TRAIN": true,
+    "GOLD_HARD": true,
+    "AUG_FLIP_P": 0.5,
+    "AUG_ROT_DEG": 10.0,
+    "AUG_SCALE": [
+      0.9,
+      1.1
+    ],
+    "AUG_TRANS": 0.06,
+    "N_WORKERS": 12,
+    "LOG_EVERY": 50,
+    "NOTES": "tanque: exp044 + aug espacial exp045 + gold-58 en train con etiqueta dura; all-data 4407, SWA [3,4,5]; decide el LB",
+    "LABELS": [
+      "ACL",
+      "MCL",
+      "Medial Meniscus",
+      "Lateral Meniscus",
+      "Medial OA",
+      "Lateral OA",
+      "PF OA",
+      "Effusion",
+      "Synovitis",
+      "Baker's",
+      "Contusion",
+      "Fracture"
+    ],
+    "AUTHOR": "rodrigo",
+    "TAG": "alldata_s123",
+    "D": 96,
+    "SLOT_SIZES": [
+      26,
+      22,
+      18,
+      12,
+      18
+    ],
+    "INIT_GOLD": 0.9190658824845807
+  },
+  "per_fold": {
+    "alldata": {
+      "n_train": 4407,
+      "n_val": 0,
+      "history": [
+        {
+          "epoch": 0,
+          "train_loss": 0.7821142712506381,
+          "pseudo_auc": null,
+          "v1_auc": null,
+          "gold_auc": 0.9211781273400391,
+          "train_s": 640.3324298858643,
+          "eval_s": 4.411415100097656,
+          "minutes": 10.745756340026855
+        },
+        {
+          "epoch": 1,
+          "train_loss": 0.7784816347468984,
+          "pseudo_auc": null,
+          "v1_auc": null,
+          "gold_auc": 0.9258344000978864,
+          "train_s": 632.5118274688721,
+          "eval_s": 4.533888816833496,
+          "minutes": 21.3774218360583
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.7750800561904907,
+          "pseudo_auc": null,
+          "v1_auc": null,
+          "gold_auc": 0.9371602652653898,
+          "train_s": 632.5092272758484,
+          "eval_s": 4.634849548339844,
+          "minutes": 32.007780881722766
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.7685082433440469,
+          "pseudo_auc": null,
+          "v1_auc": null,
+          "gold_auc": 0.9419486978616941,
+          "train_s": 632.4420788288116,
+          "eval_s": 4.605517387390137,
+          "minutes": 42.63700597286224
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.7625565527785908,
+          "pseudo_auc": null,
+          "v1_auc": null,
+          "gold_auc": 0.9418617399447061,
+          "train_s": 632.5060641765594,
+          "eval_s": 4.67176365852356,
+          "minutes": 53.26626846790314
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.7580974545262077,
+          "pseudo_auc": null,
+          "v1_auc": null,
+          "gold_auc": 0.9420081376303687,
+          "train_s": 632.7797076702118,
+          "eval_s": 4.673004627227783,
+          "minutes": 63.90084950129191
+        }
+      ],
+      "swa": {
+        "epochs": [
+          3,
+          4,
+          5
+        ],
+        "pseudo_auc": null,
+        "v1_auc": null,
+        "gold_auc": 0.9423783292443307,
+        "pseudo_per_label": null,
+        "gold_per_label": {
+          "ACL": 0.9840686274509804,
+          "MCL": 0.9863945578231292,
+          "Medial Meniscus": 0.9831730769230769,
+          "Lateral Meniscus": 0.937888198757764,
+          "Medial OA": 0.9782945736434108,
+          "Lateral OA": 0.839458413926499,
+          "PF OA": 0.87001287001287,
+          "Effusion": 0.9701863354037268,
+          "Synovitis": 0.8506571087216249,
+          "Baker's": 0.9891304347826088,
+          "Contusion": 0.9581646423751686,
+          "Fracture": 0.9611111111111111
+        }
+      },
+      "gpu_hours": 1.0652482742733425,
+      "swa_ckpt_path": "/workspace/users/rodrigo/wt_tank_seeds/results/exp085_tank_seeds/swa_alldata_s123.pt"
+    }
+  },
+  "gold_auc": null,
+  "gold_per_label": null,
+  "oof_pseudo_auc": null,
+  "swa_f0": null,
+  "delta": {
+    "pseudo_f0": null,
+    "gold": null
+  },
+  "decision_auto": "sin_padre",
+  "gold_in_train": true,
+  "gold_hard": true,
+  "init_ckpt": "/workspace/data/public_assets/nartaa__rsna-knee-publication-swa-weights-20261007/raptor_ft_alldata_t16_blendjev_oai_d96_r384_swa.pt",
+  "init_gold_auc": 0.9190658824845807,
+  "corpus": {
+    "path": "/root/corpus96_384",
+    "n": 4407,
+    "D": 96,
+    "img": 384,
+    "build_seconds": 1316.7135531902313,
+    "n_errors": 0
+  },
+  "gpu_hours_total": 1.0652482742733425
+}
