@@ -32,6 +32,9 @@ git push -u origin HEAD
 - Nunca push directo a `main`. Nunca `git push --force`.
 - Los notebooks se suben sin salidas (`nbstripout` las quita solo; lo instala `setup_pod.sh`).
 - Si `git pull` da conflicto y no sabes resolverlo: `git merge --abort` y avisa.
+- Copia local (Windows): los worktrees van **dentro** del repo, en `worktrees/`, nunca como carpetas hermanas:
+  `git worktree add worktrees/RSNA_wtNNN expNNN_tag`. Material local que no va a git (papers, visor) va en `local/`.
+  Ambas carpetas están en `.gitignore`. Para mover uno existente: `git worktree move <ruta> worktrees/<nombre>`.
 
 ## Cómo compartir un hallazgo
 

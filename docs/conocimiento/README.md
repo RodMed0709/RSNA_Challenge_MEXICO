@@ -32,7 +32,7 @@ contra nuestro código y nuestros resultados, con **implementaciones concretas**
 
 ## De dónde sale cada cosa
 
-Todo vive fuera del repo en `C:\Users\medro\Documents\_PERSONAL_PROJECTS\RSNA_papers\` (los PDFs **no** se copian aquí):
+Todo vive en `local/RSNA_papers/`, dentro del repo pero ignorado por git (los PDFs **no** se suben):
 
 | Fuente | Qué es |
 |---|---|

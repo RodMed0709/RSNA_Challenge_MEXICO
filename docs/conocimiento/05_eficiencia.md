@@ -1,6 +1,6 @@
 # 05 — Eficiencia (premio de eficiencia)
 
-Fecha: 2026-10-12. Fuentes: `RSNA_papers/05_efficiency_isbi_novelty/RESUMEN.md` (23 PDFs), A5 C2 y ★1–★2, A4 §3.
+Fecha: 2026-10-12. Fuentes: `local/RSNA_papers/05_efficiency_isbi_novelty/RESUMEN.md` (23 PDFs), A5 C2 y ★1–★2, A4 §3.
 
 ## 1. Lo que sabemos (números propios, A5 C2 / A4)
 

@@ -1,6 +1,6 @@
 # Bitácora exp026_t4_variantes
 
-- 2026-10-11 · Worktree `RSNA_wt026` desde `exp025_perfil_raptor`. Claim en rsna-c
+- 2026-10-11 · Worktree `worktrees/RSNA_wt026` desde `exp025_perfil_raptor`. Claim en rsna-c
   (`/workspace/users/.claims/exp026_t4_variantes`; rsna-d ya no existe).
 - Estudios (`exp026_studies.csv`, solo en scratchpad, con etiquetas): 58 gold + 92 fold 0 (principales),
   30 fold 0 para el perfilado serie en frío, 2 de calentamiento; semilla 0 sobre `split_v1_seed42`.

@@ -1,7 +1,7 @@
 # 02 — Augmentations: qué probamos, qué falló y por qué, y las de RM que faltan
 
-Fecha: 2026-10-12. Fuentes: `RSNA_papers/04_robustness_aug_ensemble/RESUMEN.md` (+PDFs, extraídos con `pdftotext`),
-`RSNA_papers/analisis/A2_implementacion_vs_papers.md` (§1, §2.1–2.3), writeups Kaggle de `03_mil_multiseq_arch/`,
+Fecha: 2026-10-12. Fuentes: `local/RSNA_papers/04_robustness_aug_ensemble/RESUMEN.md` (+PDFs, extraídos con `pdftotext`),
+`local/RSNA_papers/analisis/A2_implementacion_vs_papers.md` (§1, §2.1–2.3), writeups Kaggle de `03_mil_multiseq_arch/`,
 y la celda 8 del notebook de exp045 (`git show exp045_raptor_aug_espacial:experiments/exp045_raptor_aug_espacial/exp045_raptor_aug_espacial.ipynb`).
 Convención: **[paper]** = textual o paráfrasis del PDF; **[inferencia]** = razonamiento nuestro, no verificado;
 **[no en corpus]** = conocimiento general sin PDF en la carpeta. Números propios: de los verdicts (vía A2).

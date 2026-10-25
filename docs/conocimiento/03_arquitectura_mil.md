@@ -1,6 +1,6 @@
 # 03 — Arquitectura MIL multi-secuencia
 
-Fecha: 2026-10-12. Fuentes: `RSNA_papers/03_mil_multiseq_arch/RESUMEN.md` (24 PDFs + 8 writeups Kaggle), `01_knee_mri_sota/RESUMEN.md`, A2 §2.13, A5 #4 y #10.
+Fecha: 2026-10-12. Fuentes: `local/RSNA_papers/03_mil_multiseq_arch/RESUMEN.md` (24 PDFs + 8 writeups Kaggle), `01_knee_mri_sota/RESUMEN.md`, A2 §2.13, A5 #4 y #10.
 
 ## 1. Modelo actual (A2 §2.13)
 

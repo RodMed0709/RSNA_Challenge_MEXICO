@@ -2,7 +2,7 @@
 
 Fecha: 2026-10-14. Estado: **PLAN** (no hay SPEC confirmada de ningún experimento de aquí; cada entrenamiento nuevo
 necesita su `nuevo_experimento(...)` y su SPEC antes de tocar código). Fuentes: `docs/conocimiento/04_robustez_ensambles_lb.md`,
-`08_backlog_priorizado.md`, `05_eficiencia.md`, `RSNA_papers/analisis/A4_interno_vs_LB.md` §2–4, `A6_revision_colas.md` §4,
+`08_backlog_priorizado.md`, `05_eficiencia.md`, `local/RSNA_papers/analisis/A4_interno_vs_LB.md` §2–4, `A6_revision_colas.md` §4,
 `docs/pasos/raptor_receta.md`, contexto de la revisión del 14-oct y búsqueda web (ver §8).
 
 ## 0. Punto de partida (números, no hipótesis)

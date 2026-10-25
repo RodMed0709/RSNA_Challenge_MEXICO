@@ -1,6 +1,6 @@
 # exp032_raptor_alineado_LR — bitácora
 
-- 2026-10-11 19:05 UTC · worktree `RSNA_wt032` desde `exp029_raptor_entreno` (a5dff96). Claim creado.
+- 2026-10-11 19:05 UTC · worktree `worktrees/RSNA_wt032` desde `exp029_raptor_entreno` (a5dff96). Claim creado.
 - `lateralidad_corpus.py` en rsna-d2 (57 s, 24 hilos): 20,792 series del corpus, 0 sin IOP. Eje x del paciente constante
   al 100 % por slot (sagital: orden de cortes, sentido −x; coronal/axial: columnas, sentido +x) → alinear = espejar las
   `L`. Lados: R 2,305 · L 2,041 · unknown 61. Tabla en `/workspace/data/cache/raptor96_384/align_lr_exp032.{npy,csv,json}`

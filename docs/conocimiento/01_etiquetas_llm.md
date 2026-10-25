@@ -1,6 +1,6 @@
 # 01 — Etiquetas desde informes con varios LLM
 
-Fecha: 2026-10-12. Fuentes: `RSNA_papers/02_llm_report_labels/RESUMEN.md` (27 PDFs), `RSNA_papers/analisis/A3_etiquetas_llm.md`,
+Fecha: 2026-10-12. Fuentes: `local/RSNA_papers/02_llm_report_labels/RESUMEN.md` (27 PDFs), `local/RSNA_papers/analisis/A3_etiquetas_llm.md`,
 `A2 §2.9`, `A5 C1 y ★3`. Números propios: verdicts vía A3/A5.
 
 ## 1. Cómo se construye hoy el consenso (A3 §1)
