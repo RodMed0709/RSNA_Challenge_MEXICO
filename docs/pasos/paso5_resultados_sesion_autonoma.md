@@ -1,7 +1,7 @@
 # Paso 5 — síntesis de resultados de la sesión autónoma (exp012–exp022)
 
 Fecha: 2026-10-09. Para el paper (ISBI 2027 + CMIG). Todos los números se copian de la sección 3 de cada `SPEC.md` y de
-`results/expNNN_tag/metrics.json` en su worktree (`RSNA_wtNNN`, rama `expNNN_tag`), y del LB en `docs/pasos/envios_kaggle.md`.
+`results/expNNN_tag/metrics.json` en su worktree (`worktrees/RSNA_wtNNN`, rama `expNNN_tag`), y del LB en `docs/pasos/envios_kaggle.md`.
 Lo que no existe todavía dice "pendiente". Pseudo = pseudo AUC fold 0 contra etiquetas v1; gold = 58 estudios, fold 0.
 
 ## 1. Tabla maestra
@@ -21,7 +21,7 @@ Lo que no existe todavía dice "pendiente". Pseudo = pseudo AUC fold 0 contra et
 | exp021_etiquetas_L2 | etiquetas de entrenamiento L2 en vez de v1 | exp002 | 0.789 (−0.038); contra L2: 0.817 (+0.035) | 0.812 (+0.035) | **0.836** (+0.024, solo fold 0) | 3.17 | worked (decide el LB; falta confirmación de Rodrigo) |
 | exp022_entropia_suave | penalización de entropía λ = 0.005 | exp013 | 0.835 (−0.003) | 0.800 (+0.011) | no enviado | 2.91 | didnt (entropía 0.949 > 0.6: no concentra) |
 
-¹ exp013 aún no tiene `metrics.json` ni verdict (worktree `RSNA_wt013`). 0.838 / 0.789 y el +0.011 se copian de la columna
+¹ exp013 aún no tiene `metrics.json` ni verdict (worktree `worktrees/RSNA_wt013`). 0.838 / 0.789 y el +0.011 se copian de la columna
 "padre" de las SPEC de exp017, exp020 y exp022 (y del texto de exp018). **No verificados contra la fuente primaria**: confirmar
 cuando exp013 cierre su verdict.
 

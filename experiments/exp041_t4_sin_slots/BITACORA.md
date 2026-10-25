@@ -1,6 +1,6 @@
 # Bitácora exp041_t4_sin_slots
 
-- 2026-10-11 · Worktree `RSNA_wt041` desde `exp027_t4_rapido`. Claim vía rsna-c2
+- 2026-10-11 · Worktree `worktrees/RSNA_wt041` desde `exp027_t4_rapido`. Claim vía rsna-c2
   (`/workspace/users/.claims/exp041_t4_sin_slots`; rsna-e no responde por ssh).
 - Cómo quitó exp040 un slot: "una serie faltante se simula igual que la representa el corpus: cortes a cero y
   máscara 0". Aquí: lector `study_lut` del notebook con `SLOTS[:3]` (no lista ni lee los DICOM de Cor no fluido

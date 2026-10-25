@@ -102,5 +102,5 @@ gold).
 - Dawid & Skene 1979 — doi:10.2307/2346806
 - Kaggle: `riadmohamed42/jev-knee-labels`, `karttikjangid05/rsna-knee-public-llm-label-sets-compared` (en gold-58,
   11/12 hallazgos no distinguen la mejor fuente de la mediana); detalle en `docs/pasos/raptor_receta.md` §2.
-- Interno: `docs/conocimiento/01_etiquetas_llm.md`, `RSNA_papers/analisis/A3_etiquetas_llm.md`,
+- Interno: `docs/conocimiento/01_etiquetas_llm.md`, `local/RSNA_papers/analisis/A3_etiquetas_llm.md`,
   `docs/pasos/tablero_paso7.md`, notas_sesion6.md (costos de L5 y L5v2).

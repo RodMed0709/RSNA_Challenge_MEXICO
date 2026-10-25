@@ -25,3 +25,5 @@ kaggle_bundle/
 wandb/
 submission.csv
 ejemplos_locales/
+/worktrees/
+/local/

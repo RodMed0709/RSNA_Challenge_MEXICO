@@ -1,6 +1,6 @@
 # Bitácora exp027_t4_rapido
 
-- 2026-10-11 · Worktree `RSNA_wt027` desde `exp026_t4_variantes`. Claim en rsna-e
+- 2026-10-11 · Worktree `worktrees/RSNA_wt027` desde `exp026_t4_variantes`. Claim en rsna-e
   (`/workspace/users/.claims/exp027_t4_rapido`).
 - Modelo 224: `nartaa/rsna-knee-0945-efficient-224crop` (LB 0.945 según el README del dataset; el 384 con
   TTA espejo es 0.949). Receta de su celda: mismo volumen 96×384 (study_lut), ventana = recorte central 0.8

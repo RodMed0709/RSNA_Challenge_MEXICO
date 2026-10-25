@@ -1,6 +1,6 @@
 # 04 — Robustez, ensambles, weight averaging y lectura del LB
 
-Fecha: 2026-10-12. Fuentes: `RSNA_papers/04_robustness_aug_ensemble/RESUMEN.md`, `analisis/A4_interno_vs_LB.md`, `A6_revision_colas.md`, A2 §2.12 y §2.14.
+Fecha: 2026-10-12. Fuentes: `local/RSNA_papers/04_robustness_aug_ensemble/RESUMEN.md`, `analisis/A4_interno_vs_LB.md`, `A6_revision_colas.md`, A2 §2.12 y §2.14.
 
 ## 1. Ruido del LB (A4 §2)
 

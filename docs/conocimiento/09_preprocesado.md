@@ -1,8 +1,8 @@
 # 09 — Preprocesado de RM: qué probar además de CLAHE
 
 Fecha: 2026-10-12. Fuentes: `docs/papers/08_preprocesamiento_mri/` (README + PDFs, extraídos con `pdftotext`),
-`RSNA_papers/01_knee_mri_sota` (MRNet, CoPAS, Vuskov), `RSNA_papers/03_mil_multiseq_arch/kaggle_*.md`,
-`RSNA_papers/analisis/A2_implementacion_vs_papers.md` §2.6–2.8, el script de corpus
+`local/RSNA_papers/01_knee_mri_sota` (MRNet, CoPAS, Vuskov), `local/RSNA_papers/03_mil_multiseq_arch/kaggle_*.md`,
+`local/RSNA_papers/analisis/A2_implementacion_vs_papers.md` §2.6–2.8, el script de corpus
 `experiments/exp029_raptor_entreno/build_corpus96.py` (rama `exp056_raptor_combo`), y búsqueda web con cada cita
 verificada por DOI (Crossref / Semantic Scholar) o arXiv. Tiempos de CPU: **medidos por nosotros** en un PC local
 (SimpleITK 2.5.6, OpenCV, 1 hilo salvo que se diga), volumen sintético; en Kaggle hay que volver a medir.
