@@ -3,6 +3,11 @@
 Competencia de Kaggle para predecir 12 hallazgos en cada resonancia de rodilla. El modelo recibe varias series por estudio
 y produce 12 probabilidades. La métrica es el promedio de las 12 AUC ROC.
 
+## Resultado final
+
+**Medalla de bronce 🥉: lugar 603 de 6,299 equipos** en el private leaderboard, con private score **0.942** (equipo Mexico-TEAM, 48 envíos).
+Competencia: [RSNA Knee Abnormality Detection](https://www.kaggle.com/competitions/rsna-knee-abnormality-detection).
+
 Trabajamos con experimentos numerados y SDD: cada experimento tiene una SPEC antes de programarse y un verdict al terminar.
 Reglas completas en [CLAUDE.md](CLAUDE.md).
 
